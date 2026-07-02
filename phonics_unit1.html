@@ -1,0 +1,89 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>معمل الصوتيات - الوحدة 1</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Cairo', sans-serif; background-color: #fff9c4; margin: 0; padding: 20px; text-align: center; }
+        .lab-header { background: #fbc02d; color: #333; padding: 20px; border-radius: 20px; margin-bottom: 20px; }
+        .letter-section { background: white; padding: 15px; border-radius: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .letter-title { font-size: 2.5rem; color: #f57f17; font-weight: bold; }
+        .word-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin-top: 15px; }
+        .word-card { 
+            background: #fff; border: 3px solid #fff176; border-radius: 15px; 
+            padding: 15px; width: 120px; cursor: pointer; transition: 0.3s;
+        }
+        .word-card:active { background: #fffde7; transform: scale(0.9); }
+        .word-text { display: block; font-weight: bold; color: #5d4037; font-size: 1.1rem; }
+        .btn-back { background: #333; color: white; padding: 10px 20px; border: none; border-radius: 20px; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="lab-header">
+        <h1>🎙️ معمل الصوتيات الذكي</h1>
+        <p>استمع، انظر، وردد مع Maya و Hana [5، 17].</p>
+    </div>
+
+    <!-- قسم حرف Tt -->
+    <div class="letter-section">
+        <div class="letter-title">Letter Tt /t/</div>
+        <div class="word-grid">
+            <div class="word-card" onclick="speak('Tomato')">
+                <span>🍅</span>
+                <span class="word-text">Tomato</span>
+            </div>
+            <div class="word-card" onclick="speak('Tree')">
+                <span>🌳</span>
+                <span class="word-text">Tree</span>
+            </div>
+            <div class="word-card" onclick="speak('Tiger')">
+                <span>🐯</span>
+                <span class="word-text">Tiger</span>
+            </div>
+            <div class="word-card" onclick="speak('Teacher')">
+                <span>👩‍🏫</span>
+                <span class="word-text">Teacher</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- قسم حرف Ii -->
+    <div class="letter-section">
+        <div class="letter-title">Letter Ii /ɪ/</div>
+        <div class="word-grid">
+            <div class="word-card" onclick="speak('In')">
+                <span>📥</span>
+                <span class="word-text">In</span>
+            </div>
+            <div class="word-card" onclick="speak('Ink')">
+                <span>✒️</span>
+                <span class="word-text">Ink</span>
+            </div>
+            <div class="word-card" onclick="speak('Insect')">
+                <span>🐞</span>
+                <span class="word-text">Insect</span>
+            </div>
+        </div>
+    </div>
+
+    <button class="btn-back" onclick="window.location.href='dashboard.html'">العودة للوحة الوحدات</button>
+
+    <script>
+        // وظيفة نطق الكلمات لتعزيز التعلم السمعي [4، 16]
+        function speak(word) {
+            const msg = new SpeechSynthesisUtterance();
+            msg.text = word;
+            msg.lang = 'en-US';
+            window.speechSynthesis.speak(msg);
+            
+            // تسجيل "نقرة" الطالب في قاعدة البيانات للتقارير لاحقاً
+            console.log("Student interacted with: " + word);
+        }
+    </script>
+
+</body>
+</html>

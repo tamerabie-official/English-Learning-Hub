@@ -20,7 +20,11 @@
   const database = firebase.database();
 
   // ٣. وظيفة حفظ البيانات المرتبطة بمنهج Connect 1
-  function saveData() {
+  function saveData() {:}).then(() => {
+    alert("تم إنشاء ملفك الرقمي بنجاح! استعد للتعلم.");
+    window.location.href = "dashboard.html"; // تفعيل الانتقال التلقائي
+});
+
     const studentName = document.getElementById('studentName').value;
     const parentName = document.getElementById('parentName').value;
     const whatsapp = document.getElementById('whatsapp').value;

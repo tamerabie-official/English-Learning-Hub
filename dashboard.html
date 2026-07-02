@@ -68,9 +68,14 @@
 
     <script>
         function startUnit(unitId) {
-            alert("رائع! سنبدأ الآن دروس الوحدة " + unitId + " الممتعة [2، 11].");
-            // هنا سيتم التوجيه لصفحة محتوى كل وحدة لاحقاً
-        }
+    if(unitId === 1) {
+        // الربط بمعمل الصوتيات للوحدة الأولى (Tt, Ii) [4، 16]
+        window.location.href = 'phonics_unit1.html';
+    } else {
+        alert("هذه الوحدة ستكون متاحة قريباً! تابع دروس الوحدة الأولى مع Maya و Hana حالياً.");
+    }
+}
+
     </script>
 
 </body>
