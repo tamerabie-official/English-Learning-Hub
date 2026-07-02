@@ -3,27 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>English Learning Hub - 2026</title>
+    <title>لوحة التحكم - English Learning Hub</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Cairo', sans-serif; background-color: #e0f2f1; text-align: center; margin: 0; color: #2e7d32; }
-        .header { background: linear-gradient(135deg, #1976d2, #2196f3); color: white; padding: 40px 20px; border-bottom-left-radius: 50px; border-bottom-right-radius: 50px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .content { padding: 30px 20px; }
-        .character-box { margin: 20px auto; padding: 20px; background: white; border-radius: 25px; width: 85%; box-shadow: 0 6px 12px rgba(0,0,0,0.05); border: 2px dashed #1976d2; }
-        .btn-start { background: #ff9800; color: white; padding: 18px 45px; border: none; border-radius: 35px; font-size: 1.4rem; font-weight: bold; cursor: pointer; width: 80%; box-shadow: 0 6px 20px rgba(255, 152, 0, 0.4); }
+        body { font-family: 'Cairo', sans-serif; background-color: #f0f4f8; text-align: center; margin: 0; }
+        .welcome-section { background: #1976d2; color: white; padding: 30px 10px; border-bottom-left-radius: 30px; border-bottom-right-radius: 30px; }
+        .student-name { color: #ffeb3b; font-size: 1.5rem; display: block; margin-top: 10px; }
+        .unit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 20px; }
+        .unit-card { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); cursor: pointer; }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>مرحباً بك في English Learning Hub! 🎓</h1>
-        <p>الرفيق الذكي لطلاب الصف الأول الابتدائي 2026 [6، 22]</p>
+    <div class="welcome-section">
+        <h1>مرحباً بك في Hub! 🌟</h1>
+        <span id="displayStudentName" class="student-name">أيها البطل</span>
+        <p>استكشف وحدات المنهج الممتعة [1، 19]</p>
     </div>
-    <div class="content">
-        <div class="character-box">
-            <h2>Maya و Hana بانتظارك!</h2>
-            <p>انضم إلينا في رحلة تعلم تفاعلية وممتعة [11، 27].</p>
+
+    <div class="unit-grid">
+        <div class="unit-card" onclick="window.location.href='phonics_unit1.html'">
+            <div style="font-size: 2rem;">🏫</div>
+            <b>Unit 1: My School</b>
         </div>
-        <button class="btn-start" onclick="window.location.href='register.html'">ابدأ التسجيل الآن</button>
+        <div class="unit-card" onclick="window.location.href='phonics_unit2.html'">
+            <div style="font-size: 2rem;">🎨</div>
+            <b>Unit 2: Colors</b>
+        </div>
+        <!-- الوحدات المتبقية تضاف هنا بنفس النمط -->
     </div>
+
+    <script>
+        // قراءة اسم الطالب من الذاكرة المحلية التي سجلناها في صفحة login.html
+        const name = localStorage.getItem('studentName');
+        if (name) {
+            document.getElementById('displayStudentName').innerText = "يا بطلنا: " + name;
+        }
+    </script>
 </body>
 </html>

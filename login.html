@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دخول الأبطال - English Learning Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Cairo', sans-serif; background-color: #e3f2fd; padding: 20px; text-align: center; }
+        .login-box { background: white; padding: 30px; border-radius: 25px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); max-width: 400px; margin: auto; border: 3px solid #1976d2; }
+        input { width: 90%; padding: 12px; margin: 10px 0; border-radius: 12px; border: 2px solid #bbdefb; font-family: 'Cairo', sans-serif; font-size: 1rem; }
+        
+        /* نظام كلمة المرور الملونة [1، 20] */
+        .color-instruction { margin: 15px 0; color: #1565c0; font-weight: bold; }
+        .color-grid { display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; }
+        .color-btn { width: 60px; height: 60px; border-radius: 50%; border: 4px solid white; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: 0.3s; }
+        .red { background: #f44336; } .blue { background: #2196f3; }
+        .green { background: #4caf50; } .yellow { background: #ffeb3b; }
+        .selected { border-color: #1a237e; transform: scale(1.15); }
+
+        .btn-login { background: #4caf50; color: white; padding: 15px; border: none; border-radius: 30px; width: 100%; font-size: 1.3rem; cursor: pointer; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="login-box">
+        <h2>أهلاً بك يا بطل! 🌟</h2>
+        <p>اكتب اسم المستخدم واضغط على لونك السري [11، 27].</p>
+        
+        <input type="text" id="loginUser" placeholder="اسم المستخدم (Username)">
+        
+        <p class="color-instruction">ما هو لونك المفضل؟</p>
+        <div class="color-grid">
+            <div class="color-btn red" onclick="pickColor('Red', this)"></div>
+            <div class="color-btn blue" onclick="pickColor('Blue', this)"></div>
+            <div class="color-btn green" onclick="pickColor('Green', this)"></div>
+            <div class="color-btn yellow" onclick="pickColor('Yellow', this)"></div>
+        </div>
+        <input type="hidden" id="loginColor" value="">
+
+        <button class="btn-login" onclick="attemptLogin()">دخول للتعلم 🚀</button>
+    </div>
+
+    <!-- Firebase Library -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+
+    <script>
+      // يرجى وضع الـ Config الخاص بك هنا كما في ملف register.html
+      const firebaseConfig = {
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_PROJECT.firebaseapp.com",
+        databaseURL: "YOUR_DATABASE_URL",
+        projectId: "YOUR_PROJECT_ID",
+        storageBucket: "YOUR_PROJECT.appspot.com",
+        messagingSenderId: "YOUR_SENDER_ID",
+        appId: "YOUR_APP_ID"
+      };
+
+      firebase.initializeApp(firebaseConfig);
+      var database = firebase.database();
+
+      function pickColor(color, element) {
+          document.querySelectorAll('.color-btn').forEach(btn => btn.classList.remove('selected'));
+          element.classList.add('selected');
+          document.getElementById('loginColor').value = color;
+      }
+
+      function attemptLogin() {
+          const user = document.getElementById('loginUser').value;
+          const pass = document.getElementById('loginColor').value;
+
+          if(!user || !pass) {
+              alert("من فضلك اكتب اسمك واختر لونك [1].");
+              return;
+          }
+
+          // البحث عن الطالب في قاعدة البيانات التي ضبطنا قواعدها في المصدر 24582
+          database.ref('students/' + user).once('value').then((snapshot) => {
+              if (snapshot.exists()) {
+                  const data = snapshot.val();
+                  if (data.visualPassword === pass) {
+                      alert("مرحباً " + data.fullName + "! لنبدأ مع Maya و Hana [8، 26].");
+                      // حفظ اسم الطالب محلياً للتخصيص لاحقاً
+                      localStorage.setItem('studentName', data.fullName);
+                      window.location.href = "dashboard.html";
+                  } else {
+                      alert("عذراً، هذا ليس لونك الصحيح. حاول مرة أخرى!");
+                  }
+              } else {
+                  alert("اسم المستخدم غير موجود، تأكد من التسجيل أولاً.");
+              }
+          });
+      }
+    </script>
+</body>
+</html>
