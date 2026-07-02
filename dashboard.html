@@ -1,87 +1,20 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>رحلتي التعليمية - Englishhub 1</title>
+    <title>لوحة التحكم - English Learning Hub</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Cairo', sans-serif; background-color: #f0f4f8; margin: 0; padding: 0; text-align: center; }
-        .welcome-section { background: #00796b; color: white; padding: 30px 10px; border-bottom-left-radius: 30px; border-bottom-right-radius: 30px; }
-        .units-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 20px; }
-        .unit-card { 
-            background: white; padding: 20px; border-radius: 20px; 
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1); border: 2px solid #e0e0e0;
-            transition: transform 0.2s;
-        }
-        .unit-card:active { transform: scale(0.95); background-color: #e1f5fe; }
-        .unit-icon { font-size: 3rem; display: block; margin-bottom: 10px; }
-        .unit-title { font-weight: bold; color: #004d40; font-size: 0.9rem; }
-        .locked { opacity: 0.6; filter: grayscale(1); }
+        body { font-family: 'Cairo', sans-serif; background-color: #f0f4f8; text-align: center; margin: 0; }
+        .welcome-section { background: #1976d2; color: white; padding: 30px 10px; border-bottom-left-radius: 30px; border-bottom-right-radius: 30px; }
     </style>
 </head>
 <body>
-
     <div class="welcome-section">
-        <h1 id="welcomeMessage">مرحباً بك يا بطل! 🌟</h1>
-        <p>اختر وحدتك لتبدأ التعلم مع Maya و Hana [10، 11].</p>
+        <h1>مرحباً بك في Hub! 🌟</h1>
+        <p>استكشف وحدات منهج Connect 1 الممتعة [2، 23].</p>
     </div>
-
-    <div class="units-grid">
-        <!-- الوحدة 1: مدرسة طفلك [4، 17] -->
-        <div class="unit-card" onclick="startUnit(1)">
-            <span class="unit-icon">🏫</span>
-            <span class="unit-title">Unit 1: My School</span>
-        </div>
-
-        <!-- الوحدة 2: الألوان والأشكال [1، 14] -->
-        <div class="unit-card" onclick="startUnit(2)">
-            <span class="unit-icon">🎨</span>
-            <span class="unit-title">Unit 2: Colors</span>
-        </div>
-
-        <!-- الوحدة 3: العائلة [5، 19] -->
-        <div class="unit-card" onclick="startUnit(3)">
-            <span class="unit-icon">👨‍👩‍👧‍👦</span>
-            <span class="unit-title">Unit 3: My Family</span>
-        </div>
-
-        <!-- الوحدة 4: جسمي وحواسي [2، 12] -->
-        <div class="unit-card" onclick="startUnit(4)">
-            <span class="unit-icon">🖐️</span>
-            <span class="unit-title">Unit 4: My Body</span>
-        </div>
-
-        <!-- الوحدة 5: في المزرعة [3، 20] -->
-        <div class="unit-card" onclick="startUnit(5)">
-            <span class="unit-icon">🚜</span>
-            <span class="unit-title">Unit 5: The Farm</span>
-        </div>
-
-        <!-- الوحدة 6: الحيوانات من حولي [4، 23] -->
-        <div class="unit-card" onclick="startUnit(6)">
-            <span class="unit-icon">🦁</span>
-            <span class="unit-title">Unit 6: Animals</span>
-        </div>
-    </div>
-
-    <script>
-        function startUnit(unitId) {
-    if(unitId === 1) {
-        window.location.href = 'phonics_unit1.html';
-    } else if(unitId === 2) {
-        // الربط بلعبة الألوان والأشكال للوحدة الثانية [1، 9]
-        window.location.href = 'unit2_game.html';
-    } else {
-        alert("تابع دروس الوحدة الأولى والثانية حالياً مع Maya و Hana!");
-    }
-}
-
-    }
-}
-
-    </script>
-
+    <!-- بقية كود الـ Grid الخاص بالوحدات يوضع هنا -->
 </body>
 </html>
