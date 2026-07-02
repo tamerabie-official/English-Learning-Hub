@@ -10,60 +10,79 @@
         .unit-header { background: #0097a7; color: white; padding: 20px; border-radius: 25px; margin-bottom: 25px; box-shadow: 0 5px 15px rgba(0, 151, 167, 0.3); }
         .section-title { color: #006064; margin-top: 30px; border-bottom: 2px solid #4dd0e1; display: inline-block; padding-bottom: 5px; }
         
-        /* شبكة أعضاء الجسم [2، 17، 25] */
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
-        .card { background: white; padding: 15px; border-radius: 20px; border: 2px solid #4dd0e1; cursor: pointer; transition: 0.3s; }
-        .card:active { transform: scale(0.9); background: #b2ebf2; }
+        /* شبكة أجزاء الجسم والحواس المحدثة */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; margin-top: 15px; padding: 10px; }
+        .card { background: white; padding: 15px; border-radius: 20px; border: 2px solid #4dd0e1; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .card:active { transform: scale(0.95); background: #b2ebf2; }
         .card span { display: block; font-size: 2.5rem; }
         .label { font-weight: bold; color: #00796b; margin-top: 10px; }
 
-        /* معمل الصوتيات (Rr, Ee, Cc, Kk) [2، 24] */
-        .phonics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 15px; }
-        .letter-btn { background: #00acc1; color: white; padding: 12px; border-radius: 12px; font-weight: bold; border: none; cursor: pointer; }
+        /* معمل الصوتيات المحدث */
+        .phonics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-top: 15px; padding: 10px; }
+        .letter-btn { background: #00acc1; color: white; padding: 15px; border-radius: 15px; font-weight: bold; border: none; cursor: pointer; font-size: 1.1rem; transition: 0.2s; }
+        .letter-btn:active { background: #00838f; transform: scale(0.95); }
+        .letter-btn small { display: block; font-size: 0.8rem; color: #e0f7fa; font-weight: normal; margin-top: 5px; }
     </style>
 </head>
 <body>
 
     <div class="unit-header">
         <h1>👁️ Unit 4: My Body and My Senses</h1>
-        <p>اكتشف جسمك وحواسك الخمس مع Hub [2، 17]</p>
+        <p>اكتشف جسمك وحواسك الخمس مع English Learning Hub</p>
     </div>
 
     <h3 class="section-title">أجزاء الجسم (Body Parts)</h3>
     <div class="grid">
-        <div class="card" onclick="speak('I have one head')"><span>👤</span><div class="label">Head</div></div>
-        <div class="card" onclick="speak('I have two eyes')"><span>👀</span><div class="label">Eyes</div></div>
-        <div class="card" onclick="speak('I have two ears')"><span>👂</span><div class="label">Ears</div></div>
-        <div class="card" onclick="speak('I have one nose')"><span>👃</span><div class="label">Nose</div></div>
-        <div class="card" onclick="speak('I have one mouth')"><span>👄</span><div class="label">Mouth</div></div>
-        <div class="card" onclick="speak('I have two hands')"><span>🙌</span><div class="label">Hands</div></div>
+        <div class="card" onclick="speak('Head. I have one head')"><span>👤</span><div class="label">Head</div></div>
+        <div class="card" onclick="speak('Eyes. I have two eyes')"><span>👀</span><div class="label">Eyes</div></div>
+        <div class="card" onclick="speak('Ears. I have two ears')"><span>👂</span><div class="label">Ears</div></div>
+        <div class="card" onclick="speak('Nose. I have one nose')"><span>👃</span><div class="label">Nose</div></div>
+        <div class="card" onclick="speak('Mouth. I have one mouth')"><span>👄</span><div class="label">Mouth</div></div>
+        <div class="card" onclick="speak('Tongue. I have one tongue')"><span>👅</span><div class="label">Tongue</div></div>
+        <div class="card" onclick="speak('Arm. I have two arms')"><span>💪</span><div class="label">Arms</div></div>
+        <div class="card" onclick="speak('Hand. I have two hands')"><span>🙌</span><div class="label">Hands</div></div>
+        <div class="card" onclick="speak('Leg. I have two legs')"><span>🦵</span><div class="label">Legs</div></div>
+        <div class="card" onclick="speak('Feet. I have two feet')"><span>👣</span><div class="label">Feet</div></div>
+        <div class="card" onclick="speak('Toes')"><span>🩴</span><div class="label">Toes</div></div>
     </div>
 
     <h3 class="section-title">الحواس الخمس (My 5 Senses)</h3>
     <div class="grid">
-        <div class="card" onclick="speak('I can see with my eyes')"><span>🔍</span><div class="label">See</div></div>
-        <div class="card" onclick="speak('I can hear with my ears')"><span>🎧</span><div class="label">Hear</div></div>
-        <div class="card" onclick="speak('I can smell with my nose')"><span>🌹</span><div class="label">Smell</div></div>
-        <div class="card" onclick="speak('I can taste with my tongue')"><span>🍦</span><div class="label">Taste</div></div>
-        <div class="card" onclick="speak('I can touch with my hands')"><span>🧸</span><div class="label">Touch</div></div>
+        <div class="card" onclick="speak('See. I can see with my eyes')"><span>🔍</span><div class="label">See</div></div>
+        <div class="card" onclick="speak('Hear. I can hear with my ears')"><span>🎧</span><div class="label">Hear</div></div>
+        <div class="card" onclick="speak('Smell. I can smell with my nose')"><span>🌹</span><div class="label">Smell</div></div>
+        <div class="card" onclick="speak('Taste. I can taste with my tongue')"><span>🍦</span><div class="label">Taste</div></div>
+        <div class="card" onclick="speak('Touch. I can touch with my hands')"><span>🧸</span><div class="label">Touch</div></div>
     </div>
 
     <h3 class="section-title">معمل الصوتيات (Phonics Lab)</h3>
-    <p>استمع لأصوات الحروف الجديدة [2، 24]</p>
+    <p>استمع لأصوات الحروف والكلمات الرسمية من كتاب الوزارة</p>
     <div class="phonics-grid">
-        <button class="letter-btn" onclick="speak('R, R, Red, Rabbit, Rocket')">Rr</button>
-        <button class="letter-btn" onclick="speak('E, E, Egg, Elephant, Elbow')">Ee</button>
-        <button class="letter-btn" onclick="speak('C, C, Cat, Cake, Cup')">Cc</button>
-        <button class="letter-btn" onclick="speak('K, K, Kite, King, Kitchen')">Kk</button>
+        <button class="letter-btn" onclick="speak('Letter R. red, rabbit, rocket')">
+            Rr <small>red, rabbit, rocket</small>
+        </button>
+        <button class="letter-btn" onclick="speak('Letter E. egg, elephant, elbow')">
+            Ee <small>egg, elephant, elbow</small>
+        </button>
+        <button class="letter-btn" onclick="speak('Letter C. cat, cake, cup')">
+            Cc <small>cat, cake, cup</small>
+        </button>
+        <button class="letter-btn" onclick="speak('Letter K. kite, king, kitchen, key, kangaroo')">
+            Kk <small>kite, king, kitchen, key, kangaroo</small>
+        </button>
     </div>
 
     <br><br>
-    <button onclick="window.location.href='dashboard.html'" style="padding:15px 30px; border-radius:25px; border:none; background:#333; color:white; cursor:pointer; font-weight:bold;">العودة للوحة التحكم</button>
+    <button onclick="window.location.href='dashboard.html'" style="padding:15px 30px; border-radius:25px; border:none; background:#333; color:white; cursor:pointer; font-weight:bold; font-family:'Cairo';">العودة للوحة التحكم</button>
 
     <script>
         function speak(text) {
+            // إلغاء أي نطق شغال حالياً عشان الأصوات متدخلش في بعضها لو الطفل داس ورا بعض
+            window.speechSynthesis.cancel();
+            
             const msg = new SpeechSynthesisUtterance(text);
             msg.lang = 'en-US';
+            msg.rate = 0.85; // تجميع النطق أبطأ سنة صغيرة ليناسب استيعاب طفل أولى ابتدائي
             window.speechSynthesis.speak(msg);
         }
     </script>

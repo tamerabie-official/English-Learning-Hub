@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>الوحدة 5: عائلتي - English Hub</title>
+    <style>
+        body { font-family: 'Cairo', sans-serif; background-color: #fff3e0; margin: 0; padding: 20px; text-align: center; }
+        .unit-header { background: #ef6c00; color: white; padding: 20px; border-radius: 25px; margin-bottom: 25px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; }
+        .card { background: white; padding: 15px; border-radius: 20px; border: 2px solid #ffb74d; cursor: pointer; transition: 0.3s; }
+        .card:active { transform: scale(0.95); background: #ffe0b2; }
+        .card span { display: block; font-size: 2.5rem; }
+        .label { font-weight: bold; color: #e65100; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="unit-header">
+        <h1>👨‍👩‍👧‍👦 Unit 5: My Family</h1>
+        <p>تعرف على أفراد أسرتك مع English Learning Hub</p>
+    </div>
+
+    <div class="grid">
+        <div class="card" onclick="speak('Mother')"><span>👩</span><div class="label">Mother</div></div>
+        <div class="card" onclick="speak('Father')"><span>👨</span><div class="label">Father</div></div>
+        <div class="card" onclick="speak('Sister')"><span>👧</span><div class="label">Sister</div></div>
+        <div class="card" onclick="speak('Brother')"><span>👦</span><div class="label">Brother</div></div>
+    </div>
+
+    <script>
+        function speak(text) {
+            window.speechSynthesis.cancel();
+            const msg = new SpeechSynthesisUtterance(text);
+            msg.lang = 'en-US';
+            msg.rate = 0.85;
+            window.speechSynthesis.speak(msg);
+        }
+    </script>
+
+</body>
+</html>
