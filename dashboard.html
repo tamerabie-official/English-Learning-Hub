@@ -123,18 +123,24 @@
         fetchLiveMetrics();
     };
 
+    /* --- الجزء المراد وضعه بدلاً منه في ملف dashboard.html --- */
+    /* قم بوضع هذا الكود الجديد في ملفك */
+    /* --- الجزء المراد وضعه --- */
     async function fetchLiveMetrics() {
-        const { data: student } = await dbClient.from('students').select('*').eq('Full Name', currentStudent).single();
-        if (student) {
-            for (let i = 1; i <= 6; i++) {
-                const score = student[`Unit ${i} Score`];
-                const el = document.getElementById(`u${i}-score`);
-                if (score !== null && score !== undefined) {
-                    el.innerHTML = `${score}/5 ${score >= 5 ? '🏆' : ''}`;
-                    el.style.color = score >= 5 ? "#f59e0b" : "#4caf50";
-                } else {
-                    el.innerText = "لم تبدأ";
-                }
+        const { data, error } = await dbClient.from('students').select('*').eq('Full Name', currentStudent).single();
+        
+        // إذا لم نجد الطالب، أعده إلى صفحة مركبة المعرفة (التسجيل)
+        if (!data || error) {
+            localStorage.removeItem('studentName');
+            window.location.href = 'index.html'; // تأكد أن هذا هو اسم ملف صفحة التسجيل
+            return;
+        }
+
+        for (let i = 1; i <= 6; i++) {
+            const score = data[`Unit ${i} Score`];
+            const el = document.getElementById(`u${i}-score`);
+            if (el) {
+                el.innerText = (score !== null && score !== undefined) ? `${score}/5 🏆` : "لم تبدأ";
             }
         }
     }
