@@ -23,6 +23,7 @@
             border-bottom-left-radius: 40px; 
             border-bottom-right-radius: 40px; 
             box-shadow: 0 6px 20px rgba(0,0,0,0.15); 
+            position: relative;
         }
         
         .student-name { 
@@ -32,6 +33,26 @@
             display: block; 
             margin-top: 10px; 
             text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        /* زر تسجيل الخروج الأنيق للعودة للتجربة */
+        .logout-btn {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            padding: 5px 12px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            transition: 0.3s;
+        }
+        .logout-btn:hover {
+            background: #d32f2f;
+            border-color: #d32f2f;
         }
 
         /* شبكة عرض الوحدات التعليمية */
@@ -68,13 +89,17 @@
                 padding: 20px;
             }
             .student-name { font-size: 1.5rem; }
+            .logout-btn { top: 10px; left: 10px; padding: 4px 10px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- القسم الترحيبي المحدث بعد تنظيف الصور القديمة -->
+    <!-- القسم الترحيبي المطور -->
     <div class="welcome-section">
+        <!-- زر خروج مضاف لتسهيل حلقة الاختبار البرمجي والتنقل بين الحسابات -->
+        <button class="logout-btn" onclick="logoutStudent()">تسجيل خروج ⬅</button>
+        
         <h1>مرحباً بك في عالم المعرفة! 🌟</h1>
         <span id="displayStudentName" class="student-name">أهلاً بك يا بطل</span>
         <p style="margin: 5px 0 0 0; opacity: 0.9;">استعد لاستكشاف وحدات منهجك الممتعة</p>
@@ -96,13 +121,19 @@
     </div>
 
     <script>
-        // جلب الاسم المتوافق مع عمود Full Name المحفوظ عند تسجيل الدخول بنجاح
+        // التحقق من هوية الطالب فور فتح الصفحة
         const studentName = localStorage.getItem('studentName');
         if (studentName) {
             document.getElementById('displayStudentName').innerText = "يا بطلنا: " + studentName;
         } else {
-            // حماية اللوحة: إذا حاول شخص الدخول مباشرة بدون حساب يتم إرجاعه لصفحة ميكي
+            // حماية اللوحة: الطرد الفوري لصفحة ميكي إذا لم يكن هناك حساب مسجل
             window.location.href = "index.html";
+        }
+
+        // دالة تسجيل الخروج المضافة حديثاً لتنظيف الذاكرة
+        function logoutStudent() {
+            localStorage.removeItem('studentName'); // حذف الاسم من ذاكرة المتصفح
+            window.location.href = "index.html";   // العودة الفورية لصفحة البداية
         }
     </script>
 </body>

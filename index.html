@@ -137,9 +137,17 @@
 
 </div>
 
+<!-- استدعاء المكتبة الخارجية -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-    const supabaseClient = supabase.createClient('https://cjpdnptndkceescvubmg.supabase.co', 'Sb_publishable_Jbwm_t_ycZprbYmfV5HrPw_CAtZ-m6B');
+    // دالة الاتصال الآمنة: تمنع انهيار الصفحة كلياً وتكشف الأخطاء فوراً
+    function getSupabaseClient() {
+        if (typeof supabase === 'undefined') {
+            alert("تنبيه: لم يتم تحميل مكتبة قاعدة البيانات بعد. تأكد من اتصالك بالإنترنت ثم حدّث الصفحة.");
+            return null;
+        }
+        return supabase.createClient('https://cjpdnptndkceescvubmg.supabase.co', 'Sb_publishable_Jbwm_t_ycZprbYmfV5HrPw_CAtZ-m6B');
+    }
 
     async function registerStudent() {
         const fullName = document.getElementById('p_studentName').value.trim();
@@ -151,48 +159,45 @@
             return;
         }
 
+        const client = getSupabaseClient();
+        if (!client) return; // التوقف إذا فشل تحميل المكتبة لمنع الصمت التقني
+
         try {
-            // 1. التحقق من تكرار اسم المستخدم
-            const { data: userCheck } = await supabaseClient.from('students').select('*').eq('User name', username);
-            if (userCheck && userCheck.length > 0) {
-                alert("اختار اسم مستخدم آخر.");
-                return;
-            }
+            // 1. التحقق من تكرار اسم المستخدم مع التقاط الأخطاء
+            const { data: userCheck, error: userErr } = await client.from('students').select('*').eq('User name', username);
+            if (userErr) { alert("فشل فحص الحساب: " + userErr.message); return; }
+            if (userCheck && userCheck.length > 0) { alert("اختار اسم مستخدم آخر."); return; }
 
-            // 2. التحقق من تكرار الاسم الثلاثي للطالب
-            const { data: nameCheck } = await supabaseClient.from('students').select('*').eq('Full Name', fullName);
-            if (nameCheck && nameCheck.length > 0) {
-                alert("الاسم مسجل سابقا.");
-                return;
-            }
+            // 2. التحقق من تكرار الاسم الثلاثي مع التقاط الأخطاء
+            const { data: nameCheck, error: nameErr } = await client.from('students').select('*').eq('Full Name', fullName);
+            if (nameErr) { alert("فشل فحص الاسم: " + nameErr.message); return; }
+            if (nameCheck && nameCheck.length > 0) { alert("الاسم مسجل سابقا."); return; }
 
-            // 3. التحقق من تكرار رقم الجوال
-            const { data: phoneCheck } = await supabaseClient.from('students').select('*').eq('WhatsApp', whatsapp);
-            if (phoneCheck && phoneCheck.length > 0) {
-                alert("رقم الجوال مسجل سابقا.");
-                return;
-            }
+            // 3. التحقق من تكرار رقم الجوال مع التقاط الأخطاء
+            const { data: phoneCheck, error: phoneErr } = await client.from('students').select('*').eq('WhatsApp', whatsapp);
+            if (phoneErr) { alert("فشل فحص الهاتف: " + phoneErr.message); return; }
+            if (phoneCheck && phoneCheck.length > 0) { alert("رقم الجوال مسجل سابقا."); return; }
 
-            // إرسال الـ 3 أعمدة الأساسية المتبقية فقط بنجاح ونقاء تامين
-            const { error } = await supabaseClient.from('students').insert([{
+            // إرسال الـ 3 أعمدة الأساسية النظيفة بعد تبسيطك للجدول
+            const { error: insertErr } = await client.from('students').insert([{
                 'Full Name': fullName,
                 'User name': username,
                 'WhatsApp': whatsapp
             }]);
             
-            if(error) {
-                alert("خطأ أثناء التسجيل: " + error.message);
+            if(insertErr) {
+                alert("خطأ أثناء إدخال البيانات: " + insertErr.message);
             } else {
                 alert("تم التسجيل بنجاح! اسم المستخدم الخاص بك هو: (" + username + ")");
                 
-                // تفريغ خانات الكتابة بعد النجاح
+                // تفريغ المدخلات بعد النجاح
                 document.getElementById('p_studentName').value = '';
                 document.getElementById('p_username').value = '';
                 document.getElementById('p_whatsapp').value = '';
             }
 
         } catch (err) {
-            alert("حدث خطأ غير متوقع: " + err.message);
+            alert("حدث خطأ غير متوقع في النظام: " + err.message);
         }
     }
 
@@ -204,13 +209,23 @@
             return;
         }
 
-        const { data, error } = await supabaseClient.from('students').select('*').eq('User name', user).single();
-        
-        if (data) {
-            localStorage.setItem('studentName', data['Full Name']);
-            window.location.href = "dashboard.html";
-        } else {
-            alert("اسم المستخدم غير صحيح أو الطالب غير مسجل.");
+        const client = getSupabaseClient();
+        if (!client) return;
+
+        try {
+            const { data, error } = await client.from('students').select('*').eq('User name', user).single();
+            
+            if (error) {
+                alert("اسم المستخدم غير صحيح أو الطالب غير مسجل.");
+                return;
+            }
+
+            if (data) {
+                localStorage.setItem('studentName', data['Full Name']);
+                window.location.href = "dashboard.html";
+            }
+        } catch (err) {
+            alert("حدث خطأ أثناء محاولة الدخول: " + err.message);
         }
     }
 </script>
