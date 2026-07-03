@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎙️ مَعمل الصوتيات البريطاني للأبطال - Lessons</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Cairo', sans-serif; 
+            background-color: #f0f9ff; 
+            color: #333333;
+            margin: 0; 
+            padding: 20px; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .lab-container {
+            width: 100%;
+            max-width: 500px;
+        }
+        
+        .lab-header { 
+            background: linear-gradient(135deg, #ffce00, #ff9800); 
+            border-radius: 25px; 
+            padding: 20px;
+            margin-bottom: 25px; 
+            box-shadow: 0 8px 16px rgba(255, 152, 0, 0.2);
+            text-align: center;
+            color: #fff;
+        }
+        .lab-header h1 { margin: 0; font-size: 1.8rem; text-shadow: 1px 1px 2px rgba(0,0,0,0.2); }
+        .lab-header p { margin: 5px 0 0 0; font-size: 1.1rem; font-weight: bold; color: #fffde7; }
+
+        .letter-section { 
+            background: #ffffff; 
+            padding: 20px; 
+            border-radius: 25px; 
+            margin-bottom: 25px; 
+            border: 3px solid #e0f2fe;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05); 
+        }
+        
+        .letter-title { 
+            font-size: 2.2rem; 
+            color: #ff5722; 
+            font-weight: bold; 
+            margin-bottom: 15px; 
+            text-align: center;
+            background: #fff3e0;
+            border-radius: 15px;
+            padding: 5px;
+        }
+        
+        .word-grid { 
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 15px; 
+        }
+        
+        .word-card { 
+            background: #ffffff; 
+            border: 3px solid #ffeb3b; 
+            border-radius: 20px; 
+            padding: 15px; 
+            cursor: pointer; 
+            transition: transform 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.04);
+        }
+        
+        .word-card:hover, .word-card:active { 
+            transform: scale(1.05) rotate(2deg);
+            background: #fffde7;
+            border-color: #ff9800;
+        }
+        
+        .word-emoji { font-size: 3.5rem; margin-bottom: 5px; }
+        .word-text { font-weight: bold; color: #2e7d32; font-size: 1.3rem; }
+        
+        .btn-back { 
+            background: #29b6f6; 
+            color: white; 
+            padding: 12px 35px; 
+            border: none; 
+            border-radius: 50px; 
+            margin: 10px auto 30px auto; 
+            font-family: 'Cairo', sans-serif;
+            font-weight: bold;
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: block;
+            box-shadow: 0 4px 10px rgba(41, 182, 246, 0.3);
+            transition: 0.2s;
+        }
+        .btn-back:hover { background: #0288d1; }
+    </style>
+</head>
+<body>
+
+<div class="lab-container">
+
+    <div class="lab-header">
+        <h1>🎙️ مَعمل الصوتيات الذكي (الملكي 🇬🇧)</h1>
+        <p>اِستمع، اِبتسم، ورَدّد بالنطق البريطاني الرسمي المعتمد! 👧🧑</p>
+    </div>
+
+    <div class="letter-section">
+        <div class="letter-title">Letter Tt /t/</div>
+        <div class="word-grid">
+            <div class="word-card" onclick="speak('Tomato')">
+                <span class="word-emoji">🍅</span>
+                <span class="word-text">Tomato</span>
+            </div>
+            <div class="word-card" onclick="speak('Tree')">
+                <span class="word-emoji">🌳</span>
+                <span class="word-text">Tree</span>
+            </div>
+            <div class="word-card" onclick="speak('Tiger')">
+                <span class="word-emoji">🐯</span>
+                <span class="word-text">Tiger</span>
+            </div>
+            <div class="word-card" onclick="speak('Teacher')">
+                <span class="word-emoji">👩‍🏫</span>
+                <span class="word-text">Teacher</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="letter-section">
+        <div class="letter-title">Letter Ii /ɪ/</div>
+        <div class="word-grid">
+            <div class="word-card" onclick="speak('In')">
+                <span class="word-emoji">📥</span>
+                <span class="word-text">In</span>
+            </div>
+            <div class="word-card" onclick="speak('Ink')">
+                <span class="word-emoji">✒️</span>
+                <span class="word-text">Ink</span>
+            </div>
+            <div class="word-card" onclick="speak('Insect')">
+                <span class="word-emoji">🐞</span>
+                <span class="word-text">Insect</span>
+            </div>
+        </div>
+    </div>
+
+    <button class="btn-back" onclick="window.location.href='dashboard.html'">رجوع للرئيسية 🏠</button>
+
+</div>
+
+<script>
+    function speak(word) {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel(); 
+            const msg = new SpeechSynthesisUtterance();
+            msg.text = word;
+            msg.lang = 'en-GB'; // اللكنة البريطانية الرسمية للمدارس المصرية
+            msg.rate = 0.75;    
+            window.speechSynthesis.speak(msg);
+        }
+    }
+</script>
+
+</body>
+</html>
