@@ -61,10 +61,10 @@
             box-shadow: 0 12px 25px rgba(0,0,0,0.15);
         }
 
-        /* استجابة الشاشات الصغيرة (الموبايل) */
+        /* استجابة الشاشات الصغيرة للموبايل */
         @media (max-width: 480px) {
             .unit-grid {
-                grid-template-columns: 1fr; /* جعل الكروت تحت بعضها في الموبايل لسهولة الضغط */
+                grid-template-columns: 1fr; 
                 padding: 20px;
             }
             .student-name { font-size: 1.5rem; }
@@ -73,14 +73,14 @@
 </head>
 <body>
 
-    <!-- القسم الترحيبي المحدث -->
+    <!-- القسم الترحيبي المحدث بعد تنظيف الصور القديمة -->
     <div class="welcome-section">
         <h1>مرحباً بك في عالم المعرفة! 🌟</h1>
         <span id="displayStudentName" class="student-name">أهلاً بك يا بطل</span>
         <p style="margin: 5px 0 0 0; opacity: 0.9;">استعد لاستكشاف وحدات منهجك الممتعة</p>
     </div>
 
-    <!-- شبكة الدروس والوحدات -->
+    <!-- شبكة الدروس المخصصة للأبطال -->
     <div class="unit-grid">
         <!-- الوحدة الأولى -->
         <div class="unit-card" onclick="window.location.href='phonics_unit1.html'">
@@ -96,12 +96,12 @@
     </div>
 
     <script>
-        // قراءة الاسم الذي حفظناه في صفحة ميكي ماوس عند الدخول الصحيح
+        // جلب الاسم المتوافق مع عمود Full Name المحفوظ عند تسجيل الدخول بنجاح
         const studentName = localStorage.getItem('studentName');
         if (studentName) {
             document.getElementById('displayStudentName').innerText = "يا بطلنا: " + studentName;
         } else {
-            // حماية للوحة التحكم: إذا حاول شخص دخولها بدون تسجيل، يتم طرده فوراً لصفحة ميكي
+            // حماية اللوحة: إذا حاول شخص الدخول مباشرة بدون حساب يتم إرجاعه لصفحة ميكي
             window.location.href = "index.html";
         }
     </script>

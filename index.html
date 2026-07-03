@@ -139,48 +139,74 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-    const supabase = supabase.createClient('https://cjpdnptndkceescvubmg.supabase.co', 'Sb_publishable_Jbwm_t_ycZprbYmfV5HrPw_CAtZ-m6B');
+    const supabaseClient = supabase.createClient('https://cjpdnptndkceescvubmg.supabase.co', 'Sb_publishable_Jbwm_t_ycZprbYmfV5HrPw_CAtZ-m6B');
 
     async function registerStudent() {
-        const fullName = document.getElementById('p_studentName').value;
-        const username = document.getElementById('p_username').value;
-        const whatsapp = document.getElementById('p_whatsapp').value;
+        const fullName = document.getElementById('p_studentName').value.trim();
+        const username = document.getElementById('p_username').value.trim();
+        const whatsapp = document.getElementById('p_whatsapp').value.trim();
 
         if(!fullName || !username || !whatsapp) {
             alert("الرجاء ملء جميع الحقول أولاً.");
             return;
         }
 
-        // تم ربط الأعمدة بالمسافات الدقيقة وحروف الكابيتال كما في صورتك تماماً
-        // مع وضع قيم نصية مبدئية للحقول الإلزامية حتى يقبلها السيرفر بنجاح
-        const { error } = await supabase.from('students').insert([{
-            'Full Name': fullName,
-            'User name': username,
-            'WhatsApp': whatsapp,
-            'Visual password': 'none', // قيمة افتراضية لأن الحقل لا يقبل الفراغ بنظامك
-            'Progress': 'Unit 1'       // قيمة افتراضية لأن الحقل لا يقبل الفراغ بنظامك
-        }]);
-        
-        if(error) {
-            alert("خطأ أثناء التسجيل: " + error.message);
-        } else {
-            alert("تم التسجيل بنجاح! يمكن للطالب الدخول الآن.");
+        try {
+            // 1. التحقق من تكرار اسم المستخدم
+            const { data: userCheck } = await supabaseClient.from('students').select('*').eq('User name', username);
+            if (userCheck && userCheck.length > 0) {
+                alert("اختار اسم مستخدم آخر.");
+                return;
+            }
+
+            // 2. التحقق من تكرار الاسم الثلاثي للطالب
+            const { data: nameCheck } = await supabaseClient.from('students').select('*').eq('Full Name', fullName);
+            if (nameCheck && nameCheck.length > 0) {
+                alert("الاسم مسجل سابقا.");
+                return;
+            }
+
+            // 3. التحقق من تكرار رقم الجوال
+            const { data: phoneCheck } = await supabaseClient.from('students').select('*').eq('WhatsApp', whatsapp);
+            if (phoneCheck && phoneCheck.length > 0) {
+                alert("رقم الجوال مسجل سابقا.");
+                return;
+            }
+
+            // إرسال الـ 3 أعمدة الأساسية المتبقية فقط بنجاح ونقاء تامين
+            const { error } = await supabaseClient.from('students').insert([{
+                'Full Name': fullName,
+                'User name': username,
+                'WhatsApp': whatsapp
+            }]);
+            
+            if(error) {
+                alert("خطأ أثناء التسجيل: " + error.message);
+            } else {
+                alert("تم التسجيل بنجاح! اسم المستخدم الخاص بك هو: (" + username + ")");
+                
+                // تفريغ خانات الكتابة بعد النجاح
+                document.getElementById('p_studentName').value = '';
+                document.getElementById('p_username').value = '';
+                document.getElementById('p_whatsapp').value = '';
+            }
+
+        } catch (err) {
+            alert("حدث خطأ غير متوقع: " + err.message);
         }
     }
 
     async function loginStudent() {
-        const user = document.getElementById('s_username').value;
+        const user = document.getElementById('s_username').value.trim();
         
         if(!user) {
             alert("الرجاء إدخال اسم المستخدم الخاص بك.");
             return;
         }
 
-        // تم تعديل البحث ليتطابق مع اسم العمود 'User name' بمسافته وحروفه
-        const { data, error } = await supabase.from('students').select('*').eq('User name', user).single();
+        const { data, error } = await supabaseClient.from('students').select('*').eq('User name', user).single();
         
         if (data) {
-            // جلب الاسم من حقل 'Full Name' لحفظه في المتصفح للوحة التحكم
             localStorage.setItem('studentName', data['Full Name']);
             window.location.href = "dashboard.html";
         } else {
