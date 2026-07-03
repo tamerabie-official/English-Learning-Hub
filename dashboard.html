@@ -6,46 +6,102 @@
     <title>لوحة التحكم - English Learning Hub</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Cairo', sans-serif; background: linear-gradient(135deg, #e3f2fd, #fff9c4); min-height: 100vh; text-align: center; margin: 0; padding-bottom: 30px; }
-        .welcome-section { background: #1976d2; color: white; padding: 30px 10px; border-bottom-left-radius: 40px; border-bottom-right-radius: 40px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .student-name { color: #ffeb3b; font-size: 1.8rem; font-weight: bold; display: block; margin-top: 10px; }
-        .side-img { width: 120px; position: fixed; bottom: 0; z-index: -1; }
-        #tom { left: 10px; }
-        #jerry { right: 10px; }
-        .unit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: 30px; max-width: 600px; margin: auto; }
-        .unit-card { background: white; padding: 25px; border-radius: 25px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); cursor: pointer; transition: 0.3s; border: 3px solid #ff9800; }
-        .unit-card:hover { transform: translateY(-10px); background-color: #fffde7; }
+        body { 
+            font-family: 'Cairo', sans-serif; 
+            background: linear-gradient(135deg, #e3f2fd, #fff9c4); 
+            min-height: 100vh; 
+            text-align: center; 
+            margin: 0; 
+            padding-bottom: 40px; 
+        }
+        
+        /* القسم الترحيبي العلوي */
+        .welcome-section { 
+            background: #1976d2; 
+            color: white; 
+            padding: 35px 15px; 
+            border-bottom-left-radius: 40px; 
+            border-bottom-right-radius: 40px; 
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15); 
+        }
+        
+        .student-name { 
+            color: #ffeb3b; 
+            font-size: 1.8rem; 
+            font-weight: bold; 
+            display: block; 
+            margin-top: 10px; 
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        /* شبكة عرض الوحدات التعليمية */
+        .unit-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 20px; 
+            padding: 30px; 
+            max-width: 600px; 
+            margin: auto; 
+        }
+        
+        /* كروت الوحدات */
+        .unit-card { 
+            background: white; 
+            padding: 25px; 
+            border-radius: 25px; 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1); 
+            cursor: pointer; 
+            transition: 0.3s ease; 
+            border: 3px solid #ff9800; 
+        }
+        
+        .unit-card:hover { 
+            transform: translateY(-8px); 
+            background-color: #fffde7; 
+            box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+        }
+
+        /* استجابة الشاشات الصغيرة (الموبايل) */
+        @media (max-width: 480px) {
+            .unit-grid {
+                grid-template-columns: 1fr; /* جعل الكروت تحت بعضها في الموبايل لسهولة الضغط */
+                padding: 20px;
+            }
+            .student-name { font-size: 1.5rem; }
+        }
     </style>
 </head>
 <body>
 
-    <!-- الشخصيات المرافقة -->
-    <img src="25009.jpg" id="tom" class="side-img" alt="Tom">
-    <img src="25010.jpg" id="jerry" class="side-img" alt="Jerry">
-
+    <!-- القسم الترحيبي المحدث -->
     <div class="welcome-section">
         <h1>مرحباً بك في عالم المعرفة! 🌟</h1>
         <span id="displayStudentName" class="student-name">أهلاً بك يا بطل</span>
-        <p>استعد لاستكشاف وحدات منهجك الممتعة</p>
+        <p style="margin: 5px 0 0 0; opacity: 0.9;">استعد لاستكشاف وحدات منهجك الممتعة</p>
     </div>
 
+    <!-- شبكة الدروس والوحدات -->
     <div class="unit-grid">
+        <!-- الوحدة الأولى -->
         <div class="unit-card" onclick="window.location.href='phonics_unit1.html'">
-            <div style="font-size: 3rem;">🏫</div>
-            <b style="font-size: 1.2rem;">Unit 1: My School</b>
+            <div style="font-size: 3.5rem; margin-bottom: 5px;">🏫</div>
+            <b style="font-size: 1.2rem; color: #333; display: block;">Unit 1: My School</b>
         </div>
+        
+        <!-- الوحدة الثانية -->
         <div class="unit-card" onclick="window.location.href='phonics_unit2.html'">
-            <div style="font-size: 3rem;">🎨</div>
-            <b style="font-size: 1.2rem;">Unit 2: Colors</b>
+            <div style="font-size: 3.5rem; margin-bottom: 5px;">🎨</div>
+            <b style="font-size: 1.2rem; color: #333; display: block;">Unit 2: Colors</b>
         </div>
     </div>
 
     <script>
+        // قراءة الاسم الذي حفظناه في صفحة ميكي ماوس عند الدخول الصحيح
         const studentName = localStorage.getItem('studentName');
         if (studentName) {
             document.getElementById('displayStudentName').innerText = "يا بطلنا: " + studentName;
         } else {
-            // إعادة توجيه إذا لم يقم الطالب بتسجيل الدخول
+            // حماية للوحة التحكم: إذا حاول شخص دخولها بدون تسجيل، يتم طرده فوراً لصفحة ميكي
             window.location.href = "index.html";
         }
     </script>

@@ -61,7 +61,7 @@
             margin-top: 5px;
         }
 
-        /* المسافة الفاصلة بين المربعين */
+        /* المسافة الفاصلة */
         .spacer { height: 20px; }
 
         /* 2. مربع ميكي ماوس لفورم الطالب */
@@ -77,13 +77,12 @@
             margin: 0 auto;
         }
 
-        /* حاوية الفورم الداخلية المتموضعة بدقة في المساحة البيضاء المريحة */
         .mickey-form {
             position: absolute;
-            top: 63%; /* تم إنزال الفورم ليكون تحت الإطار الخشبي تماماً */
+            top: 63%; 
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 65%; /* العرض المثالي ليبقى داخل المساحة البيضاء */
+            width: 65%; 
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -127,7 +126,7 @@
 
     <div class="spacer"></div>
 
-    <!-- 2. مربع ميكي ماوس بعد التعديل الهندسي -->
+    <!-- 2. مربع ميكي ماوس لفورم الطالب -->
     <div class="mickey-container">
         <div class="mickey-form">
             <h3>مسجل بالفعل! 🎓</h3>
@@ -152,14 +151,21 @@
             return;
         }
 
+        // تم ربط الأعمدة بالمسافات الدقيقة وحروف الكابيتال كما في صورتك تماماً
+        // مع وضع قيم نصية مبدئية للحقول الإلزامية حتى يقبلها السيرفر بنجاح
         const { error } = await supabase.from('students').insert([{
-            full_name: fullName,
-            username: username,
-            whatsapp: whatsapp
+            'Full Name': fullName,
+            'User name': username,
+            'WhatsApp': whatsapp,
+            'Visual password': 'none', // قيمة افتراضية لأن الحقل لا يقبل الفراغ بنظامك
+            'Progress': 'Unit 1'       // قيمة افتراضية لأن الحقل لا يقبل الفراغ بنظامك
         }]);
         
-        if(error) alert("خطأ: " + error.message);
-        else alert("تم التسجيل بنجاح! يمكن للطالب الدخول الآن باستخدام اسم المستخدم.");
+        if(error) {
+            alert("خطأ أثناء التسجيل: " + error.message);
+        } else {
+            alert("تم التسجيل بنجاح! يمكن للطالب الدخول الآن.");
+        }
     }
 
     async function loginStudent() {
@@ -170,13 +176,15 @@
             return;
         }
 
-        const { data, error } = await supabase.from('students').select('*').eq('username', user).single();
+        // تم تعديل البحث ليتطابق مع اسم العمود 'User name' بمسافته وحروفه
+        const { data, error } = await supabase.from('students').select('*').eq('User name', user).single();
         
         if (data) {
-            localStorage.setItem('studentName', data.full_name);
+            // جلب الاسم من حقل 'Full Name' لحفظه في المتصفح للوحة التحكم
+            localStorage.setItem('studentName', data['Full Name']);
             window.location.href = "dashboard.html";
         } else {
-            alert("الطالب غير مسجل أو الرجاء التسجيل أولاً.");
+            alert("اسم المستخدم غير صحيح أو الطالب غير مسجل.");
         }
     }
 </script>
