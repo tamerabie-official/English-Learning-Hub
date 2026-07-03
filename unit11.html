@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الوحدة 1: شفرة التعارف الفضائي 👋</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght=400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif; background: linear-gradient(135deg, #065f46, #022c22);
+            color: #f8fafc; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh;
+        }
+        .container { width: 100%; max-width: 500px; }
+        .story-header { background: rgba(255,255,255,0.05); border: 2px solid #34d399; border-radius: 20px; padding: 15px; text-align: center; margin-bottom: 20px; }
+        
+        /* ميكانيكية الرادار اللاسلكي */
+        .radio-panel { background: rgba(0, 0, 0, 0.4); border-radius: 25px; padding: 20px; border: 1px solid rgba(255,255,255,0.1); text-align: center; }
+        .screen-display { background: #022c22; border: 2px solid #10b981; border-radius: 15px; padding: 15px; min-height: 100px; margin-bottom: 20px; display: flex; flex-direction: column; justify-content: center; }
+        .character-avatar { font-size: 3.5rem; animation: pulse 2s infinite; }
+        
+        .transmission-text { font-weight: bold; font-size: 1.2rem; color: #34d399; direction: ltr; }
+        .translation-text { font-size: 0.95rem; color: #94a3b8; margin-top: 5px; }
+
+        .crew-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+        .crew-btn { background: #047857; color: white; border: none; padding: 10px; border-radius: 15px; font-family: 'Cairo'; font-weight: bold; cursor: pointer; transition: all 0.2s; }
+        .crew-btn:hover { background: #10b981; transform: scale(1.05); }
+
+        .quiz-zone { background: rgba(255, 255, 255, 0.03); border-radius: 20px; padding: 15px; display: none; border: 1px dashed #34d399; }
+        .opt-btn { width: 100%; background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); padding: 12px; margin: 6px 0; border-radius: 12px; font-family: 'Cairo'; cursor: pointer; text-align: right; }
+        .opt-btn:hover { background: #34d399; color: #022c22; font-weight: bold; }
+
+        .nav-btn { background: #34d399; color: #022c22; border: none; padding: 12px 30px; border-radius: 50px; font-family: 'Cairo'; font-weight: bold; cursor: pointer; margin-top: 20px; display: block; width: fit-content; margin-right: auto; margin-left: auto; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="story-header">
+        <h2 style="margin:0; font-size:1.3rem; color:#34d399;">🛸 الفصل 1: إشارات الترحيب بالمقر</h2>
+        <p style="margin:5px 0 0 0; font-size:0.9rem;" id="narrative-p">اضغط على أفراد الطاقم لتبادل شفرة التحية الكونية وفك قفل البوابة!</p>
+    </div>
+
+    <!-- لوحة الرادار واللاسلكي -->
+    <div class="radio-panel" id="main-game-panel">
+        <div class="screen-display">
+            <div class="character-avatar" id="screen-emoji">🛰️</div>
+            <div class="transmission-text" id="screen-en">Click a Crew Member</div>
+            <div class="translation-text" id="screen-ar">اضغط على أحد أفراد طاقم السفينة لاستقبال الإشارة</div>
+        </div>
+
+        <div class="crew-grid">
+            <button class="crew-btn" onclick="triggerTransmission('adam')">🧑‍يبدو Adam</button>
+            <button class="crew-btn" onclick="triggerTransmission('dina')">👧 Dina</button>
+            <button class="crew-btn" onclick="triggerTransmission('bee')">🐝 Busy Bee</button>
+        </div>
+
+        <button class="nav-btn" style="background:#f59e0b;" onclick="startUnit1Quiz()">الانتقال لتحدي البوابة 🔐</button>
+    </div>
+
+    <!-- كويز فك شفرة البوابة -->
+    <div class="quiz-zone" id="quiz-panel">
+        <h3 style="margin:0 0 15px 0; color:#34d399; text-align:center;">🔒 فحص تطابق الشفرة الأمنية</h3>
+        <p style="text-align:center; font-weight:bold;" id="q-text">ماذا نقول عندما نلتقي بشخص لأول مرة؟</p>
+        <div id="options-box">
+            <button class="opt-btn" onclick="checkU1Answer(true)">Hello! 👋</button>
+            <button class="opt-btn" onclick="checkU1Answer(false)">Goodbye! 🏃‍♂️</button>
+        </div>
+    </div>
+
+    <button class="nav-btn" onclick="window.location.href='dashboard.html'">خريطة المجرات 🏠</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    const isMomMode = localStorage.getItem('gameMode') === 'mom';
+    const student = localStorage.getItem('studentName') || 'البطل';
+
+    if(isMomMode) {
+        document.getElementById('narrative-p').innerText = `يا ${student}، اطلب من ماما تضغط معاك على الأبطال لتردوا التحية سوا!`;
+    }
+
+    const crewData = {
+        adam: { emoji: "🧑‍🚀", en: "Hello! I am Adam.", ar: isMomMode ? "مرحبا! أنا آدم، أهلاً بكِ يا ماما وبابنك البطل!" : "مرحباً! أنا آدم، مستعد للرحلة الكونية؟" },
+        dina: { emoji: "👧", en: "Goodbye, friends!", ar: "إلى اللقاء يا أصدقاء! نلتقي في المجرة التالية." },
+        bee: { emoji: "🐝", en: "I am Busy Bee. Let's work!", ar: "أنا النحلة النشيطة، هيا بنا نشحن مفاعل السفينة!" }
+    };
+
+    function triggerTransmission(char) {
+        const data = crewData[char];
+        document.getElementById('screen-emoji').innerText = data.emoji;
+        document.getElementById('screen-en').innerText = data.en;
+        document.getElementById('screen-ar').innerText = data.ar;
+        
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(data.en); u.lang = 'en-US'; u.rate = 0.8;
+        window.speechSynthesis.speak(u);
+    }
+
+    function startUnit1Quiz() {
+        document.getElementById('main-game-panel').style.display = 'none';
+        document.getElementById('quiz-panel').style.display = 'block';
+    }
+
+    async function checkU1Answer(isCorrect) {
+        alert(isCorrect ? "🎉 شفرة صحيحة! تم شحن طاقة البوابة الأولى بنجاح!" : "🚨 إشارة خاطئة، حاول مجدداً!");
+        if(isCorrect) {
+            const supabaseUrl = 'https://cjpdnptndkceescvubmg.supabase.co';
+            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNqcGRucHRuZGtjZWVzY3Z1Ym1nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwMTExNTYsImV4cCI6MjA5ODU4NzE1Nn0.psxah2ekfvgZ5ReTutudYg59fiSrX13dI8IkJCobGMM';
+            const db = supabase.createClient(supabaseUrl, supabaseKey);
+            await db.from('students').update({ 'Unit 1 Score': '5/5' }).eq('Full Name', student);
+            window.location.href = 'dashboard.html';
+        }
+    }
+</script>
+</body>
+</html>

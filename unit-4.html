@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الوحدة الرابعة: بلورة الألوان وجواهر الطاقة 🔮</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght=400;700&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Cairo', sans-serif; 
+            background-color: #fdf2f8; 
+            color: #1e1b4b;
+            margin: 0; padding: 20px; 
+            display: flex; flex-direction: column; align-items: center; min-height: 100vh;
+        }
+        
+        .space-container { width: 100%; max-width: 500px; }
+        
+        .space-header { 
+            background: linear-gradient(135deg, #ec4899, #be185d); 
+            border-radius: 25px; padding: 20px; margin-bottom: 25px; 
+            box-shadow: 0 8px 16px rgba(190, 24, 93, 0.2); text-align: center; color: #fff;
+        }
+        .space-header h1 { margin: 0; font-size: 1.5rem; }
+        .space-header p { margin: 5px 0 0 0; font-size: 0.95rem; font-weight: bold; color: #fce7f3; }
+
+        .section-title {
+            font-size: 1.25rem; color: #be185d; margin: 25px 0 12px 0;
+            text-align: right; font-weight: bold; border-right: 5px solid #ec4899; padding-right: 10px;
+        }
+
+        .lesson-card { 
+            background: #ffffff; padding: 20px; border-radius: 25px; margin-bottom: 20px; 
+            border: 3px solid #fbcfe8; box-shadow: 0 6px 12px rgba(0, 0, 0, 0.02); 
+        }
+        
+        .grid-layout { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        
+        .item-box { 
+            background: #ffffff; border: 3px solid #f9a8d4; border-radius: 20px; 
+            padding: 15px 10px; display: flex; flex-direction: column; align-items: center;
+        }
+        
+        .item-emoji { font-size: 2.8rem; margin-bottom: 5px; }
+        .item-text { font-weight: bold; color: #be185d; font-size: 1.2rem; }
+        .item-arabic { font-size: 0.85rem; color: #6b7280; margin-top: 2px; }
+        
+        .audio-bar { display: flex; gap: 6px; margin-top: 10px; width: 100%; }
+        .btn-play {
+            flex: 1; background: #fdf2f8; border: 1px solid #ec4899; color: #9d174d;
+            padding: 6px; border-radius: 12px; font-size: 0.8rem; font-weight: bold; cursor: pointer;
+        }
+        .btn-loop {
+            flex: 1; background: #f8fafc; border: 1px solid #cbd5e1; color: #475569;
+            padding: 6px; border-radius: 12px; font-size: 0.8rem; font-weight: bold; cursor: pointer;
+        }
+
+        .dialog-card {
+            background: #fff5f5; border: 2px dashed #f43f5e; border-radius: 20px;
+            padding: 15px; margin-bottom: 12px; cursor: pointer; display: flex; align-items: center; justify-content: space-between;
+        }
+        .dialog-en { font-weight: bold; color: #9f1239; font-size: 1.1rem; text-align: left; direction: ltr; }
+        .dialog-ar { color: #4c0519; font-size: 0.9rem; margin-top: 4px; text-align: right; }
+
+        .btn-home { 
+            background: #ec4899; color: white; padding: 12px 35px; border: none; border-radius: 50px; 
+            margin: 25px auto; font-family: 'Cairo'; font-weight: bold; font-size: 1.1rem; cursor: pointer; display: block;
+        }
+    </style>
+</head>
+<body>
+
+<div class="space-container">
+
+    <div class="space-header">
+        <h1>مستوى شحن الطاقة والألوان 🔮</h1>
+        <p>حدد مستوى لاعبك واجمع بلورات الألوان لتشغيل المحرك الكوني</p>
+    </div>
+
+    <!-- هدف لغويات السؤال عن العمر واستجابة الترقية -->
+    <div class="section-title">🎮 تحديد مستوى طاقة اللاعب (Level Sync)</div>
+    <div class="lesson-card">
+        <div class="dialog-card" onclick="speak('How old are you? I\'m six')">
+            <div>
+                <div class="dialog-en">How old are you? I'm six!</div>
+                <div class="dialog-ar">ما هو مستوى طاقة عمرك؟ طاقتي هي المستوى السادس!</div>
+            </div>
+            <span>📢</span>
+        </div>
+    </div>
+
+    <!-- هدف الأرقام من 1 إلى 5 -->
+    <div class="section-title">🔢 عدّادات الجواهر المشحونة (Energy Counter)</div>
+    <div class="lesson-card">
+        <div class="grid-layout">
+            <div class="item-box">
+                <span class="item-emoji">1️⃣</span><span class="item-text">One</span><span class="item-arabic">بلورة واحدة</span>
+                <div class="audio-bar"><button class="btn-play" onclick="speak('One')">نطق 📢</button></div>
+            </div>
+            <div class="item-box">
+                <span class="item-emoji">2️⃣</span><span class="item-text">Two</span><span class="item-arabic">بلورتان</span>
+                <div class="audio-bar"><button class="btn-play" onclick="speak('Two')">نطق 📢</button></div>
+            </div>
+            <div class="item-box">
+                <span class="item-emoji">3️⃣</span><span class="item-text">Three</span><span class="item-arabic">ثلاث بلورات</span>
+                <div class="audio-bar"><button class="btn-play" onclick="speak('Three')">نطق 📢</button></div>
+            </div>
+            <div class="item-box">
+                <span class="item-emoji">4️⃣</span><span class="item-text">Four</span><span class="item-arabic">أربع بلورات</span>
+                <div class="audio-bar"><button class="btn-play" onclick="speak('Four')">نطق 📢</button></div>
+            </div>
+            <div class="item-box" style="grid-column: span 2; max-width: 50%; margin: 0 auto;">
+                <span class="item-emoji">5️⃣</span><span class="item-text">Five</span><span class="item-arabic">خمس بلورات</span>
+                <div class="audio-bar"><button class="btn-play" onclick="speak('Five')">نطق 📢</button></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- هدف الألوان الأساسية بالكتاب المدرسي -->
+    <div class="section-title">🎨 مصفوفة بلورات الألوان (Color Crystals)</div>
+    <div class="lesson-card">
+        <div class="grid-layout">
+            <div class="item-box" style="border-color: #ef4444;">
+                <span class="item-emoji">🔴</span><span class="item-text" style="color:#ef4444;">Red</span><span class="item-arabic">بلورة حمراء</span>
+                <div class="audio-bar"><button class="btn-play" style="border-color:#ef4444; color:#ef4444;" onclick="speak('Red')">📢</button></div>
+            </div>
+            <div class="item-box" style="border-color: #3b82f6;">
+                <span class="item-emoji">🔵</span><span class="item-text" style="color:#3b82f6;">Blue</span><span class="item-arabic">بلورة زرقاء</span>
+                <div class="audio-bar"><button class="btn-play" style="border-color:#3b82f6; color:#3b82f6;" onclick="speak('Blue')">📢</button></div>
+            </div>
+            <div class="item-box" style="border-color: #22c55e;">
+                <span class="item-emoji">🟢</span><span class="item-text" style="color:#22c55e;">Green</span><span class="item-arabic">بلورة خضراء</span>
+                <div class="audio-bar"><button class="btn-play" style="border-color:#22c55e; color:#22c55e;" onclick="speak('Green')">📢</button></div>
+            </div>
+            <div class="item-box" style="border-color: #eab308;">
+                <span class="item-emoji">🟡</span><span class="item-text" style="color:#eab308;">Yellow</span><span class="item-arabic">بلورة صفراء</span>
+                <div class="audio-bar"><button class="btn-play" style="border-color:#eab308; color:#eab308;" onclick="speak('Yellow')">📢</button></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- هدف الفونكس المتقدم بصيغة التكرار الإيقاعي للتأهيل السمعي -->
+    <div class="section-title">🎵 ترددات الأصوات الكونية (Phonics Lab)</div>
+    
+    <!-- صوت حرف C ينطق K -->
+    <div class="lesson-card">
+        <div style="font-weight: bold; color: #be185d; margin-bottom: 12px; text-align: right;">صوت التقاط كاميرا الرادار Cc /k/</div>
+        <div class="grid-layout">
+            <div class="item-box">
+                <span class="item-emoji">🐱</span><span class="item-text">Cat</span><span class="item-arabic">القط العبقري</span>
+                <div class="audio-bar">
+                    <button class="btn-play" onclick="speak('Cat')">عادي 📢</button>
+                    <button class="btn-loop" onclick="speakLoop('k', 'Cat')">إيقاعي 🔄</button>
+                </div>
+            </div>
+            <div class="item-box">
+                <span class="item-emoji">🚗</span><span class="item-text">Car</span><span class="item-arabic">سيارة الشحن</span>
+                <div class="audio-bar">
+                    <button class="btn-play" onclick="speak('Car')">عادي 📢</button>
+                    <button class="btn-loop" onclick="speakLoop('k', 'Car')">إيقاعي 🔄</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- صوت حرف O -->
+    <div class="lesson-card">
+        <div style="font-weight: bold; color: #be185d; margin-bottom: 12px; text-align: right;">صوت فتح بوابة الفضاء Oo /ɒ/</div>
+        <div class="grid-layout">
+            <div class="item-box">
+                <span class="item-emoji">🐙</span><span class="item-text">Octopus</span><span class="item-arabic">الأخطبوط الكوني</span>
+                <div class="audio-bar">
+                    <button class="btn-play" onclick="speak('Octopus')">عادي 📢</button>
+                    <button class="btn-loop" onclick="speakLoop('o', 'Octopus')">إيقاعي 🔄</button>
+                </div>
+            </div>
+            <div class="item-box">
+                <span class="item-emoji">🍊</span><span class="item-text">Orange</span><span class="item-arabic">البرتقالة المضيئة</span>
+                <div class="audio-bar">
+                    <button class="btn-play" onclick="speak('Orange')">عادي 📢</button>
+                    <button class="btn-loop" onclick="speakLoop('o', 'Orange')">إيقاعي 🔄</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="btn-home" onclick="window.location.href='dashboard.html'">رجوع للرئيسية 🏠</button>
+
+</div>
+
+<script>
+    function speak(t) {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            const m = new SpeechSynthesisUtterance(t); m.lang = 'en-US'; m.rate = 0.8;
+            window.speechSynthesis.speak(m);
+        }
+    }
+
+    // علاج الفروق الفردية سمعياً عن طريق تفكيك التردد الصوتي للحرف 3 مرات قبل الكلمة
+    function speakLoop(sound, word) {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            const m = new SpeechSynthesisUtterance(`${sound}... ${sound}... ${sound}... ${word}`);
+            m.lang = 'en-US'; m.rate = 0.55; m.pitch = 1.2;
+            window.speechSynthesis.speak(m);
+        }
+    }
+</script>
+
+</body>
+</html>

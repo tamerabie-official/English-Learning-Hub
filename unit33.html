@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الوحدة 3: حقيبة الأدوات والميكانيكا 🎒</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght=400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif; background: linear-gradient(135deg, #111827, #064e3b);
+            color: #f1f5f9; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh;
+        }
+        .container { width: 100%; max-width: 500px; }
+        .inventory-box { background: #1f2937; border: 3px solid #10b981; border-radius: 25px; padding: 20px; text-align: center; }
+        
+        /* خلايا الطاقة والمخزن */
+        .slots-layout { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin: 20px 0; }
+        .slot-card {
+            background: #111827; border: 2px dashed rgba(16, 185, 129, 0.3); border-radius: 15px; padding: 15px;
+            cursor: pointer; transition: all 0.3s;
+        }
+        .slot-card.active-slot { border-color: #f59e0b; background: rgba(245, 158, 11, 0.05); }
+        .tool-emoji { font-size: 2.5rem; display: block; }
+        .tool-title { font-weight: bold; margin-top: 5px; font-size: 1.1rem; }
+
+        .reactor-core { background: linear-gradient(90deg, #064e3b, #047857); border-radius: 15px; padding: 15px; margin-top: 20px; font-weight: bold; }
+        .nav-btn { background: #10b981; color: #111827; border: none; padding: 12px 35px; border-radius: 50px; font-family: 'Cairo'; font-weight: bold; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div style="text-align: center; margin-bottom: 20px;">
+        <h2 style="color: #10b981; margin: 0;">🎒 الفصل 3: صيانة محرك الأدوات الذكية</h2>
+        <p style="color:#94a3b8; font-size:0.9rem;" id="info-p">قم بتفعيل أداة الصيانة بالضغط عليها لإصلاح الدائرة الكهربائية للمركبة</p>
+    </div>
+
+    <div class="inventory-box">
+        <div class="reactor-core" id="core-status">⚡ طاقة المفاعل الحالية: 20% (منخفضة جداً)</div>
+        
+        <div class="slots-layout">
+            <div class="slot-card" id="t1" onclick="useTool('Pencil', 'قلم رصاص الصيانة', 't1')">
+                <span class="tool-emoji">✏️</span><span class="tool-title">Pencil</span>
+            </div>
+            <div class="slot-card" id="t2" onclick="useTool('Ruler', 'مقياس الأبعاد (مسطرة)', 't2')">
+                <span class="tool-emoji">📏</span><span class="tool-title">Ruler</span>
+            </div>
+            <div class="slot-card" id="t3" onclick="useTool('Bag', 'حقيبة التخزين الكبرى', 't3')">
+                <span class="tool-emoji">🎒</span><span class="tool-title">Bag</span>
+            </div>
+            <div class="slot-card" id="t4" onclick="useTool('Book', 'كتيب الإرشادات (كتاب)', 't4')">
+                <span class="tool-emoji">📖</span><span class="tool-title">Book</span>
+            </div>
+        </div>
+
+        <button class="nav-btn" onclick="completeRepair()">إطلاق تيار الإصلاح الشامل 🔧</button>
+    </div>
+
+    <button class="nav-btn" style="margin-top:20px; display:block; margin-left:auto; margin-right:auto; background:transparent; color:#64748b; border:1px solid rgba(255,255,255,0.1);" onclick="window.location.href='dashboard.html'">العودة للمنصة 🏠</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    const isMomActive = localStorage.getItem('gameMode') === 'mom';
+    const activeUser = localStorage.getItem('studentName') || 'البطل';
+    let energy = 20;
+
+    if(isMomActive) {
+        document.getElementById('info-p').innerText = "تحدي ماما: انطق الأداة مع ماما بصوت عالٍ قبل الشحن لإدخال طاقة مضاعفة!";
+    }
+
+    function useTool(en, ar, id) {
+        const card = document.getElementById(id);
+        if(card.classList.contains('active-slot')) return;
+
+        card.classList.add('active-slot');
+        energy += 20;
+        document.getElementById('core-status').innerText = `⚡ طاقة المفاعل الحالية: ${energy}% (جاري الشحن الحركي)`;
+        
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(en); u.lang = 'en-US'; window.speechSynthesis.speak(u);
+    }
+
+    async function completeRepair() {
+        if(energy < 100) {
+            alert("🚨 تحذير: يجب شحن وتفعيل كافة الأدوات الأربعة أولاً لإكمال الدائرة!");
+            return;
+        }
+        alert("🏆 تم إصلاح العطل بنجاح وإعادة تشغيل المركبة بالكامل بفضل أدواتك السيبرانية!");
+        const supabaseUrl = 'https://cjpdnptndkceescvubmg.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNqcGRucHRuZGtjZWVzY3Z1Ym1nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwMTExNTYsImV4cCI6MjA5ODU4NzE1Nn0.psxah2ekfvgZ5ReTutudYg59fiSrX13dI8IkJCobGMM';
+        const db = supabase.createClient(supabaseUrl, supabaseKey);
+        await db.from('students').update({ 'Unit 3 Score': '5/5' }).eq('Full Name', activeUser);
+        window.location.href = 'dashboard.html';
+    }
+</script>
+</body>
+</html>

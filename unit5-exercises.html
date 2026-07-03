@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تحدي استدعاء الحلفاء - Unit 5 🧩</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght=400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif; background-color: #f8fafc; color: #334155;
+            margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh;
+        }
+
+        .game-card {
+            width: 100%; max-width: 500px; background: #ffffff; border: 3px solid #a7f3d0;
+            border-radius: 25px; padding: 20px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.03); text-align: center;
+        }
+
+        .top-bar { background: linear-gradient(135deg, #10b981, #047857); color: white; border-radius: 20px; padding: 15px; margin-bottom: 20px; }
+        .top-bar h1 { margin: 0; font-size: 1.4rem; }
+
+        .stage { display: none; animation: slideIn 0.4s ease; }
+        .stage.active { display: block; }
+
+        .stage-title { font-size: 1.2rem; color: #047857; font-weight: bold; margin-bottom: 15px; }
+        .instruction { font-size: 1.05rem; font-weight: bold; margin-bottom: 15px; color: #0288d1; }
+        .huge-emoji { font-size: 4rem; margin-bottom: 15px; display: block; }
+
+        .action-btn {
+            background: #10b981; color: white; border: none; padding: 12px 25px; font-size: 1rem;
+            font-weight: bold; border-radius: 50px; cursor: pointer; font-family: 'Cairo'; margin-bottom: 10px;
+        }
+        .action-btn.recording { background: #16a34a; animation: heartBeat 1s infinite; }
+
+        .feedback-text { font-weight: bold; margin-top: 10px; min-height: 24px; font-size: 1.05rem; }
+        .good { color: #16a34a; }
+        .bad { color: #dc2626; }
+
+        .bubbles-grid { display: flex; justify-content: center; gap: 15px; margin-top: 20px; }
+        .bubble {
+            background: #f0fdf4; border: 2px solid #6ee7b7; border-radius: 50%;
+            width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; font-weight: bold; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.04);
+        }
+
+        .link-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
+        .link-col { display: flex; flex-direction: column; gap: 10px; }
+        .link-block {
+            background: #fff; border: 2px solid #a7f3d0; padding: 12px; border-radius: 15px; cursor: pointer; font-weight: bold;
+        }
+        .link-block.active-link { background: #f0fdf4; border-color: #10b981; }
+        .link-block.done-link { background: #dcfce7; border-color: #16a34a; pointer-events: none; }
+
+        .btn-forward {
+            background: #047857; color: white; border: none; padding: 10px 30px; border-radius: 50px;
+            font-family: 'Cairo'; font-weight: bold; cursor: pointer; margin-top: 25px; display: none;
+        }
+
+        @keyframes slideIn { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes heartBeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.04); } }
+    </style>
+</head>
+<body>
+
+<div class="game-card">
+    <div class="top-bar">
+        <h1>🎯 تحدي ربط ترددات الحلفاء</h1>
+    </div>
+
+    <!-- تحدي النطق الصوتي لتعريف الأم -->
+    <div id="stage1" class="stage active">
+        <div class="stage-title">المرحلة 1: رادار بصمة الصوت 🗣️</div>
+        <div class="instruction">قدم هذا الحليف بوضوح لفتح بوابة العبور:</div>
+        <span class="huge-emoji">👩</span>
+        
+        <button class="action-btn" id="mic-control" onclick="handleVoiceSync()">اضغط لتسجيل البصمة الصوتية 🎤</button>
+        <div class="feedback-text" id="voice-info">في انتظار الإشارة اللغوية بالإنجليزية...</div>
+
+        <div style="margin-top: 15px; padding: 10px; background: #f0fdf4; border-radius: 15px;">
+            <button class="action-btn" style="background: #047857; padding: 6px 12px; font-size: 0.85rem; box-shadow:none;" onclick="triggerHint('This is my mother')">سماع الجملة 🔊</button>
+            <button class="action-btn" style="background: #cbd5e1; color:#334155; padding: 6px 12px; font-size: 0.85rem; box-shadow:none;" onclick="skipStage1()">تجاوز ⏭️</button>
+        </div>
+        <button class="btn-forward" id="go1" onclick="nextStage(2)">المرحلة التالية 🚀</button>
+    </div>
+
+    <!-- تحدي الحرف الأول المفقود للعلم -->
+    <div id="stage2" class="stage">
+        <div class="stage-title">المرحلة 2: إشارة العلم الضائعة 🎈</div>
+        <div class="instruction">اختر الحرف الأول المكمل لرمز المقر:</div>
+        <span class="huge-emoji">🚩</span>
+        <div style="font-size: 2.2rem; font-weight: bold; margin-bottom: 15px;" id="missing-word">_ l a g</div>
+        <div class="bubbles-grid">
+            <div class="bubble" onclick="verifyBubble('M', this)">M</div>
+            <div class="bubble" onclick="verifyBubble('F', this)">F</div>
+            <div class="bubble" onclick="verifyBubble('C', this)">C</div>
+        </div>
+        <div class="feedback-text" id="bubble-info"></div>
+        <button class="btn-forward" id="go2" onclick="nextStage(3)">المرحلة التالية 🚀</button>
+    </div>
+
+    <!-- تحدي التوصيل للمفردات القرابة -->
+    <div id="stage3" class="stage">
+        <div class="stage-title">المرحلة 3: مصفوفة الأقارب 🔗</div>
+        <div class="instruction">صل بطاقة الحليف بالترجمة الصحيحة له:</div>
+        
+        <div class="link-grid">
+            <div class="link-col">
+                <div class="link-block" id="c1" onclick="linkStep('c1', 'brother')">👦 Brother</div>
+                <div class="link-block" id="c2" onclick="linkStep('c2', 'father')">👨 Father</div>
+            </div>
+            <div class="link-col">
+                <div class="link-block" id="g1" onclick="linkStep('g1', 'father')">الأب القائد</div>
+                <div class="link-block" id="g2" onclick="linkStep('g2', 'brother')">الأخ المساعد</div>
+            </div>
+        </div>
+        <div class="feedback-text" id="link-info"></div>
+        <button class="btn-forward" id="go3" onclick="alert('اتصال مثالي بقاعدة العائلة! تم تفعيل الدعم المشترك بنجاح 🏆🧬'); window.location.href='dashboard.html'">إنهاء الورشة 🏠</button>
+    </div>
+</div>
+
+<script>
+    function nextStage(n) {
+        document.querySelectorAll('.stage').forEach(s => s.classList.remove('active'));
+        document.getElementById(`stage${n}`).classList.add('active');
+    }
+
+    function skipStage1() {
+        document.getElementById('go1').style.display = 'inline-block';
+        document.getElementById('voice-info').innerHTML = "<span class='good'>تم التعرف على هوية الحليف والموافقة للعبور!</span>";
+    }
+
+    let recStatus = false; let recObject = null;
+    function handleVoiceSync() {
+        const info = document.getElementById('voice-info');
+        const btn = document.getElementById('mic-control');
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+        if(!SpeechRecognition) { skipStage1(); return; }
+
+        if(!recStatus) {
+            recObject = new SpeechRecognition(); recObject.lang = 'en-US';
+            recObject.onstart = () => {
+                recStatus = true; btn.classList.add('recording'); btn.innerText = "جاري التقاط الذبذبات.. اضغط للحفظ 🛑";
+                info.innerText = "تحدث الآن بوضوح وقل: This is my mother";
+            };
+            recObject.onresult = (e) => {
+                const textResult = e.results[0][0].transcript.toLowerCase();
+                if(textResult.includes('mother') || textResult.includes('this is')) {
+                    info.innerHTML = "<span class='good'>تطابق مذهل! تم تسجيل بصمة الحليف بنجاح 🏆</span>";
+                } else {
+                    info.innerHTML = `<span class='bad'>العبارة الملتقطة: "${textResult}". حاول مجدداً.</span>`;
+                }
+                document.getElementById('go1').style.display = 'inline-block';
+            };
+            recObject.onend = () => { recStatus = false; btn.classList.remove('recording'); btn.innerText = "اضغط لتسجيل البصمة الصوتية 🎤"; };
+            recObject.start();
+        } else { if(recObject) recObject.stop(); }
+    }
+
+    function triggerHint(t) {
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(t); u.lang='en-US'; u.rate=0.75; window.speechSynthesis.speak(u);
+    }
+
+    function verifyBubble(letter, el) {
+        const info = document.getElementById('bubble-info');
+        if(letter === 'F') {
+            document.getElementById('missing-word').innerText = "Flag";
+            info.innerHTML = "<span class='good'>رائع! طار حرف F ليكتمل علم المقر Flag 🚩</span>";
+            document.getElementById('go2').style.display = 'inline-block';
+            el.style.background = '#10b981'; el.style.color = '#fff';
+        } else {
+            info.innerHTML = "<span class='bad'>الحرف غير صحيح، أعد المسح!</span>";
+            el.style.background = '#ef4444'; el.style.color = '#fff';
+        }
+    }
+
+    let activeId = null; let activeType = null; let winCount = 0;
+    function linkStep(id, type) {
+        const currentBlock = document.getElementById(id);
+        if(currentBlock.classList.contains('done-link') || currentBlock.classList.contains('active-link')) return;
+
+        if(!activeId) { activeId = id; activeType = type; currentBlock.classList.add('active-link'); } 
+        else {
+            const previousBlock = document.getElementById(activeId);
+            if((activeId.startsWith('c') && id.startsWith('g')) || (activeId.startsWith('g') && id.startsWith('c'))) {
+                if(activeType === type) {
+                    currentBlock.className = 'link-block done-link'; previousBlock.className = 'link-block done-link'; winCount++;
+                    document.getElementById('link-info').innerHTML = "<span class='good'>تم ربط الحليف بسجل البيانات! 🔗</span>";
+                    if(winCount === 2) document.getElementById('go3').style.display = 'inline-block';
+                } else {
+                    previousBlock.classList.remove('active-link');
+                    document.getElementById('link-info').innerHTML = "<span class='bad'>البطاقات غير متطابقة، حاول ثانية!</span>";
+                }
+                activeId = null; activeType = null;
+            } else { previousBlock.classList.remove('active-link'); activeId = id; activeType = type; currentBlock.classList.add('active-link'); }
+        }
+    }
+</script>
+</body>
+</html>

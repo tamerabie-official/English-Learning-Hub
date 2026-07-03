@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الوحدة الثالثة: حقيبة العميل السري 🎒</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Cairo', sans-serif; 
+            background-color: #f0f4f8; 
+            color: #1e293b;
+            margin: 0; 
+            padding: 20px; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .spy-container { width: 100%; max-width: 500px; }
+        
+        .spy-header { 
+            background: linear-gradient(135deg, #0288d1, #01579b); 
+            border-radius: 25px; 
+            padding: 20px;
+            margin-bottom: 25px; 
+            box-shadow: 0 8px 16px rgba(1, 87, 155, 0.2);
+            text-align: center;
+            color: #fff;
+        }
+        .spy-header h1 { margin: 0; font-size: 1.5rem; }
+        .spy-header p { margin: 5px 0 0 0; font-size: 0.95rem; font-weight: bold; color: #e0f7fa; }
+
+        .section-title {
+            font-size: 1.25rem;
+            color: #01579b;
+            margin: 25px 0 12px 0;
+            text-align: right;
+            font-weight: bold;
+            border-right: 5px solid #0288d1;
+            padding-right: 10px;
+        }
+
+        .lesson-card { 
+            background: #ffffff; 
+            padding: 20px; 
+            border-radius: 25px; 
+            margin-bottom: 20px; 
+            border: 3px solid #b3e5fc;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.02); 
+        }
+        
+        .word-grid { 
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 12px; 
+        }
+        
+        .word-card { 
+            background: #ffffff; 
+            border: 3px solid #4fc3f7; 
+            border-radius: 20px; 
+            padding: 15px 10px; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .word-emoji { font-size: 3rem; margin-bottom: 5px; }
+        .word-text { font-weight: bold; color: #01579b; font-size: 1.2rem; }
+        .word-translation { font-size: 0.85rem; color: #64748b; margin-top: 2px; }
+        
+        .audio-actions {
+            display: flex;
+            gap: 6px;
+            margin-top: 10px;
+            width: 100%;
+        }
+        .btn-sound {
+            flex: 1;
+            background: #e0f2fe;
+            border: 1px solid #0288d1;
+            color: #0369a1;
+            padding: 6px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+        }
+        .btn-repeat {
+            flex: 1;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            color: #475569;
+            padding: 6px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .phrase-card {
+            background: #f0fdf4;
+            border: 2px dashed #22c55e;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .phrase-english { font-weight: bold; color: #166534; font-size: 1.1rem; text-align: left; direction: ltr; }
+        .phrase-arabic { color: #475569; font-size: 0.9rem; margin-top: 4px; text-align: right; }
+
+        .btn-back { 
+            background: #0288d1; 
+            color: white; 
+            padding: 12px 35px; 
+            border: none; 
+            border-radius: 50px; 
+            margin: 25px auto; 
+            font-family: 'Cairo', sans-serif;
+            font-weight: bold;
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: block;
+            box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+<div class="spy-container">
+
+    <div class="spy-header">
+        <h1>مخزن ترسانة العميل السري 🎒</h1>
+        <p>افحص أدواتك الذكية وتعرف على شفراتها الصوتية السرية</p>
+    </div>
+
+    <!-- مهارة التواصل والتفاعل اللغوي المدرسي -->
+    <div class="section-title">🔒 شفرات توجيه الأوامر (Spy Commands)</div>
+    <div class="lesson-card">
+        <div class="phrase-card" onclick="speak('Deploy your bag')">
+            <div>
+                <div class="phrase-english">Deploy your bag!</div>
+                <div class="phrase-arabic">افتح حقيبة الأدوات الذكية! (بديل Open your bag)</div>
+            </div>
+            <span>📢</span>
+        </div>
+        <div class="phrase-card" onclick="speak('Lock the secret book')">
+            <div>
+                <div class="phrase-english">Lock your book!</div>
+                <div class="phrase-arabic">أغلق كتاب الأسرار! (بديل Close your book)</div>
+            </div>
+            <span>📢</span>
+        </div>
+        <div class="phrase-card" onclick="speak('What is this? It is a pen')">
+            <div>
+                <div class="phrase-english">What's this? It's a pen.</div>
+                <div class="phrase-arabic">قم بعمل مسح ضوئي: ما هذا؟ إنه قلم جاف!</div>
+            </div>
+            <span>📢</span>
+        </div>
+    </div>
+
+    <!-- مفردات الأدوات المدرسية -->
+    <div class="section-title">🚀 ترسانة الأدوات التكنولوجية (Gadget Arsenal)</div>
+    <div class="lesson-card">
+        <div class="word-grid">
+            <div class="word-card">
+                <span class="word-emoji">🎒</span>
+                <span class="word-text">Bag</span>
+                <span class="word-translation">حقيبة المعدات</span>
+                <div class="audio-actions"><button class="btn-sound" onclick="speak('Bag')">نطق 📢</button></div>
+            </div>
+            <div class="word-card">
+                <span class="word-emoji">🖊️</span>
+                <span class="word-text">Pen</span>
+                <span class="word-translation">قلم البلازما (جاف)</span>
+                <div class="audio-actions"><button class="btn-sound" onclick="speak('Pen')">نطق 📢</button></div>
+            </div>
+            <div class="word-card">
+                <span class="word-emoji">✏️</span>
+                <span class="word-text">Pencil</span>
+                <span class="word-translation">قلم الليزر (رصاص)</span>
+                <div class="audio-actions"><button class="btn-sound" onclick="speak('Pencil')">نطق 📢</button></div>
+            </div>
+            <div class="word-card">
+                <span class="word-emoji">📏</span>
+                <span class="word-text">Ruler</span>
+                <span class="word-translation">مسطرة المسح الراداري</span>
+                <div class="audio-actions"><button class="btn-sound" onclick="speak('Ruler')">نطق 📢</button></div>
+            </div>
+            <div class="word-card">
+                <span class="word-emoji">🖨️</span>
+                <span class="word-text">Sharpener</span>
+                <span class="word-translation">براية الصاروخ</span>
+                <div class="audio-actions"><button class="btn-sound" onclick="speak('Sharpener')">نطق 📢</button></div>
+            </div>
+            <div class="word-card">
+                <span class="word-emoji">👝</span>
+                <span class="word-text">Pencil case</span>
+                <span class="word-translation">خزانة الأسلحة (مقلمة)</span>
+                <div class="audio-actions"><button class="btn-sound" onclick="speak('Pencil case')">نطق 📢</button></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- الصوتيات المعززة للذكاء السمعي والتكرار اللغوي -->
+    <div class="section-title">🎵 رادار تفكيك ترددات الصوت (Phonics Drills)</div>
+    
+    <!-- صوت حرف P -->
+    <div class="lesson-card">
+        <div style="font-weight: bold; color: #01579b; margin-bottom: 12px; text-align: right;">صوت القنابل الصوتية Pp /p/</div>
+        <div class="word-grid">
+            <div class="word-card">
+                <span class="word-emoji">🐼</span>
+                <span class="word-text">Panda</span>
+                <span class="word-translation">العميل باندا</span>
+                <div class="audio-actions">
+                    <button class="btn-sound" onclick="speak('Panda')">عادي 📢</button>
+                    <button class="btn-repeat" onclick="speakPhonetic('p', 'p', 'Panda')">إيقاعي 🔄</button>
+                </div>
+            </div>
+            <div class="word-card">
+                <span class="word-emoji">🚀</span>
+                <span class="word-text">Peter</span>
+                <span class="word-translation">القائد بيتر</span>
+                <div class="audio-actions">
+                    <button class="btn-sound" onclick="speak('Peter')">عادي 📢</button>
+                    <button class="btn-repeat" onclick="speakPhonetic('p', 'p', 'Peter')">إيقاعي 🔄</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- صوت حرف R -->
+    <div class="lesson-card">
+        <div style="font-weight: bold; color: #01579b; margin-bottom: 12px; text-align: right;">صوت محرك سيارة السباق Rr /r/</div>
+        <div class="word-grid">
+            <div class="word-card">
+                <span class="word-emoji">🤖</span>
+                <span class="word-text">Robot</span>
+                <span class="word-translation">الروبوت المساعد</span>
+                <div class="audio-actions">
+                    <button class="btn-sound" onclick="speak('Robot')">عادي 📢</button>
+                    <button class="btn-repeat" onclick="speakPhonetic('r', 'r', 'Robot')">إيقاعي 🔄</button>
+                </div>
+            </div>
+            <div class="word-card">
+                <span class="word-emoji">🚀</span>
+                <span class="word-text">Rocket</span>
+                <span class="word-translation">صاروخ الانطلاق</span>
+                <div class="audio-actions">
+                    <button class="btn-sound" onclick="speak('Rocket')">عادي 📢</button>
+                    <button class="btn-repeat" onclick="speakPhonetic('r', 'r', 'Rocket')">إيقاعي 🔄</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="btn-back" onclick="window.location.href='dashboard.html'">رجوع للرئيسية 🏠</button>
+
+</div>
+
+<script>
+    function speak(text) {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel(); 
+            const msg = new SpeechSynthesisUtterance(text);
+            msg.lang = 'en-US'; 
+            msg.rate = 0.8; 
+            window.speechSynthesis.speak(msg);
+        }
+    }
+
+    // دعم الذكاء السمعي: تجزئة الحرف متبوعاً بفواصل زمنية مريحة للتكرار
+    function speakPhonetic(letterSound, textRepeat, fullWord) {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            const msg = new SpeechSynthesisUtterance(`${letterSound}... ${letterSound}... ${letterSound}... ${fullWord}`);
+            msg.lang = 'en-US';
+            msg.rate = 0.55;
+            msg.pitch = 1.25;
+            window.speechSynthesis.speak(msg);
+        }
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تحدي شحن البلورات - Unit 4 🧩</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght=400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif; background-color: #f8fafc; color: #334155;
+            margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh;
+        }
+
+        .game-card {
+            width: 100%; max-width: 500px; background: #ffffff; border: 3px solid #fbcfe8;
+            border-radius: 25px; padding: 20px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.03); text-align: center;
+        }
+
+        .top-bar { background: linear-gradient(135deg, #ec4899, #be185d); color: white; border-radius: 20px; padding: 15px; margin-bottom: 20px; }
+        .top-bar h1 { margin: 0; font-size: 1.4rem; }
+
+        .stage { display: none; animation: slideIn 0.4s ease; }
+        .stage.active { display: block; }
+
+        .stage-title { font-size: 1.2rem; color: #9d174d; font-weight: bold; margin-bottom: 15px; }
+        .instruction { font-size: 1.05rem; font-weight: bold; margin-bottom: 15px; color: #0288d1; }
+        .huge-emoji { font-size: 4rem; margin-bottom: 15px; display: block; }
+
+        .action-btn {
+            background: #ec4899; color: white; border: none; padding: 12px 25px; font-size: 1rem;
+            font-weight: bold; border-radius: 50px; cursor: pointer; font-family: 'Cairo'; margin-bottom: 10px;
+        }
+        .action-btn.recording { background: #16a34a; animation: heartBeat 1s infinite; }
+
+        .feedback-text { font-weight: bold; margin-top: 10px; min-height: 24px; font-size: 1.05rem; }
+        .good { color: #16a34a; }
+        .bad { color: #dc2626; }
+
+        .bubbles-grid { display: flex; justify-content: center; gap: 15px; margin-top: 20px; }
+        .bubble {
+            background: #fdf2f8; border: 2px solid #f9a8d4; border-radius: 50%;
+            width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; font-weight: bold; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.04);
+        }
+
+        .link-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
+        .link-col { display: flex; flex-direction: column; gap: 10px; }
+        .link-block {
+            background: #fff; border: 2px solid #fbcfe8; padding: 12px; border-radius: 15px; cursor: pointer; font-weight: bold;
+        }
+        .link-block.active-link { background: #fdf2f8; border-color: #ec4899; }
+        .link-block.done-link { background: #dcfce7; border-color: #16a34a; pointer-events: none; }
+
+        .btn-forward {
+            background: #be185d; color: white; border: none; padding: 10px 30px; border-radius: 50px;
+            font-family: 'Cairo'; font-weight: bold; cursor: pointer; margin-top: 25px; display: none;
+        }
+
+        @keyframes slideIn { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes heartBeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.04); } }
+    </style>
+</head>
+<body>
+
+<div class="game-card">
+    <div class="top-bar">
+        <h1>🎯 تحدي تجميع شحنات الألوان الكونية</h1>
+    </div>
+
+    <!-- تحدي النطق الصوتي للبلورة الحمراء -->
+    <div id="stage1" class="stage active">
+        <div class="stage-title">المرحلة 1: اختبار تفعيل اللون 🗣️</div>
+        <div class="instruction">انطق اسم هذا اللون لشحن بلورة السفينة:</div>
+        <span class="huge-emoji">🔴</span>
+        
+        <button class="action-btn" id="mic-control" onclick="handleVoiceSync()">اضغط لتسجيل بصمة اللون 🎤</button>
+        <div class="feedback-text" id="voice-info">في انتظار التقاط اللون بالإنجليزية...</div>
+
+        <div style="margin-top: 15px; padding: 10px; background: #fdf2f8; border-radius: 15px;">
+            <button class="action-btn" style="background: #9d174d; padding: 6px 12px; font-size: 0.85rem; box-shadow:none;" onclick="triggerHint('Red')">سماع اللفظ 🔊</button>
+            <button class="action-btn" style="background: #cbd5e1; color:#334155; padding: 6px 12px; font-size: 0.85rem; box-shadow:none;" onclick="skipStage1()">تجاوز ⏭️</button>
+        </div>
+        <button class="btn-forward" id="go1" onclick="nextStage(2)">المرحلة التالية 🚀</button>
+    </div>
+
+    <!-- تحدي الحرف الأول المفقود للأخطبوط -->
+    <div id="stage2" class="stage">
+        <div class="stage-title">المرحلة 2: فقاعة الحرف الضائع 🎈</div>
+        <div class="instruction">جد الحرف الافتتاحي الصحيح لكائن الفضاء المساعد:</div>
+        <span class="huge-emoji">🐙</span>
+        <div style="font-size: 2.2rem; font-weight: bold; margin-bottom: 15px;" id="missing-word">_ c t o p u s</div>
+        <div class="bubbles-grid">
+            <div class="bubble" onclick="verifyBubble('C', this)">C</div>
+            <div class="bubble" onclick="verifyBubble('O', this)">O</div>
+            <div class="bubble" onclick="verifyBubble('R', this)">R</div>
+        </div>
+        <div class="feedback-text" id="bubble-info"></div>
+        <button class="btn-forward" id="go2" onclick="nextStage(3)">المرحلة التالية 🚀</button>
+    </div>
+
+    <!-- تحدي التوصيل بنقرتين للأعداد والبلورات -->
+    <div id="stage3" class="stage">
+        <div class="stage-title">المرحلة 3: اقتران عدادات الطاقة 🔗</div>
+        <div class="instruction">صل العداد الرقمي بالترجمة المطابقة له:</div>
+        
+        <div class="link-grid">
+            <div class="link-col">
+                <div class="link-block" id="c1" onclick="linkStep('c1', 'three')">3️⃣ Three</div>
+                <div class="link-block" id="c2" onclick="linkStep('c2', 'five')">5️⃣ Five</div>
+            </div>
+            <div class="link-col">
+                <div class="link-block" id="g1" onclick="linkStep('g1', 'five')">خمس بلورات طاقة</div>
+                <div class="link-block" id="g2" onclick="linkStep('g2', 'three')">ثلاث بلورات طاقة</div>
+            </div>
+        </div>
+        <div class="feedback-text" id="link-info"></div>
+        <button class="btn-forward" id="go3" onclick="alert('عمل مذهل يفوق التوقعات! شحن محرك الألوان اكتمل 🏆🔮'); window.location.href='dashboard.html'">إنهاء الورشة 🏠</button>
+    </div>
+</div>
+
+<script>
+    function nextStage(n) {
+        document.querySelectorAll('.stage').forEach(s => s.classList.remove('active'));
+        document.getElementById(`stage${n}`).classList.add('active');
+    }
+
+    function skipStage1() {
+        document.getElementById('go1').style.display = 'inline-block';
+        document.getElementById('voice-info').innerHTML = "<span class='good'>تم شحن طاقة اللون الأحمر بنجاح!</span>";
+    }
+
+    let recStatus = false; let recObject = null;
+    function handleVoiceSync() {
+        const info = document.getElementById('voice-info');
+        const btn = document.getElementById('mic-control');
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+        if(!SpeechRecognition) { skipStage1(); return; }
+
+        if(!recStatus) {
+            recObject = new SpeechRecognition(); recObject.lang = 'en-US';
+            recObject.onstart = () => {
+                recStatus = true; btn.classList.add('recording'); btn.innerText = "جاري الفحص الصوتي.. اضغط للحفظ 🛑";
+                info.innerText = "تحدث الآن بوضوح وقل: Red";
+            };
+            recObject.onresult = (e) => {
+                const textResult = e.results[0][0].transcript.toLowerCase();
+                if(textResult.includes('red')) {
+                    info.innerHTML = "<span class='good'>مذهل! تطابق نطق بلورة Red بنسبة 100% 🏆</span>";
+                } else {
+                    info.innerHTML = `<span class='bad'>النطق الملتقط: "${textResult}". أعد المحاولة أو اضغط تجاوز.</span>`;
+                }
+                document.getElementById('go1').style.display = 'inline-block';
+            };
+            recObject.onend = () => { recStatus = false; btn.classList.remove('recording'); btn.innerText = "اضغط لتسجيل بصمة اللون 🎤"; };
+            recObject.start();
+        } else { if(recObject) recObject.stop(); }
+    }
+
+    function triggerHint(t) {
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(t); u.lang='en-US'; u.rate=0.75; window.speechSynthesis.speak(u);
+    }
+
+    function verifyBubble(letter, el) {
+        const info = document.getElementById('bubble-info');
+        if(letter === 'O') {
+            document.getElementById('missing-word').innerText = "Octopus";
+            info.innerHTML = "<span class='good'>إجابة صحيحة! انطلقت فقاقة حرف O لتركيب Octopus 🐙</span>";
+            document.getElementById('go2').style.display = 'inline-block';
+            el.style.background = '#22c55e'; el.style.color = '#fff';
+        } else {
+            info.innerHTML = "<span class='bad'>الحرف غير متطابق، حاول مرة أخرى!</span>";
+            el.style.background = '#ef4444'; el.style.color = '#fff';
+        }
+    }
+
+    let activeId = null; let activeType = null; let winCount = 0;
+    function linkStep(id, type) {
+        const currentBlock = document.getElementById(id);
+        if(currentBlock.classList.contains('done-link') || currentBlock.classList.contains('active-link')) return;
+
+        if(!activeId) { activeId = id; activeType = type; currentBlock.classList.add('active-link'); } 
+        else {
+            const previousBlock = document.getElementById(activeId);
+            if((activeId.startsWith('c') && id.startsWith('g')) || (activeId.startsWith('g') && id.startsWith('c'))) {
+                if(activeType === type) {
+                    currentBlock.className = 'link-block done-link'; previousBlock.className = 'link-block done-link'; winCount++;
+                    document.getElementById('link-info').innerHTML = "<span class='good'>اتصال عدادات رقمي ناجح! 🔗</span>";
+                    if(winCount === 2) document.getElementById('go3').style.display = 'inline-block';
+                } else {
+                    previousBlock.classList.remove('active-link');
+                    document.getElementById('link-info').innerHTML = "<span class='bad'>القيم غير متساوية رقمياً، جرب ثانية!</span>";
+                }
+                activeId = null; activeType = null;
+            } else { previousBlock.classList.remove('active-link'); activeId = id; activeType = type; currentBlock.classList.add('active-link'); }
+        }
+    }
+</script>
+</body>
+</html>

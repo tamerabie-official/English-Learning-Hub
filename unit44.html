@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الوحدة 4: حفل شحن مفاعل الأرقام 🎂</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght=400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif; background: linear-gradient(135deg, #1e1b4b, #701a75);
+            color: #fff; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh;
+        }
+        .container { width: 100%; max-width: 500px; }
+        .party-card { background: rgba(255, 255, 255, 0.04); border: 2px solid #e879f9; border-radius: 25px; padding: 20px; text-align: center; box-shadow: 0 0 25px rgba(232, 121, 249, 0.2); }
+        
+        /* شبكة الشموع الرقمية التفاعلية */
+        .candles-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 25px 0; }
+        .candle-node {
+            background: rgba(0,0,0,0.3); border: 2px solid rgba(232, 121, 249, 0.3);
+            border-radius: 18px; padding: 15px; cursor: pointer; transition: all 0.2s;
+        }
+        .candle-node.lit { border-color: #f59e0b; background: rgba(245, 158, 11, 0.1); box-shadow: 0 0 15px rgba(245, 158, 11, 0.3); }
+        .candle-fire { font-size: 2.2rem; display: block; filter: grayscale(100%); transition: filter 0.3s; }
+        .candle-node.lit .candle-fire { filter: grayscale(0%); }
+        .candle-num { font-weight: 900; margin-top: 5px; display: block; font-size: 1.2rem; color: #e879f9; }
+
+        .progress-text { font-size: 1.1rem; font-weight: bold; color: #f59e0b; margin-bottom: 10px; }
+        .nav-btn { background: #e879f9; color: #1e1b4b; border: none; padding: 12px 35px; border-radius: 50px; font-family: 'Cairo'; font-weight: bold; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div style="text-align: center; margin-bottom: 20px;">
+        <h2 style="color: #e879f9; margin: 0;">🎂 الفصل 4: عدّ شموع طاقة المفاعل</h2>
+        <p style="color:#cbd5e1; font-size:0.9rem;" id="narrative-text">المس الشموع الرقمية لإشعال طاقة الأرقام وإطلاق الألعاب النارية</p>
+    </div>
+
+    <div class="party-card">
+        <div class="progress-text" id="counter-display">الشموع المشتعلة: 0 من 3</div>
+        
+        <div class="candles-grid">
+            <div class="candle-node" id="c1" onclick="lightCandle('One', 1, 'c1')">
+                <span class="candle-fire">🕯️</span><span class="candle-num">One (1)</span>
+            </div>
+            <div class="candle-node" id="c2" onclick="lightCandle('Two', 2, 'c2')">
+                <span class="candle-fire">🕯️</span><span class="candle-num">Two (2)</span>
+            </div>
+            <div class="candle-node" id="c3" onclick="lightCandle('Three', 3, 'c3')">
+                <span class="candle-fire">🕯️</span><span class="candle-num">Three (3)</span>
+            </div>
+        </div>
+
+        <button class="nav-btn" onclick="triggerFireworks()">إشعال مفاعل حفل الميلاد 🎉</button>
+    </div>
+
+    <button class="nav-btn" style="margin-top:20px; display:block; margin-left:auto; margin-right:auto; background:transparent; color:#94a3b8; border:1px solid rgba(255,255,255,0.1);" onclick="window.location.href='dashboard.html'">خريطة المجرات 🏠</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    const isMomModeActive = localStorage.getItem('gameMode') === 'mom';
+    const currentHero = localStorage.getItem('studentName') || 'البطل';
+    let litCount = 0;
+
+    if(isMomModeActive) {
+        document.getElementById('narrative-text').innerText = "وضع ماما نشط: عدّ الشموع بالإنجليزية مع ماما واجعلي البطل يضغط بيده!";
+    }
+
+    function lightCandle(word, num, id) {
+        const node = document.getElementById(id);
+        if(node.classList.contains('lit')) return;
+
+        node.classList.add('lit');
+        litCount++;
+        document.getElementById('counter-display').innerText = `الشموع المشتعلة: ${litCount} من 3`;
+        
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(word); utterance.lang = 'en-US'; window.speechSynthesis.speak(utterance);
+    }
+
+    async function triggerFireworks() {
+        if(litCount < 3) {
+            alert("🚨 يرجى إشعال كافة الشموع الرقمية أولاً لتوليد طاقة الاحتفال الكافية!");
+            return;
+        }
+        alert("🎉 مبروك! انطلقت الألعاب النارية في الفضاء وتم تفعيل شفرة الأرقام بنجاح!");
+        const supabaseUrl = 'https://cjpdnptndkceescvubmg.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNqcGRucHRuZGtjZWVzY3Z1Ym1nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwMTExNTYsImV4cCI6MjA5ODU4NzE1Nn0.psxah2ekfvgZ5ReTutudYg59fiSrX13dI8IkJCobGMM';
+        const db = supabase.createClient(supabaseUrl, supabaseKey);
+        await db.from('students').update({ 'Unit 4 Score': '5/5' }).eq('Full Name', currentHero);
+        window.location.href = 'dashboard.html';
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الوحدة 6: القفزة الموسيقية والأخيرة 🎵</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght=400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif; background: linear-gradient(135deg, #110c1f, #4c0519);
+            color: #fff; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh;
+        }
+        .container { width: 100%; max-width: 500px; }
+        .audio-deck { background: rgba(255, 255, 255, 0.03); border: 2px solid #f43f5e; border-radius: 25px; padding: 20px; text-align: center; }
+        
+        /* أوتار ومفاتيح العزف الكوني */
+        .instrument-panel { display: flex; flex-direction: column; gap: 12px; margin: 25px 0; }
+        .instrument-row {
+            background: rgba(0,0,0,0.5); border-left: 5px solid #f43f5e; border-radius: 12px;
+            padding: 14px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; transition: all 0.2s;
+        }
+        .instrument-row:hover { background: rgba(244, 63, 94, 0.1); transform: scale(1.02); }
+        .instrument-row.played { border-left-color: #10b981; background: rgba(16, 185, 129, 0.08); }
+        
+        .inst-meta { display: flex; align-items: center; gap: 15px; }
+        .inst-emoji { font-size: 2.2rem; }
+        .inst-name { font-weight: 900; font-size: 1.1rem; }
+        .wave-status { font-size: 0.8rem; color: #f43f5e; font-weight: bold; }
+        .instrument-row.played .wave-status { color: #10b981; }
+
+        .nav-btn { background: linear-gradient(90deg, #f43f5e, #e11d48); color: white; border: none; padding: 14px 40px; border-radius: 50px; font-family: 'Cairo'; font-weight: 900; font-size: 1.1rem; cursor: pointer; box-shadow: 0 5px 15px rgba(244,63,94,0.4); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div style="text-align: center; margin-bottom: 20px;">
+        <h2 style="color: #f43f5e; margin: 0;">🎵 الفصل 6: سيمفونية العودة لكوكب الأرض</h2>
+        <p style="color:#fca5a5; font-size:0.9rem;" id="final-tip">اعزف التردد النغمي لفتح الثقب الدودي وإنهاء رحلتك الكونية بنجاح</p>
+    </div>
+
+    <div class="audio-deck">
+        <div class="instrument-panel">
+            <div class="instrument-row" id="i1" onclick="playInstrument('Piano', 'i1')">
+                <div class="inst-meta">
+                    <span class="inst-emoji">🎹</span><span class="inst-name">Piano</span>
+                </div>
+                <span class="wave-status" id="ws-i1">التردد معطل</span>
+            </div>
+            
+            <div class="instrument-row" id="i2" onclick="playInstrument('Drum', 'i2')">
+                <div class="inst-meta">
+                    <span class="inst-emoji">🥁</span><span class="inst-name">Drum</span>
+                </div>
+                <span class="wave-status" id="ws-i2">التردد معطل</span>
+            </div>
+
+            <div class="instrument-row" id="i3" onclick="playInstrument('Guitar', 'i3')">
+                <div class="inst-meta">
+                    <span class="inst-emoji">🎸</span><span class="inst-name">Guitar</span>
+                </div>
+                <span class="wave-status" id="ws-i3">التردد معطل</span>
+            </div>
+        </div>
+
+        <button class="nav-btn" onclick="executeHyperJump()">🚀 إطلاق القفزة الكونية الأخيرة</button>
+    </div>
+
+    <button class="nav-btn" style="margin-top:20px; display:block; margin-left:auto; margin-right:auto; background:transparent; color:#64748b; border:1px solid rgba(255,255,255,0.1); box-shadow:none;" onclick="window.location.href='dashboard.html'">العودة للقائمة 🏠</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    const isMomVoice = localStorage.getItem('gameMode') === 'mom';
+    const pilotName = localStorage.getItem('studentName') || 'البطل';
+    let trackCount = 0;
+
+    if(isMomVoice) {
+        document.getElementById('final-tip').innerText = "🎤 دور ماما والبطل: اضغطوا على الآلة وانطقوا النغمة سوا بأعلى صوت لدمج موجات الصوت العائلية!";
+    }
+
+    function playInstrument(word, id) {
+        const row = document.getElementById(id);
+        if(row.classList.contains('played')) return;
+
+        row.classList.add('played');
+        trackCount++;
+        document.getElementById(`ws-${id}`).innerText = "✓ تم ضبط التردد";
+        
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(word); u.lang = 'en-US'; window.speechSynthesis.speak(u);
+    }
+
+    async function executeHyperJump() {
+        if(trackCount < 3) {
+            alert("🚨 يرجى فك تشفير وضبط تردد الآلات الثلاث أولاً لفتح بوابة الأرض!");
+            return;
+        }
+        alert("🌍 مبروك! انفتحت البوابة الكبرى وعادت السفينة بسلام الأرض! لقد أكملت مغامرة الترم الأول كاملة بامتياز وفخر أمام والدتك! 🏆");
+        const supabaseUrl = 'https://cjpdnptndkceescvubmg.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNqcGRucHRuZGtjZWVzY3Z1Ym1nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwMTExNTYsImV4cCI6MjA5ODU4NzE1Nn0.psxah2ekfvgZ5ReTutudYg59fiSrX13dI8IkJCobGMM';
+        const db = supabase.createClient(supabaseUrl, supabaseKey);
+        await db.from('students').update({ 'Unit 6 Score': '5/5' }).eq('Full Name', pilotName);
+        window.location.href = 'dashboard.html';
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The English Learning Hub - بوابة الإطلاق 🌌</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght=400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-gold: #f59e0b;
+            --cyber-purple: #a855f7;
+            --space-dark: #090514;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: radial-gradient(circle at center, #1e1145 0%, var(--space-dark) 100%);
+            color: #f8fafc;
+            margin: 0; padding: 20px;
+            min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            overflow-x: hidden;
+        }
+
+        /* حاوية التصميم الزجاجية الفاخرة */
+        .launchpad-card {
+            width: 100%; max-width: 450px;
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(168, 85, 247, 0.3);
+            border-radius: 30px; padding: 30px 25px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(168, 85, 247, 0.1);
+            text-align: center;
+            animation: floatTemplate 4s ease-in-out infinite;
+        }
+
+        @keyframes floatTemplate {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .brand-logo { font-size: 3.5rem; margin-bottom: 10px; display: inline-block; }
+        
+        h1 { font-size: 1.8rem; font-weight: 900; margin: 0; color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.2); }
+        .subtitle { color: #94a3b8; font-size: 0.95rem; margin: 10px 0 25px 0; line-height: 1.6; }
+
+        /* حقل إدخال اسم البطل */
+        .input-group { margin-bottom: 25px; text-align: right; }
+        .input-group label { display: block; font-weight: bold; color: var(--neon-gold); margin-bottom: 8px; font-size: 0.9rem; }
+        .input-cyber {
+            width: 100%; background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px; padding: 14px; box-sizing: border-box;
+            color: #fff; font-family: 'Cairo'; font-size: 1.1rem; text-align: center;
+            transition: all 0.3s;
+        }
+        .input-cyber:focus {
+            outline: none; border-color: var(--cyber-purple);
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.4); background: rgba(0,0,0,0.4);
+        }
+
+        /* شبكة اختيار الأفاتار الفضائي */
+        .avatar-label { text-align: right; font-weight: bold; color: var(--neon-gold); font-size: 0.9rem; margin-bottom: 10px; }
+        .avatar-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 30px; }
+        .avatar-option {
+            background: rgba(255, 255, 255, 0.03); border: 2px solid rgba(255, 255, 255, 0.08);
+            border-radius: 18px; padding: 12px; cursor: pointer; transition: all 0.2s;
+        }
+        .avatar-option span { font-size: 2.2rem; display: block; }
+        .avatar-option p { margin: 5px 0 0 0; font-size: 0.75rem; color: #94a3b8; font-weight: bold; }
+        .avatar-option:hover { border-color: rgba(168, 85, 247, 0.5); background: rgba(255,255,255,0.06); }
+        .avatar-option.selected {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(245, 158, 11, 0.1));
+            border-color: var(--neon-gold); box-shadow: 0 0 15px rgba(245, 158, 11, 0.2);
+        }
+
+        /* زر الإطلاق الناري الكبير */
+        .btn-launch {
+            width: 100%; background: linear-gradient(90deg, #7c3aed, #a855f7, #f59e0b);
+            background-size: 200% auto; color: white; border: none;
+            padding: 16px; font-family: 'Cairo'; font-weight: 900; font-size: 1.2rem;
+            border-radius: 50px; cursor: pointer; box-shadow: 0 5px 20px rgba(168, 85, 247, 0.4);
+            transition: all 0.3s ease;
+        }
+        .btn-launch:hover { background-position: right center; transform: scale(1.02); }
+        .btn-launch:disabled { background: #334155; color: #64748b; cursor: not-allowed; box-shadow: none; }
+
+        .status-msg { margin-top: 15px; font-size: 0.9rem; font-weight: bold; min-height: 22px; }
+        .loading-color { color: var(--neon-gold); }
+        .error-color { color: #ef4444; }
+    </style>
+</head>
+<body>
+
+<div class="launchpad-card">
+    <div class="brand-logo">🚀</div>
+    <h1>مركبة المعرفة الكونية</h1>
+    <div class="subtitle">سجل هويتك الرقمية الآن لتشغيل محركات السفينة وفك شفرات اللغة الإنجليزية!</div>
+
+    <!-- حقل اسم الطالب -->
+    <div class="input-group">
+        <label for="student-name">👤 الاسم الثلاثي للبطل:</label>
+        <input type="text" id="student-name" class="input-cyber" placeholder="اكتب اسمك هنا بالعربية..." autocomplete="off">
+    </div>
+
+    <!-- منطقة اختيار رفيق الرحلة (الأفاتار) -->
+    <div class="avatar-label">🛸 اختر بدلة الفضاء الخاصة بك:</div>
+    <div class="avatar-grid">
+        <div class="avatar-option selected" onclick="selectAvatar('🧑‍🚀', 'كابتن السايبر', this)">
+            <span>🧑‍🚀</span>
+            <p>كابتن السايبر</p>
+        </div>
+        <div class="avatar-option" onclick="selectAvatar('🥷', 'مستكشف الليل', this)">
+            <span>🥷</span>
+            <p>مستكشف الليل</p>
+        </div>
+        <div class="avatar-option" onclick="selectAvatar('🤖', 'المساعد الذكي', this)">
+            <span>🤖</span>
+            <p>المساعد الذكي</p>
+        </div>
+    </div>
+
+    <!-- زر بدء الرحلة وتأكيد الاتصال -->
+    <button class="btn-launch" id="launch-trigger" onclick="initiateCosmicSession()">انطلق إلى الفضاء 🌌</button>
+    <div class="status-msg" id="msg-box"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    // ربط فوري وآمن بقاعدة البيانات الموحدة للمنصة
+    const urlSupabase = 'https://cjpdnptndkceescvubmg.supabase.co';
+    const keySupabase = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNqcGRucHRuZGtjZWVzY3Z1Ym1nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwMTExNTYsImV4cCI6MjA5ODU4NzE1Nn0.psxah2ekfvgZ5ReTutudYg59fiSrX13dI8IkJCobGMM';
+    const clientDb = supabase.createClient(urlSupabase, keySupabase);
+
+    let chosenIcon = '🧑‍🚀';
+    let chosenTitle = 'كابتن السايبر';
+
+    function selectAvatar(icon, title, element) {
+        document.querySelectorAll('.avatar-option').forEach(el => el.classList.remove('selected'));
+        element.classList.add('selected');
+        chosenIcon = icon;
+        chosenTitle = title;
+    }
+
+    async function initiateCosmicSession() {
+        const nameField = document.getElementById('student-name').value.trim();
+        const msg = document.getElementById('msg-box');
+        const trigger = document.getElementById('launch-trigger');
+
+        if (nameField.length < 5) {
+            msg.className = "status-msg error-color";
+            msg.innerText = "🚨 يرجى كتابة الاسم الثلاثي كاملاً لتأكيد الهوية!";
+            return;
+        }
+
+        // قفل الزر لمنع نقرات تكرار الاتصال
+        trigger.disabled = true;
+        msg.className = "status-msg loading-color";
+        msg.innerText = "⚡ جاري فحص سجلات الفضاء وبناء الهوية العائلية...";
+
+        try {
+            // 1. التحقق الفوري هل البطل مسجل مسبقاً في الـ Supabase؟
+            const { data: existingStudent, error: fetchError } = await clientDb
+                .from('students')
+                .select('*')
+                .eq('Full Name', nameField)
+                .maybeSingle();
+
+            if (fetchError) throw fetchError;
+
+            if (!existingStudent) {
+                // 2. إذا كان بطلاً جديداً، ننشئ له سجلاً فارغاً ونربط هويته ومكانه بالكامل
+                const { error: insertError } = await clientDb
+                    .from('students')
+                    .insert([{ 
+                        'Full Name': nameField,
+                        'Avatar': `${chosenIcon} ${chosenTitle}`
+                    }]);
+
+                if (insertError) throw insertError;
+            }
+
+            // 3. تخزين البيانات محلياً لضمان السيولة والربط المتسلسل في لوحة التحكم والوحدات
+            localStorage.setItem('studentName', nameField);
+            localStorage.setItem('studentAvatar', `${chosenIcon} ${chosenTitle}`);
+            localStorage.setItem('gameMode', 'solo'); // الوضع الافتراضي عند الدخول
+
+            msg.style.color = "#10b981";
+            msg.innerText = "🏆 تم تأكيد البصمة! فتح البوابات الكونية... 🚀";
+
+            // انطلاق وتوجيه سلس نحو لوحة التحكم
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 1200);
+
+        } catch (err) {
+            console.error(err);
+            msg.className = "status-msg error-color";
+            msg.innerText = "🚨 تعذر الاتصال بمولد الطاقة الكوني. حاول مجدداً!";
+            trigger.disabled = false;
+        }
+    }
+</script>
+</body>
+</html>

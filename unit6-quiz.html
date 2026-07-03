@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مستشعر قياس الكفاءة النغمية - Unit 6 🧠</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght=400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif; background: linear-gradient(135deg, #451a03, #78350f);
+            color: #f8fafc; min-height: 100vh; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center;
+        }
+
+        .quiz-wrapper {
+            width: 100%; max-width: 500px; background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(16px);
+            border: 2px solid #d97706; border-radius: 25px; padding: 25px 20px;
+            box-shadow: 0 10px 30px rgba(217, 119, 6, 0.15); text-align: center;
+        }
+
+        h2 { color: #d97706; font-size: 1.4rem; margin-bottom: 20px; }
+        
+        .track-bg { width: 100%; background: #78350f; border-radius: 10px; margin-bottom: 20px; overflow: hidden; }
+        .track-fill { height: 10px; width: 20%; background: linear-gradient(90deg, #d97706, #b45309); transition: width 0.3s; }
+
+        .question-statement { font-size: 1.25rem; margin-bottom: 25px; font-weight: bold; }
+        .emoji-holder { font-size: 4rem; margin-bottom: 15px; display: block; }
+
+        .options-stack { display: grid; grid-template-columns: 1fr; gap: 12px; width: 100%; }
+        .btn-opt {
+            background: rgba(255, 255, 255, 0.04); color: #fff; border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 14px; border-radius: 15px; font-family: 'Cairo'; font-size: 1.05rem; cursor: pointer; transition: all 0.2s;
+        }
+        .btn-opt:hover { background: linear-gradient(45deg, #d97706, #b45309); color: #451a03; font-weight: bold; }
+
+        .display-score { font-size: 1.8rem; color: #d97706; margin: 20px 0; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="quiz-wrapper">
+    <div id="quiz-panel">
+        <h2 id="question-tag">فحص مصفوفة السؤال 1 من 5</h2>
+        <div class="track-bg"><div class="track-fill" id="fill-bar"></div></div>
+        
+        <div class="question-statement">
+            <span class="emoji-holder" id="display-emoji">🔮</span>
+            <span id="display-text">جاري استدعاء السؤال...</span>
+        </div>
+        <div class="options-stack" id="stack-box"></div>
+    </div>
+
+    <div id="result-panel" style="display: none;">
+        <h2>📊 تم حصر وتأكيد تقرير التوافق الموسيقي!</h2>
+        <div class="display-score">قوة الأداء اللغوي: <span id="final-points">0</span> / 5</div>
+        <p id="evaluation-tag" style="color: #d97706; font-weight: bold;"></p>
+        <button style="background:#d97706; color:white; border:none; padding:12px 30px; border-radius:15px; font-family:'Cairo'; font-weight:bold; cursor:pointer; margin-top:20px;" onclick="window.location.href='dashboard.html'">تثبيت النتيجة رقمياً 🏠</button>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    const examQuestions = [
+        { emoji: "🥁", text: "Complete: I ______ play the drum.", options: ["am", "can", "is"], correct: "can" },
+        { emoji: "🪈", text: "Identify this soft sound instrument:", options: ["Flute", "Guitar", "Piano"], correct: "Flute" },
+        { emoji: "🎹", text: "What do we say to play together?", options: ["Good morning", "Let's play music", "Goodbye"], correct: "Let's play music" },
+        { emoji: "🐕", text: "Select the starting letter sound for (Dog):", options: ["Gg", "Dd", "Mm"], correct: "Dd" },
+        { emoji: "👧", text: "Which phonic wave letter triggers (Girl)?", options: ["Dd", "Ff", "Gg"], correct: "Gg" }
+    ];
+
+    let currentStep = 0; let pointCounter = 0;
+
+    function createClientInstance() {
+        return supabase.createClient('https://cjpdnptndkceescvubmg.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNqcGRucHRuZGtjZWVzY3Z1Ym1nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwMTExNTYsImV4cCI6MjA5ODU4NzE1Nn0.psxah2ekfvgZ5ReTutudYg59fiSrX13dI8IkJCobGMM');
+    }
+
+    function renderQuestion() {
+        const qObj = examQuestions[currentStep];
+        document.getElementById('question-tag').innerText = `فحص مصفوفة السؤال ${currentStep + 1} من ${examQuestions.length}`;
+        document.getElementById('fill-bar').style.width = `${((currentStep + 1) / examQuestions.length) * 100}%`;
+        document.getElementById('display-emoji').innerText = qObj.emoji;
+        document.getElementById('display-text').innerText = qObj.text;
+        
+        const container = document.getElementById('stack-box'); container.innerHTML = '';
+        qObj.options.forEach(optionText => {
+            const oButton = document.createElement('button'); oButton.className = 'btn-opt'; oButton.innerText = optionText;
+            oButton.onclick = () => {
+                if(optionText === qObj.correct) pointCounter++;
+                currentStep++;
+                if(currentStep < examQuestions.length) renderQuestion(); else pushResultsToDB();
+            };
+            container.appendChild(oButton);
+        });
+    }
+
+    async function pushResultsToDB() {
+        document.getElementById('quiz-panel').style.display = 'none';
+        document.getElementById('result-panel').style.display = 'block';
+        document.getElementById('final-points').innerText = pointCounter;
+
+        let evaluationStr = pointCounter >= 4 ? "عزف لغوي متقن! أداء صوتي بنسبة تماثل كاملة 🚀" : "أداء جيد، ينصح بمراجعة نغمات الحروف والأدوات 📚";
+        document.getElementById('evaluation-tag').innerText = evaluationStr;
+
+        const activeStudent = localStorage.getItem('studentName');
+        if (activeStudent) {
+            const databaseClient = createClientInstance();
+            await databaseClient.from('students').update({ 'Unit 6 Score': `${pointCounter}/5`, 'Unit 6 Evaluation': evaluationStr }).eq('Full Name', activeStudent);
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", renderQuestion);
+</script>
+</body>
+</html>

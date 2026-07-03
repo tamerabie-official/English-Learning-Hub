@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الوحدة 5: أسطول الحماية العائلية 🛡️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght=400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif; background: linear-gradient(135deg, #0f172a, #7f1d1d);
+            color: #fff; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh;
+        }
+        .container { width: 100%; max-width: 500px; }
+        .tactical-hud { background: rgba(15, 23, 42, 0.7); border: 2px solid #ef4444; border-radius: 25px; padding: 20px; text-align: center; }
+        
+        /* شبكة أسطول الحلفاء */
+        .fleet-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .fleet-card {
+            background: rgba(0,0,0,0.4); border: 2px solid rgba(239, 68, 68, 0.3);
+            border-radius: 20px; padding: 15px; cursor: pointer; transition: all 0.2s;
+        }
+        .fleet-card:hover { border-color: #ef4444; background: rgba(239, 68, 68, 0.1); }
+        .fleet-card.activated { border-color: #22c55e; background: rgba(34, 197, 94, 0.15); }
+        .avatar-ship { font-size: 2.8rem; display: block; }
+        .ship-title { font-weight: bold; margin-top: 5px; font-size: 1.1rem; color: #ef4444; }
+        .fleet-card.activated .ship-title { color: #22c55e; }
+
+        .radar-status { background: #000; border: 1px solid rgba(255,255,255,0.1); padding: 10px; border-radius: 12px; font-family: monospace; color: #ef4444; text-align: left; direction: ltr; font-size: 0.85rem; margin-bottom: 20px; }
+        .nav-btn { background: #ef4444; color: white; border: none; padding: 12px 35px; border-radius: 50px; font-family: 'Cairo'; font-weight: bold; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div style="text-align: center; margin-bottom: 20px;">
+        <h2 style="color: #ef4444; margin: 0;">🛡️ الفصل 5: درع الحماية واستدعاء العائلة</h2>
+        <p style="color:#94a3b8; font-size:0.9rem;" id="narrative-tag">المركبة في خطر! استدعِ طواقم الدعم لفتح دروع الحماية السيبرانية</p>
+    </div>
+
+    <div class="tactical-hud">
+        <div class="radar-status" id="radar">SHIELD INTEGRITY: 10%. DANGER ALERT!</div>
+        
+        <div class="fleet-grid">
+            <div class="fleet-card" id="f1" onclick="summonFleet('Father', 'الأب القائد', 'f1')">
+                <span class="avatar-ship">👨</span><span class="ship-title">Father</span>
+            </div>
+            <div class="fleet-card" id="f2" onclick="summonFleet('Mother', 'الأم المستشارة', 'f2')">
+                <span class="avatar-ship">👩</span><span class="ship-title">Mother</span>
+            </div>
+            <div class="fleet-card" id="f3" onclick="summonFleet('Brother', 'الأخ المساعد', 'f3')">
+                <span class="avatar-ship">👦</span><span class="ship-title">Brother</span>
+            </div>
+            <div class="fleet-card" id="f4" onclick="summonFleet('Sister', 'الأخت الملاحة', 'f4')">
+                <span class="avatar-ship">👧</span><span class="ship-title">Sister</span>
+            </div>
+        </div>
+
+        <button class="nav-btn" style="background:#22c55e;" onclick="activateGlobalShield()">تفعيل الدرع الدفاعي الأكبر ⚡</button>
+    </div>
+
+    <button class="nav-btn" style="margin-top:20px; display:block; margin-left:auto; margin-right:auto; background:transparent; color:#64748b; border:1px solid rgba(255,255,255,0.1);" onclick="window.location.href='dashboard.html'">العودة للمنصة 🏠</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    const isMomPlay = localStorage.getItem('gameMode') === 'mom';
+    const activePilot = localStorage.getItem('studentName') || 'البطل';
+    let shieldPower = 10;
+
+    if(isMomPlay) {
+        document.getElementById('narrative-tag').innerText = "نداء عاجل: التفت لماما وقولها: انطقي اسمك يا ماما في اللعبة عشان تفعلي درع الحماية لمركبتنا!";
+    }
+
+    function summonFleet(member, arName, id) {
+        const card = document.getElementById(id);
+        if(card.classList.contains('activated')) return;
+
+        card.classList.add('activated');
+        shieldPower += 22.5;
+        document.getElementById('radar').style.color = "#22c55e";
+        document.getElementById('radar').innerText = `DEPLOYING > [${member.toUpperCase()}] SUPPORT ONLINE. SHIELD CAPACITY: ${Math.min(100, Math.round(shieldPower))}%`;
+        
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(member); u.lang = 'en-US'; window.speechSynthesis.speak(u);
+    }
+
+    async function activateGlobalShield() {
+        if(shieldPower < 90) {
+            alert("🚨 تحذير: عاصفة النيازك ما زالت قوية! استدعِ بقية أفراد العائلة لتأمين الطاقة بالكامل!");
+            return;
+        }
+        alert("🛡️ تم تفعيل درع الطاقة العائلي الكلي بنجاح! تلاشت عاصفة النيازك وعبرت السفينة بسلام!");
+        const supabaseUrl = 'https://cjpdnptndkceescvubmg.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNqcGRucHRuZGtjZWVzY3Z1Ym1nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwMTExNTYsImV4cCI6MjA5ODU4NzE1Nn0.psxah2ekfvgZ5ReTutudYg59fiSrX13dI8IkJCobGMM';
+        const db = supabase.createClient(supabaseUrl, supabaseKey);
+        await db.from('students').update({ 'Unit 5 Score': '5/5' }).eq('Full Name', activePilot);
+        window.location.href = 'dashboard.html';
+    }
+</script>
+</body>
+</html>
