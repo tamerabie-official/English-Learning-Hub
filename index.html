@@ -140,13 +140,19 @@
 <!-- استدعاء المكتبة الخارجية -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-    // دالة الاتصال الآمنة: تمنع انهيار الصفحة كلياً وتكشف الأخطاء فوراً
+    // الدالة المحدثة: ضع مفتاحك الجديد المنسوخ بالأسفل هنا
     function getSupabaseClient() {
         if (typeof supabase === 'undefined') {
             alert("تنبيه: لم يتم تحميل مكتبة قاعدة البيانات بعد. تأكد من اتصالك بالإنترنت ثم حدّث الصفحة.");
             return null;
         }
-        return supabase.createClient('https://cjpdnptndkceescvubmg.supabase.co', 'Sb_publishable_Jbwm_t_ycZprbYmfV5HrPw_CAtZ-m6B');
+        
+        const url = 'https://cjpdnptndkceescvubmg.supabase.co';
+        
+        // ⚠️ امسح النص المكتوب بالأسفل بالكامل وضَعْ بدله الـ Anon Key الطويل الذي نسخته
+        const key = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNqcGRucHRuZGtjZWVzY3Z1Ym1nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwMTExNTYsImV4cCI6MjA5ODU4NzE1Nn0.psxah2ekfvgZ5ReTutudYg59fiSrX13dI8IkJCobGMM';
+        
+        return supabase.createClient(url, key);
     }
 
     async function registerStudent() {
@@ -160,25 +166,21 @@
         }
 
         const client = getSupabaseClient();
-        if (!client) return; // التوقف إذا فشل تحميل المكتبة لمنع الصمت التقني
+        if (!client) return; 
 
         try {
-            // 1. التحقق من تكرار اسم المستخدم مع التقاط الأخطاء
             const { data: userCheck, error: userErr } = await client.from('students').select('*').eq('User name', username);
             if (userErr) { alert("فشل فحص الحساب: " + userErr.message); return; }
             if (userCheck && userCheck.length > 0) { alert("اختار اسم مستخدم آخر."); return; }
 
-            // 2. التحقق من تكرار الاسم الثلاثي مع التقاط الأخطاء
             const { data: nameCheck, error: nameErr } = await client.from('students').select('*').eq('Full Name', fullName);
             if (nameErr) { alert("فشل فحص الاسم: " + nameErr.message); return; }
             if (nameCheck && nameCheck.length > 0) { alert("الاسم مسجل سابقا."); return; }
 
-            // 3. التحقق من تكرار رقم الجوال مع التقاط الأخطاء
             const { data: phoneCheck, error: phoneErr } = await client.from('students').select('*').eq('WhatsApp', whatsapp);
             if (phoneErr) { alert("فشل فحص الهاتف: " + phoneErr.message); return; }
             if (phoneCheck && phoneCheck.length > 0) { alert("رقم الجوال مسجل سابقا."); return; }
 
-            // إرسال الـ 3 أعمدة الأساسية النظيفة بعد تبسيطك للجدول
             const { error: insertErr } = await client.from('students').insert([{
                 'Full Name': fullName,
                 'User name': username,
@@ -187,18 +189,19 @@
             
             if(insertErr) {
                 alert("خطأ أثناء إدخال البيانات: " + insertErr.message);
-            } else {
-                alert("تم التسجيل بنجاح! اسم المستخدم الخاص بك هو: (" + username + ")");
-                
-                // تفريغ المدخلات بعد النجاح
-                document.getElementById('p_studentName').value = '';
-                document.getElementById('p_username').value = '';
-                document.getElementById('p_whatsapp').value = '';
-            }
+            } 
 
         } catch (err) {
             alert("حدث خطأ غير متوقع في النظام: " + err.message);
-        }
+        } else {
+    alert("تم التسجيل بنجاح! اسم المستخدم الخاص بك هو: (" + username + ")");
+    
+    // حفظ الاسم في ذاكرة المتصفح لكي ترحب به لوحة التحكم فوراً
+    localStorage.setItem('studentName', fullName);
+    
+    // الانتقال التلقائي إلى لوحة التحكم
+    window.location.href = "dashboard.html";
+}
     }
 
     async function loginStudent() {

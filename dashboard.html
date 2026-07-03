@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة التحكم - English Learning Hub</title>
+    <title>مرحباً بك في English Learning Hub 🌟</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body { 
@@ -11,130 +11,230 @@
             background: linear-gradient(135deg, #e3f2fd, #fff9c4); 
             min-height: 100vh; 
             text-align: center; 
-            margin: 0; 
-            padding-bottom: 40px; 
+            padding: 20px; 
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         
-        /* القسم الترحيبي العلوي */
-        .welcome-section { 
-            background: #1976d2; 
-            color: white; 
-            padding: 35px 15px; 
-            border-bottom-left-radius: 40px; 
-            border-bottom-right-radius: 40px; 
-            box-shadow: 0 6px 20px rgba(0,0,0,0.15); 
-            position: relative;
-        }
-        
-        .student-name { 
-            color: #ffeb3b; 
-            font-size: 1.8rem; 
-            font-weight: bold; 
-            display: block; 
-            margin-top: 10px; 
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-        }
-
-        /* زر تسجيل الخروج الأنيق للعودة للتجربة */
-        .logout-btn {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            padding: 5px 12px;
-            border-radius: 12px;
-            font-size: 0.8rem;
-            cursor: pointer;
-            font-family: 'Cairo', sans-serif;
-            transition: 0.3s;
-        }
-        .logout-btn:hover {
-            background: #d32f2f;
-            border-color: #d32f2f;
-        }
-
-        /* شبكة عرض الوحدات التعليمية */
-        .unit-grid { 
-            display: grid; 
-            grid-template-columns: 1fr 1fr; 
-            gap: 20px; 
-            padding: 30px; 
-            max-width: 600px; 
+        .container { 
+            width: 100%;
+            max-width: 430px; 
             margin: auto; 
         }
-        
-        /* كروت الوحدات */
-        .unit-card { 
+
+        /* 1. مربع تسجيل ولي الأمر */
+        .box { 
             background: white; 
-            padding: 25px; 
-            border-radius: 25px; 
+            padding: 20px; 
+            border-radius: 30px; 
             box-shadow: 0 8px 20px rgba(0,0,0,0.1); 
-            cursor: pointer; 
-            transition: 0.3s ease; 
             border: 3px solid #ff9800; 
+            transition: 0.3s;
         }
+        .box h3 { margin-top: 0; color: #ff9800; }
         
-        .unit-card:hover { 
-            transform: translateY(-8px); 
-            background-color: #fffde7; 
-            box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+        /* تصميم المدخلات العام */
+        input { 
+            width: 85%; 
+            padding: 12px; 
+            margin: 8px 0; 
+            border-radius: 15px; 
+            border: 2px solid #ddd; 
+            outline: none; 
+            font-family: 'Cairo', sans-serif;
+            text-align: center;
+        }
+        input:focus { border-color: #ff9800; }
+        
+        button { 
+            background: #4caf50; 
+            color: white; 
+            padding: 10px 30px; 
+            border: none; 
+            border-radius: 20px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            font-size: 1rem; 
+            font-family: 'Cairo', sans-serif;
+            margin-top: 5px;
         }
 
-        /* استجابة الشاشات الصغيرة للموبايل */
-        @media (max-width: 480px) {
-            .unit-grid {
-                grid-template-columns: 1fr; 
-                padding: 20px;
-            }
-            .student-name { font-size: 1.5rem; }
-            .logout-btn { top: 10px; left: 10px; padding: 4px 10px; }
+        /* المسافة الفاصلة */
+        .spacer { height: 20px; }
+
+        /* 2. مربع ميكي ماوس لفورم الطالب */
+        .mickey-container {
+            position: relative;
+            width: 100%;
+            max-width: 380px;
+            height: 400px;
+            background-image: url('25015.jpg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            margin: 0 auto;
+        }
+
+        .mickey-form {
+            position: absolute;
+            top: 63%; 
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 65%; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .mickey-form h3 { 
+            margin: 0 0 12px 0; 
+            color: #d32f2f; 
+            font-size: 1.1rem;
+        }
+        
+        .mickey-form input { 
+            width: 95%; 
+            padding: 10px; 
+            margin: 6px 0; 
+            font-size: 0.9rem;
+            border: 2px solid #d32f2f;
+            border-radius: 12px;
+        }
+        
+        .mickey-form button { 
+            background: #d32f2f; 
+            padding: 10px 25px; 
+            font-size: 0.9rem;
+            margin-top: 8px;
         }
     </style>
 </head>
 <body>
 
-    <!-- القسم الترحيبي المطور -->
-    <div class="welcome-section">
-        <!-- زر خروج مضاف لتسهيل حلقة الاختبار البرمجي والتنقل بين الحسابات -->
-        <button class="logout-btn" onclick="logoutStudent()">تسجيل خروج ⬅</button>
-        
-        <h1>مرحباً بك في عالم المعرفة! 🌟</h1>
-        <span id="displayStudentName" class="student-name">أهلاً بك يا بطل</span>
-        <p style="margin: 5px 0 0 0; opacity: 0.9;">استعد لاستكشاف وحدات منهجك الممتعة</p>
+<div class="container">
+    
+    <!-- 1. مربع التسجيل لولي الأمر -->
+    <div class="box">
+        <h3>للتسجيل (ولي الأمر) 📝</h3>
+        <input type="text" id="p_studentName" placeholder="اسم الطالب الثلاثي">
+        <input type="text" id="p_username" placeholder="اسم المستخدم للطالب">
+        <input type="tel" id="p_whatsapp" placeholder="رقم واتساب ولي الأمر">
+        <button onclick="registerStudent()">تسجيل الطالب</button>
     </div>
 
-    <!-- شبكة الدروس المخصصة للأبطال -->
-    <div class="unit-grid">
-        <!-- الوحدة الأولى -->
-        <div class="unit-card" onclick="window.location.href='phonics_unit1.html'">
-            <div style="font-size: 3.5rem; margin-bottom: 5px;">🏫</div>
-            <b style="font-size: 1.2rem; color: #333; display: block;">Unit 1: My School</b>
-        </div>
-        
-        <!-- الوحدة الثانية -->
-        <div class="unit-card" onclick="window.location.href='phonics_unit2.html'">
-            <div style="font-size: 3.5rem; margin-bottom: 5px;">🎨</div>
-            <b style="font-size: 1.2rem; color: #333; display: block;">Unit 2: Colors</b>
+    <div class="spacer"></div>
+
+    <!-- 2. مربع ميكي ماوس لفورم الطالب -->
+    <div class="mickey-container">
+        <div class="mickey-form">
+            <h3>مسجل بالفعل! 🎓</h3>
+            <input type="text" id="s_username" placeholder="أدخل اسم المستخدم">
+            <button onclick="loginStudent()">دخول للتعلم</button>
         </div>
     </div>
 
-    <script>
-        // التحقق من هوية الطالب فور فتح الصفحة
-        const studentName = localStorage.getItem('studentName');
-        if (studentName) {
-            document.getElementById('displayStudentName').innerText = "يا بطلنا: " + studentName;
-        } else {
-            // حماية اللوحة: الطرد الفوري لصفحة ميكي إذا لم يكن هناك حساب مسجل
-            window.location.href = "index.html";
+</div>
+
+<!-- استدعاء المكتبة الخارجية -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    // دالة الاتصال المحدثة والآمنة جاهزة تماماً بمفتاحك
+    function getSupabaseClient() {
+        if (typeof supabase === 'undefined') {
+            alert("تنبيه: لم يتم تحميل مكتبة قاعدة البيانات بعد. تأكد من اتصالك بالإنترنت ثم حدّث الصفحة.");
+            return null;
+        }
+        
+        const url = 'https://cjpdnptndkceescvubmg.supabase.co';
+        
+        // هنا تم الاحتفاظ بالمفتاح الشغال الذي قمت بضبطه بنجاح
+        const key = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNqcGRucHRuZGtjZWVzY3Z1Ym1nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwMTExNTYsImV4cCI6MjA5ODU4NzE1Nn0.psxah2ekfvgZ5ReTutudYg59fiSrX13dI8IkJCobGMM';
+        
+        return supabase.createClient(url, key);
+    }
+
+    async function registerStudent() {
+        const fullName = document.getElementById('p_studentName').value.trim();
+        const username = document.getElementById('p_username').value.trim();
+        const whatsapp = document.getElementById('p_whatsapp').value.trim();
+
+        if(!fullName || !username || !whatsapp) {
+            alert("الرجاء ملء جميع الحقول أولاً.");
+            return;
         }
 
-        // دالة تسجيل الخروج المضافة حديثاً لتنظيف الذاكرة
-        function logoutStudent() {
-            localStorage.removeItem('studentName'); // حذف الاسم من ذاكرة المتصفح
-            window.location.href = "index.html";   // العودة الفورية لصفحة البداية
+        const client = getSupabaseClient();
+        if (!client) return; 
+
+        try {
+            // 1. التحقق من تكرار اسم المستخدم
+            const { data: userCheck, error: userErr } = await client.from('students').select('*').eq('User name', username);
+            if (userErr) { alert("فشل فحص الحساب: " + userErr.message); return; }
+            if (userCheck && userCheck.length > 0) { alert("اختار اسم مستخدم آخر."); return; }
+
+            // 2. التحقق من تكرار الاسم الثلاثي
+            const { data: nameCheck, error: nameErr } = await client.from('students').select('*').eq('Full Name', fullName);
+            if (nameErr) { alert("فشل فحص الاسم: " + nameErr.message); return; }
+            if (nameCheck && nameCheck.length > 0) { alert("الاسم مسجل سابقا."); return; }
+
+            // 3. التحقق من تكرار رقم الجوال
+            const { data: phoneCheck, error: phoneErr } = await client.from('students').select('*').eq('WhatsApp', whatsapp);
+            if (phoneErr) { alert("فشل فحص الهاتف: " + phoneErr.message); return; }
+            if (phoneCheck && phoneCheck.length > 0) { alert("رقم الجوال مسجل سابقا."); return; }
+
+            // إرسال البيانات إلى سوبابيز
+            const { error: insertErr } = await client.from('students').insert([{
+                'Full Name': fullName,
+                'User name': username,
+                'WhatsApp': whatsapp
+            }]);
+            
+            if(insertErr) {
+                alert("خطأ أثناء إدخال البيانات: " + insertErr.message);
+            } else {
+                alert("تم التسجيل بنجاح! اسم المستخدم الخاص بك هو: (" + username + ")");
+                
+                // 🚀 التعديل المطور الجديد: حفظ الاسم في ذاكرة المتصفح للترحيب به
+                localStorage.setItem('studentName', fullName);
+                
+                // 🚀 توجيه الطالب تلقائياً إلى لوحة التحكم فوراً!
+                window.location.href = "dashboard.html";
+            }
+
+        } catch (err) {
+            alert("حدث خطأ غير متوقع في النظام: " + err.message);
         }
-    </script>
+    }
+
+    async function loginStudent() {
+        const user = document.getElementById('s_username').value.trim();
+        
+        if(!user) {
+            alert("الرجاء إدخل اسم المستخدم الخاص بك.");
+            return;
+        }
+
+        const client = getSupabaseClient();
+        if (!client) return;
+
+        try {
+            const { data, error } = await client.from('students').select('*').eq('User name', user).single();
+            
+            if (error) {
+                alert("اسم المستخدم غير صحيح أو الطالب غير مسجل.");
+                return;
+            }
+
+            if (data) {
+                localStorage.setItem('studentName', data['Full Name']);
+                window.location.href = "dashboard.html";
+            }
+        } catch (err) {
+            alert("حدث خطأ أثناء محاولة الدخول: " + err.message);
+        }
+    }
+</script>
 </body>
 </html>
