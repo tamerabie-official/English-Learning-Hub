@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مغامرة التحديات الذكية 🧩</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #f0f9ff;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: #ffffff;
+            border: 3px solid #e0f2fe;
+            border-radius: 25px;
+            padding: 20px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #9c27b0, #673ab7);
+            color: white;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .header h1 { margin: 0; font-size: 1.5rem; }
+
+        .game-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        .game-section.active { display: block; }
+
+        .game-title { font-size: 1.3rem; color: #ff9800; font-weight: bold; margin-bottom: 15px; }
+        .prompt-text { font-size: 1.2rem; font-weight: bold; margin-bottom: 15px; color: #007adb; }
+        .emoji-display { font-size: 4.5rem; margin-bottom: 15px; display: block; }
+
+        .mic-btn {
+            background: #e91e63;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(233, 30, 99, 0.3);
+            font-family: 'Cairo', sans-serif;
+            margin-bottom: 10px;
+            transition: all 0.2s;
+        }
+        .mic-btn.listening { background: #4caf50; animation: pulse 1s infinite; }
+
+        .status-msg { font-weight: bold; margin-top: 10px; min-height: 24px; font-size: 1.1rem; }
+        .success { color: #2e7d32; }
+        .error { color: #c62828; }
+        .info { color: #0288d1; }
+
+        .balloon-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .balloon {
+            background: #ffeb3b;
+            border: 2px solid #fbc02d;
+            border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+            width: 55px;
+            height: 65px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        .balloon:hover { transform: scale(1.1) translateY(-5px); }
+
+        .match-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .match-column { display: flex; flex-direction: column; gap: 10px; }
+        .match-item {
+            background: #fff;
+            border: 2px solid #29b6f6;
+            padding: 12px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+        .match-item.selected { background: #bbdefb; border-color: #0d47a1; }
+        .match-item.correct { background: #c8e6c9; border-color: #2e7d32; pointer-events: none; }
+
+        .letter-pool {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        .letter-tile {
+            background: #ff9800;
+            color: white;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+        }
+        .word-slots {
+            font-size: 1.8rem;
+            font-weight: bold;
+            letter-spacing: 5px;
+            margin: 15px 0;
+            color: #33691e;
+            min-height: 35px;
+        }
+
+        .next-btn {
+            background: #007adb;
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 50px;
+            font-family: 'Cairo', sans-serif;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 25px;
+            display: none;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.04); } 100% { transform: scale(1); } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>🎯 وِرشة التحديات التفاعلية</h1>
+    </div>
+
+    <!-- 1️⃣ لعبة النطق والتصحيح والمقارنة المعزولة تماماً ضد الانهيار -->
+    <div id="game1" class="game-section active">
+        <div class="game-title">التحدي 1: انطق واكتشف 📢</div>
+        <div class="prompt-text">ماذا ترى في الصورة؟ اضغط المايك وسجل صوتك!</div>
+        <span class="emoji-display">🐯</span>
+        
+        <button class="mic-btn" id="mic-btn" onclick="toggleRecording()">ابدأ تسجيل صوتك 🎤</button>
+        <div class="status-msg" id="voice-status">اضغط على الزر بالأعلى وابدأ الكلام...</div>
+
+        <!-- أزرار مساعدة تعمل بشكل مستقل دائماً لمنع تعطل اللعبة -->
+        <div style="margin-top: 15px; padding: 10px; background: #e0f2fe; border-radius: 15px;">
+            <p style="margin: 0 0 8px 0; font-weight: bold; color: #0369a1; font-size: 0.95rem;">💡 خيارات سريعة للدعم والاستماع:</p>
+            <button class="mic-btn" style="background: #0288d1; padding: 8px 18px; font-size: 0.95rem; margin-bottom: 0; box-shadow: none;" onclick="speakTargetWord('Tiger')">اسمع النطق الصحيح 🔊</button>
+            <button class="mic-btn" style="background: #78909c; padding: 8px 18px; font-size: 0.95rem; margin-bottom: 0; box-shadow: none;" onclick="skipVoiceGame()">تخطي التحدي الحالي ⏭️</button>
+        </div>
+
+        <!-- منطقة المقارنة والاستماع الآمنة عند نجاح المايك -->
+        <div id="audio-feedback-zone" style="display: none; margin-top: 20px; background: #f3f4f6; padding: 15px; border-radius: 15px; border: 2px dashed #9ca3af;">
+            <p style="font-weight: bold; color: #4b5563; margin-top: 0; margin-bottom: 8px;">🎧 استمع إلى تسجيلك الصوتي الحقيقي:</p>
+            <audio id="student-audio-playback" controls style="width: 100%; max-width: 300px;"></audio>
+        </div>
+
+        <button class="next-btn" id="next1" style="margin-top: 20px;" onclick="switchGame(2)">التحدي التالي 🚀</button>
+    </div>
+
+    <!-- 2️⃣ لعبة الحروف المفقودة (البالونات) -->
+    <div id="game2" class="game-section">
+        <div class="game-title">التحدي 2: فرقع بالونة الحرف الناقص 🎈</div>
+        <div class="prompt-text">أكمل الحرف الأول الناقص للكلمة المعبرة عن الصورة:</div>
+        <span class="emoji-display">⛺</span>
+        <div class="word-slots" style="font-size: 2rem;" id="balloon-word">_ e n t</div>
+        <div class="balloon-container">
+            <div class="balloon" onclick="checkBalloon('B', this)">B</div>
+            <div class="balloon" onclick="checkBalloon('T', this)">T</div>
+            <div class="balloon" onclick="checkBalloon('M', this)">M</div>
+        </div>
+        <div class="status-msg" id="balloon-status"></div>
+        <button class="next-btn" id="next2" onclick="switchGame(3)">التحدي التالي 🚀</button>
+    </div>
+
+    <!-- 3️⃣ لعبة التوصيل السحرية بنقرتين -->
+    <div id="game3" class="game-section">
+        <div class="game-title">التحدي 3: التوصيل العبقري الذكي 🔗</div>
+        <div class="prompt-text">اضغط على الصورة ثم العبارة الصحيحة المناسبة لها:</div>
+        
+        <div class="match-grid">
+            <div class="match-column">
+                <div class="match-item" id="img1" onclick="selectMatch('img1', 'morning')">🌅 Morning</div>
+                <div class="match-item" id="img2" onclick="selectMatch('img2', 'bye')">👋 Goodbye</div>
+            </div>
+            <div class="match-column">
+                <div class="match-item" id="txt1" onclick="selectMatch('txt1', 'bye')">مع السلامة</div>
+                <div class="match-item" id="txt2" onclick="selectMatch('txt2', 'morning')">صباح الخير</div>
+            </div>
+        </div>
+        <div class="status-msg" id="match-status"></div>
+        <button class="next-btn" id="next3" onclick="switchGame(4)">التحدي التالي 🚀</button>
+    </div>
+
+    <!-- 4️⃣ لعبة ترتيب الحروف المبعثرة -->
+    <div id="game4" class="game-section">
+        <div class="game-title">التحدي 4: جمّع الحروف المختبئة 🔍</div>
+        <div class="prompt-text">رتب الحروف بالترتيب الصحيح لتكوين كلمة الصورة:</div>
+        <span class="emoji-display">❄️</span>
+        <div class="word-slots" id="hunt-word-display">____</div>
+        <div class="letter-pool" id="letter-pool-container">
+            <!-- ستتولد الحروف عشوائياً -->
+        </div>
+        <div class="status-msg" id="hunt-status"></div>
+        <button class="next-btn" id="next4" onclick="alert('عبقري وممتاز! أنهيت كل التحديات بنجاح 🎉🌟'); window.location.href='dashboard.html'">إنهاء المغامرة العظمى 🏠</button>
+    </div>
+</div>
+
+<script>
+    function switchGame(gameNum) {
+        document.querySelectorAll('.game-section').forEach(sec => sec.classList.remove('active'));
+        document.getElementById(`game${gameNum}`).classList.add('active');
+        if(gameNum === 4) initWordHunt();
+    }
+
+    function skipVoiceGame() {
+        document.getElementById('next1').style.display = 'inline-block';
+        document.getElementById('voice-status').innerHTML = "<span class='info'>تم تخطي التحدي بنجاح، يمكنك الانتقال للتحدي التالي الآن!</span>";
+    }
+
+    // 1️⃣ إدارة التسجيل الصوتي والتحليل بشكل محمي بالكامل
+    let mediaRecorder = null;
+    let audioChunks = [];
+    let isRecording = false;
+    let streamReference = null;
+
+    async function toggleRecording() {
+        if (!isRecording) {
+            await startAudioRecording();
+        } else {
+            stopAudioRecording();
+        }
+    }
+
+    async function startAudioRecording() {
+        const statusMsg = document.getElementById('voice-status');
+        const micBtn = document.getElementById('mic-btn');
+        const feedbackZone = document.getElementById('audio-feedback-zone');
+        
+        feedbackZone.style.display = 'none';
+        audioChunks = [];
+
+        // حماية برمجية ضد بيئات المعاينة غير الآمنة
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            statusMsg.innerHTML = "<span class='error'>⚠️ المتصفح أو تطبيق المعاينة يمنع المايك! يرجى تجربته بمتصفح خارجي أو الضغط على 'تخطي التحدي' بالأسفل.</span>";
+            document.getElementById('next1').style.display = 'inline-block';
+            return;
+        }
+
+        try {
+            streamReference = await navigator.mediaDevices.getUserMedia({ audio: true });
+            mediaRecorder = new MediaRecorder(streamReference);
+            
+            mediaRecorder.ondataavailable = event => {
+                if (event.data.size > 0) audioChunks.push(event.data);
+            };
+
+            mediaRecorder.onstop = () => {
+                try {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    document.getElementById('student-audio-playback').src = audioUrl;
+                    feedbackZone.style.display = 'block';
+                } catch(e) { console.log(e); }
+                
+                analyzeSpeechDirectly();
+            };
+
+            mediaRecorder.start();
+            isRecording = true;
+            micBtn.classList.add('listening');
+            micBtn.innerText = "احفظ تسجيلك الصوتي وحلله 🛑";
+            statusMsg.innerHTML = "🔴 جاري التسجيل.. تحدث الآن بوضوح!";
+        } catch (err) {
+            statusMsg.innerHTML = "<span class='error'>❌ فشل تشغيل المايك: تأكد من إعطاء الصلاحية أو جربه في متصفح خارجي (Chrome).</span>";
+            document.getElementById('next1').style.display = 'inline-block';
+        }
+    }
+
+    function stopAudioRecording() {
+        const micBtn = document.getElementById('mic-btn');
+        try {
+            if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                mediaRecorder.stop();
+            }
+        } catch(e) { console.error(e); }
+
+        if (streamReference) {
+            try {
+                streamReference.getTracks().forEach(track => track.stop());
+            } catch(e) { console.error(e); }
+        }
+        isRecording = false;
+        micBtn.classList.remove('listening');
+        micBtn.innerText = "ابدأ تسجيل صوتك 🎤";
+    }
+
+    function analyzeSpeechDirectly() {
+        const statusMsg = document.getElementById('voice-status');
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        
+        if (!SpeechRecognition) {
+            statusMsg.innerHTML = "<span class='success'>تم تسجيل صوتك بنجاح! اسمع وقارن مع النطق الصحيح.</span>";
+            document.getElementById('next1').style.display = 'inline-block';
+            return;
+        }
+
+        try {
+            statusMsg.innerHTML = "⏳ جاري مراجعة وتحليل نطقك اللغوي للكلمة...";
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'en-US';
+            
+            recognition.onresult = function(event) {
+                const speechResult = event.results[0][0].transcript.toLowerCase().trim();
+                if (speechResult.includes('tiger')) {
+                    statusMsg.innerHTML = "<span class='success'>ممتااااز وعظيم! نطقك للكلمة سليم 100% 🌟🎉</span>";
+                } else {
+                    statusMsg.innerHTML = `<span class='error'>تم التحليل.. نطقك قريب من: "${speechResult}". قارنه بالصوت الأصلي بالأسفل!</span>`;
+                }
+                document.getElementById('next1').style.display = 'inline-block';
+            };
+
+            recognition.onerror = function() {
+                statusMsg.innerHTML = "<span class='success'>تم حفظ تسجيلك بنجاح! اضغط واستمع وقارن مع النطق الصحيح بالأسفل 🔊</span>";
+                document.getElementById('next1').style.display = 'inline-block';
+            };
+
+            recognition.start();
+        } catch(e) {
+            statusMsg.innerHTML = "<span class='success'>تم التسجيل بنجاح! انقر على النطق الصحيح للمقارنة.</span>";
+            document.getElementById('next1').style.display = 'inline-block';
+        }
+    }
+
+    function speakTargetWord(text) {
+        if ('speechSynthesis' in window) {
+            try {
+                window.speechSynthesis.cancel();
+                const msg = new SpeechSynthesisUtterance();
+                msg.text = text;
+                msg.lang = 'en-US';
+                msg.rate = 0.75;
+                window.speechSynthesis.speak(msg);
+            } catch(e) {
+                alert("حدث خطأ أثناء تشغيل الصوت.");
+            }
+        } else {
+            alert("ميزة النطق الصوتي غير مدعومة في هذا المتصفح الداخلي.");
+        }
+    }
+
+    // 2️⃣ منطق البالونات والحروف المفقودة
+    function checkBalloon(letter, element) {
+        const statusMsg = document.getElementById('balloon-status');
+        if(letter === 'T') {
+            document.getElementById('balloon-word').innerText = "Tent";
+            statusMsg.innerHTML = "<span class='success'>إجابة صحيحة! انطلقت الرصاصة وفرقعت البالونة 🎈✨</span>";
+            document.getElementById('next2').style.display = 'inline-block';
+            element.style.background = '#8bc34a';
+        } else {
+            statusMsg.innerHTML = "<span class='error'>حاول مجدداً، هذا الحرف لا يركب هنا!</span>";
+            element.style.background = '#e57373';
+        }
+    }
+
+    // 3️⃣ منطق التوصيل بنقرتين
+    let selectedId = null;
+    let selectedType = null;
+    let correctMatches = 0;
+
+    function selectMatch(id, type) {
+        const item = document.getElementById(id);
+        if(item.classList.contains('correct') || item.classList.contains('selected')) return;
+
+        if (!selectedId) {
+            selectedId = id;
+            selectedType = type;
+            item.classList.add('selected');
+        } else {
+            const previousItem = document.getElementById(selectedId);
+            if ((selectedId.startsWith('img') && id.startsWith('txt')) || (selectedId.startsWith('txt') && id.startsWith('img'))) {
+                if (selectedType === type) {
+                    item.classList.remove('selected');
+                    item.classList.add('correct');
+                    previousItem.classList.remove('selected');
+                    previousItem.classList.add('correct');
+                    correctMatches++;
+                    document.getElementById('match-status').innerHTML = "<span class='success'>توصيل عبقري صحيح! 🔗</span>";
+                    if(correctMatches === 2) {
+                        document.getElementById('next3').style.display = 'inline-block';
+                    }
+                } else {
+                    previousItem.classList.remove('selected');
+                    document.getElementById('match-status').innerHTML = "<span class='error'>خطأ، لا يتطابقان! جرب توليفة أخرى.</span>";
+                }
+                selectedId = null;
+                selectedType = null;
+            } else {
+                previousItem.classList.remove('selected');
+                selectedId = id;
+                selectedType = type;
+                item.classList.add('selected');
+            }
+        }
+    }
+
+    // 4️⃣ منطق لعبة ترتيب الحروف المبعثرة (Igloo)
+    const targetWord = "igloo";
+    let currentConstructedWord = "";
+
+    function initWordHunt() {
+        const pool = document.getElementById('letter-pool-container');
+        pool.innerHTML = "";
+        const shuffledLetters = ['o', 'g', 'l', 'i', 'o'];
+        
+        shuffledLetters.forEach(lettr => {
+            const tile = document.createElement('div');
+            tile.className = 'letter-tile';
+            tile.innerText = lettr.toUpperCase();
+            tile.onclick = function() {
+                selectHuntLetter(lettr, tile);
+            };
+            pool.appendChild(tile);
+        });
+    }
+
+    function selectHuntLetter(letter, tileElement) {
+        currentConstructedWord += letter;
+        document.getElementById('hunt-word-display').innerText = currentConstructedWord.toUpperCase();
+        tileElement.style.visibility = 'hidden';
+
+        if(currentConstructedWord.length === targetWord.length) {
+            if(currentConstructedWord === targetWord) {
+                document.getElementById('hunt-status').innerHTML = "<span class='success'>يا لك من بطل مذهل! ركبت الكلمة بنجاح صاعق 🎉</span>";
+                document.getElementById('next4').style.display = 'inline-block';
+            } else {
+                document.getElementById('hunt-status').innerHTML = "<span class='error'>الترتيب خاطئ! سأعيد لك الحروف لتحاول مجدداً.</span>";
+                setTimeout(() => {
+                    currentConstructedWord = "";
+                    document.getElementById('hunt-word-display').innerText = "____";
+                    initWordHunt();
+                }, 1500);
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
