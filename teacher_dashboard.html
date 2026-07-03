@@ -121,13 +121,14 @@
     <div class="table-container">
         <table>
             <thead>
-                <tr>
-                    <th>اسم الطالب الثلاثي</th>
-                    <th>اسم المستخدم (Login)</th>
-                    <th>رقم الواتساب</th>
-                    <th>إرسال التقرير التشخيصي</th>
-                </tr>
-            </thead>
+    <tr>
+        <th>اسم الطالب الثلاثي</th>
+        <th>اسم المستخدم (Login)</th>
+        <th>رقم الواتساب</th>
+        <th>الأداء (التقدم)</th> <!-- هذا هو العنوان الناقص -->
+        <th>إرسال التقرير التشخيصي</th>
+    </tr>
+</thead>
             <tbody id="studentsTableBody">
                 <tr>
                     <td colspan="4" style="text-align:center; color:#888;">جاري جلب البيانات...</td>
@@ -198,8 +199,44 @@
 
     window.onload = fetchTeacherData;
 
-    async function fetchTeacherData() {
+        async function fetchTeacherData() {
         try {
+            const { data: students, error } = await supabaseClient.from('students').select('*');
+            if (error) { alert("خطأ: " + error.message); return; }
+
+            const tbody = document.getElementById('studentsTableBody');
+            tbody.innerHTML = ''; 
+            document.getElementById('totalStudents').innerText = students.length;
+
+            if (students.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#888;">لا يوجد طلاب مسجلون.</td></tr>`;
+                return;
+            }
+
+            for (const student of students) {
+                // استدعاء الدالة البرمجية (المحرك) من Supabase
+                const { data: perfData } = await supabaseClient
+                    .rpc('calculate_student_performance', { student_id: student.id });
+                
+                const avg = perfData ? perfData[0].avg_score.toFixed(1) : "0.0";
+                const units = perfData ? perfData[0].total_units_completed : 0;
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td style="font-weight: bold; color: #fff;">${student['Full Name']}</td>
+                    <td style="color: #ff9800;">${student['User name']}</td>
+                    <td dir="ltr" style="color: #b0bec5;">${student['WhatsApp']}</td>
+                    <td style="color: #4caf50; font-weight: bold;">${units}/6 (${avg})</td>
+                    <td>
+                        <button class="whatsapp-btn" onclick="openReportModal('${student['WhatsApp']}', '${student['Full Name']}')">
+                            تقرير 📊
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            }
+        } catch (err) { alert("حدث خطأ: " + err.message); }
+    }
             const { data: students, error } = await supabaseClient.from('students').select('*');
             if (error) { alert("خطأ: " + error.message); return; }
 
