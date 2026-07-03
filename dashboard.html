@@ -8,13 +8,36 @@
     <style>
         body { font-family: 'Cairo', sans-serif; background-color: #f0f4f8; text-align: center; margin: 0; }
         .welcome-section { background: #1976d2; color: white; padding: 30px 10px; border-bottom-left-radius: 30px; border-bottom-right-radius: 30px; }
+        .student-name { color: #ffeb3b; font-size: 1.5rem; display: block; margin-top: 10px; }
+        .unit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 20px; }
+        .unit-card { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); cursor: pointer; transition: 0.3s; }
+        .unit-card:hover { transform: scale(1.05); }
     </style>
 </head>
 <body>
     <div class="welcome-section">
         <h1>مرحباً بك في Hub! 🌟</h1>
-        <p>استكشف وحدات منهج Connect 1 الممتعة [2، 23].</p>
+        <span id="displayStudentName" class="student-name">أيها البطل</span>
+        <p>استكشف وحدات منهج Connect 1 الممتعة.</p>
     </div>
-    <!-- بقية كود الـ Grid الخاص بالوحدات يوضع هنا -->
+
+    <div class="unit-grid">
+        <div class="unit-card" onclick="window.location.href='phonics_unit1.html'">
+            <div style="font-size: 2rem;">🏫</div>
+            <b>Unit 1: My School</b>
+        </div>
+        <div class="unit-card" onclick="window.location.href='phonics_unit2.html'">
+            <div style="font-size: 2rem;">🎨</div>
+            <b>Unit 2: Colors</b>
+        </div>
+    </div>
+
+    <script>
+        // جلب اسم الطالب الذي حفظناه في localStorage عند تسجيل الدخول
+        const studentName = localStorage.getItem('studentName');
+        if (studentName) {
+            document.getElementById('displayStudentName').innerText = "يا بطلنا: " + studentName;
+        }
+    </script>
 </body>
 </html>

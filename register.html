@@ -9,15 +9,12 @@
         body { font-family: 'Cairo', sans-serif; background-color: #f1f8e9; padding: 20px; text-align: center; }
         .form-container { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); max-width: 450px; margin: auto; }
         input { width: 90%; padding: 12px; margin: 8px 0; border-radius: 10px; border: 1px solid #ccc; font-family: 'Cairo', sans-serif; }
-        
-        /* تنسيق كلمة المرور الملونة [1، 15] */
         .color-password-label { margin-top: 15px; font-weight: bold; color: #1976d2; }
         .color-grid { display: flex; justify-content: center; gap: 10px; margin: 15px 0; }
         .color-opt { width: 50px; height: 50px; border-radius: 50%; border: 3px solid transparent; cursor: pointer; transition: 0.3s; }
         .red { background-color: #f44336; } .blue { background-color: #2196f3; }
         .green { background-color: #4caf50; } .yellow { background-color: #ffeb3b; }
         .selected { border-color: #333; transform: scale(1.1); }
-
         .btn-save { background: #ff9800; color: white; padding: 15px; border: none; border-radius: 25px; width: 100%; font-size: 1.2rem; cursor: pointer; font-weight: bold; margin-top: 20px; }
     </style>
 </head>
@@ -25,7 +22,7 @@
 
     <div class="form-container">
         <h2>📝 انضم إلى عائلة Hub!</h2>
-        <p>املأ البيانات لنبدأ رحلة التعلم مع Maya و Hana [11، 27].</p>
+        <p>املأ البيانات لنبدأ رحلة التعلم.</p>
         
         <input type="text" id="studentName" placeholder="اسم الطالب الثلاثي">
         <input type="text" id="username" placeholder="اسم المستخدم (Username)">
@@ -43,55 +40,50 @@
         <button class="btn-save" onclick="saveData()">حفظ والبدء 🚀</button>
     </div>
 
-    <!-- Firebase Library -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+    <!-- مكتبة Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <script>
-      const firebaseConfig = {
-        apiKey: "AIzaSyCmofZnzpI4kei1IdDiYUYt4nXDPJ0P-Yk", 
-        authDomain: "englishhub-87acb.firebaseapp.com",
-        databaseURL: "https://englishhub-87acb-default-rtdb.firebaseio.com",
-        projectId: "englishhub-87acb",
-        storageBucket: "englishhub-87acb.firebasestorage.app",
-        messagingSenderId: "678127242155",
-        appId: "1:678127242155:web:aa8ba48cc68c134f1aa0ee"
-      };
+        const supabaseUrl = 'https://cjpdnptndkceescvubmg.supabase.co';
+        const supabaseKey = 'Sb_publishable_Jbwm_t_ycZprbYmfV5HrPw_CAtZ-m6B';
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-      firebase.initializeApp(firebaseConfig);
-      var database = firebase.database();
-
-      function selectColor(color, element) {
-          // مسح الاختيار السابق
-          document.querySelectorAll('.color-opt').forEach(opt => opt.classList.remove('selected'));
-          // تحديد اللون الجديد
-          element.classList.add('selected');
-          document.getElementById('selectedColor').value = color;
-      }
-
-      function saveData() {
-        const name = document.getElementById('studentName').value;
-        const user = document.getElementById('username').value;
-        const phone = document.getElementById('whatsapp').value;
-        const pass = document.getElementById('selectedColor').value;
-
-        if(!name || !user || !phone || !pass) {
-            alert("يرجى إكمال كافة البيانات واختيار لونك المفضل! [10، 11]");
-            return;
+        function selectColor(color, element) {
+            document.querySelectorAll('.color-opt').forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+            document.getElementById('selectedColor').value = color;
         }
 
-        database.ref('students/' + user).set({
-            fullName: name,
-            username: user,
-            whatsapp: phone,
-            visualPassword: pass, // الربط بنواتج تعلم الألوان [1، 15]
-            progress: "Unit 1 Started"
-        })
-        .then(() => {
-            alert("تم التسجيل بنجاح! تذكر لونك هو: " + pass);
-            window.location.href = "dashboard.html";
-        })
-        .catch((error) => alert("خطأ: " + error.message));
-      }
+        async function saveData() {
+            const name = document.getElementById('studentName').value;
+            const user = document.getElementById('username').value;
+            const phone = document.getElementById('whatsapp').value;
+            const pass = document.getElementById('selectedColor').value;
+
+            if(!name || !user || !phone || !pass) {
+                alert("يرجى إكمال كافة البيانات واختيار لونك المفضل!");
+                return;
+            }
+
+            const { data, error } = await supabase
+                .from('students')
+                .insert([
+                    { 
+                        full_name: name, 
+                        username: user, 
+                        whatsapp: phone, 
+                        visual_password: pass, 
+                        progress: "Unit 1 Started" 
+                    }
+                ]);
+
+            if (error) {
+                alert("خطأ: " + error.message);
+            } else {
+                alert("تم التسجيل بنجاح!");
+                window.location.href = "dashboard.html";
+            }
+        }
     </script>
 </body>
+</html>

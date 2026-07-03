@@ -10,14 +10,15 @@
         .welcome-section { background: #1976d2; color: white; padding: 30px 10px; border-bottom-left-radius: 30px; border-bottom-right-radius: 30px; }
         .student-name { color: #ffeb3b; font-size: 1.5rem; display: block; margin-top: 10px; }
         .unit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 20px; }
-        .unit-card { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); cursor: pointer; }
+        .unit-card { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); cursor: pointer; transition: 0.3s; }
+        .unit-card:hover { transform: scale(1.05); background-color: #f9f9f9; }
     </style>
 </head>
 <body>
     <div class="welcome-section">
         <h1>مرحباً بك في Hub! 🌟</h1>
         <span id="displayStudentName" class="student-name">أيها البطل</span>
-        <p>استكشف وحدات المنهج الممتعة [1، 19]</p>
+        <p>استكشف وحدات المنهج الممتعة</p>
     </div>
 
     <div class="unit-grid">
@@ -29,14 +30,16 @@
             <div style="font-size: 2rem;">🎨</div>
             <b>Unit 2: Colors</b>
         </div>
-        <!-- الوحدات المتبقية تضاف هنا بنفس النمط -->
     </div>
 
     <script>
-        // قراءة اسم الطالب من الذاكرة المحلية التي سجلناها في صفحة login.html
-        const name = localStorage.getItem('studentName');
-        if (name) {
-            document.getElementById('displayStudentName').innerText = "يا بطلنا: " + name;
+        // جلب اسم الطالب من الذاكرة المحلية
+        const studentName = localStorage.getItem('studentName');
+        if (studentName) {
+            document.getElementById('displayStudentName').innerText = "يا بطلنا: " + studentName;
+        } else {
+            // إذا لم يجد اسماً، يوجهه لصفحة الدخول
+            window.location.href = "login.html";
         }
     </script>
 </body>
