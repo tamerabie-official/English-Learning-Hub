@@ -66,6 +66,38 @@
             </li>
         </ul>
     </footer>
+<!-- Supabase Client Library -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+<script>
+  // 1. إعداد الاتصال (استبدل القيم ببيانات مشروعك من لوحة تحكم Supabase)
+  const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+  const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY';
+  const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  // 2. دالة جلب بيانات الطالب
+  async function loadStudentData() {
+    try {
+      // نفترض أن الطالب مسجل دخوله (لنجلب بياناته)
+      const { data, error } = await supabase
+        .from('students') // اسم الجدول في قاعدة بياناتك
+        .select('name, progress_percentage')
+        .eq('id', 'CURRENT_STUDENT_ID') // هنا سنضع معرف الطالب لاحقاً
+        .single();
+
+      if (error) throw error;
+
+      // 3. تحديث الواجهة بالبيانات الحقيقية
+      document.querySelector('h1').innerText = `مرحباً، يا ${data.name}! 🌟`;
+      document.querySelector('.bg-emerald-500').style.width = `${data.progress_percentage}%`;
+      
+    } catch (err) {
+      console.error('خطأ في جلب البيانات:', err.message);
+    }
+  }
+
+  // تشغيل الدالة عند تحميل الصفحة
+  loadStudentData();
+</script>
 </body>
 </html>

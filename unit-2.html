@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الوحدة الثانية: صمّم بطلك الخارق 🦸‍♂️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Cairo', sans-serif; 
+            background-color: #f0f9ff; 
+            color: #333333;
+            margin: 0; 
+            padding: 20px; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .lab-container { width: 100%; max-width: 500px; }
+        
+        .lab-header { 
+            background: linear-gradient(135deg, #ff9800, #e65100); 
+            border-radius: 25px; 
+            padding: 20px;
+            margin-bottom: 25px; 
+            box-shadow: 0 8px 16px rgba(230, 81, 0, 0.2);
+            text-align: center;
+            color: #fff;
+        }
+        .lab-header h1 { margin: 0; font-size: 1.6rem; }
+        .lab-header p { margin: 5px 0 0 0; font-size: 1rem; font-weight: bold; color: #fffde7; }
+
+        .section-title {
+            font-size: 1.3rem;
+            color: #e65100;
+            margin: 25px 0 12px 0;
+            text-align: right;
+            font-weight: bold;
+            border-right: 5px solid #ff9800;
+            padding-right: 10px;
+        }
+
+        .lesson-card { 
+            background: #ffffff; 
+            padding: 20px; 
+            border-radius: 25px; 
+            margin-bottom: 20px; 
+            border: 3px solid #ffe0b2;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.04); 
+        }
+        
+        .word-grid { 
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 12px; 
+        }
+        
+        .word-card { 
+            background: #ffffff; 
+            border: 3px solid #ffb74d; 
+            border-radius: 20px; 
+            padding: 15px 10px; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+        
+        .word-emoji { font-size: 3.2rem; margin-bottom: 5px; }
+        .word-text { font-weight: bold; color: #e65100; font-size: 1.2rem; }
+        .word-translation { font-size: 0.9rem; color: #777; margin-top: 2px; }
+        
+        /* أزرار الصوت المخصصة للفروق الفردية */
+        .audio-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+            width: 100%;
+        }
+        .btn-sound {
+            flex: 1;
+            background: #e0f7fa;
+            border: 1px solid #00bcd4;
+            color: #006064;
+            padding: 6px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+        }
+        .btn-repeat {
+            flex: 1;
+            background: #f1f5f9;
+            border: 1px solid #94a3b8;
+            color: #334155;
+            padding: 6px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .phrase-card {
+            background: #fff8e1;
+            border: 2px dashed #ffb300;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .phrase-english { font-weight: bold; color: #ff6f00; font-size: 1.15rem; text-align: left; direction: ltr; }
+        .phrase-arabic { color: #666; font-size: 0.95rem; margin-top: 4px; text-align: right; }
+
+        .btn-back { 
+            background: #ff9800; 
+            color: white; 
+            padding: 12px 35px; 
+            border: none; 
+            border-radius: 50px; 
+            margin: 25px auto; 
+            font-family: 'Cairo', sans-serif;
+            font-weight: bold;
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: block;
+            box-shadow: 0 4px 10px rgba(255, 152, 0, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+<div class="lab-container">
+
+    <div class="lab-header">
+        <h1>مهمة البطل الخارق: هذا أنا! 🦸‍♂️</h1>
+        <p>شغّل أجهزة استشعار بطلك وتعرف على قواك الكامنة</p>
+    </div>
+
+    <!-- الهدف 1: تنفيذ الأوامر الحركية والتفاعل اللغوي -->
+    <div class="section-title">⚡ تفعيل القوى الحركية (Super Commands)</div>
+    <div class="lesson-card">
+        <div class="phrase-card" onclick="speak('Touch your nose')">
+            <div>
+                <div class="phrase-english">Touch your nose!</div>
+                <div class="phrase-arabic">شغّل مستشعر الأنف الحساس! (المس أنفك)</div>
+            </div>
+            <span>📢</span>
+        </div>
+        <div class="phrase-card" onclick="speak('Well done, super hero')">
+            <div>
+                <div class="phrase-english">Well done!</div>
+                <div class="phrase-arabic">أحسنت صنعاً يا بطل! تم التفعيل بنجاح.</div>
+            </div>
+            <span>📢</span>
+        </div>
+    </div>
+
+    <!-- الهدف 2: مفردات أعضاء الجسم المعززة بالخيال -->
+    <div class="section-title">🔍 رادار أعضاء البطل (Hero Body Parts)</div>
+    <div class="lesson-card">
+        <div class="word-grid">
+            <!-- العين -->
+            <div class="word-card">
+                <span class="word-emoji">👁️</span>
+                <span class="word-text">Eye</span>
+                <span class="word-translation">عين خارقة</span>
+                <div class="audio-actions">
+                    <button class="btn-sound" onclick="speak('Eye')">نطق 📢</button>
+                </div>
+            </div>
+            <!-- الأذن -->
+            <div class="word-card">
+                <span class="word-emoji">👂</span>
+                <span class="word-text">Ear</span>
+                <span class="word-translation">أذن الرادار</span>
+                <div class="audio-actions">
+                    <button class="btn-sound" onclick="speak('Ear')">نطق 📢</button>
+                </div>
+            </div>
+            <!-- الأنف -->
+            <div class="word-card">
+                <span class="word-emoji">👃</span>
+                <span class="word-text">Nose</span>
+                <span class="word-translation">أنف التعقب</span>
+                <div class="audio-actions">
+                    <button class="btn-sound" onclick="speak('Nose')">نطق 📢</button>
+                </div>
+            </div>
+            <!-- الفم -->
+            <div class="word-card">
+                <span class="word-emoji">👄</span>
+                <span class="word-text">Mouth</span>
+                <span class="word-translation">فم الإشارة</span>
+                <div class="audio-actions">
+                    <button class="btn-sound" onclick="speak('Mouth')">نطق 📢</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- الهدف 3: الفونكس المتقدم المخصص للفروق الفردية والذكاء السمعي -->
+    <div class="section-title">🎵 معمل شفرات الأصوات الإيقاعية (Phonics Drills)</div>
+    
+    <!-- صوت حرف H -->
+    <div class="lesson-card">
+        <div style="font-weight: bold; color: #ff6f00; margin-bottom: 12px; text-align: right;">صوت طاقة الانطلاق Hh /h/</div>
+        <div class="word-grid">
+            <div class="word-card">
+                <span class="word-emoji">✋</span>
+                <span class="word-text">Hand</span>
+                <span class="word-translation">يد القوة</span>
+                <div class="audio-actions">
+                    <button class="btn-sound" onclick="speak('Hand')">عادي 📢</button>
+                    <!-- هنا التكرار السمعي المستهدف للفروق الفردية -->
+                    <button class="btn-repeat" onclick="speakPhonetic('h', 'h', 'Hand')">إيقاعي 🔄</button>
+                </div>
+            </div>
+            <div class="word-card">
+                <span class="word-emoji">💇‍♂️</span>
+                <span class="word-text">Hair</span>
+                <span class="word-translation">شعر</span>
+                <div class="audio-actions">
+                    <button class="btn-sound" onclick="speak('Hair')">عادي 📢</button>
+                    <button class="btn-repeat" onclick="speakPhonetic('h', 'h', 'Hair')">إيقاعي 🔄</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- صوت حرف N -->
+    <div class="lesson-card">
+        <div style="font-weight: bold; color: #ff6f00; margin-bottom: 12px; text-align: right;">صوت شبكة النينجا Nn /n/</div>
+        <div class="word-grid">
+            <div class="word-card">
+                <span class="word-emoji">👃</span>
+                <span class="word-text">Nose</span>
+                <span class="word-translation">أنف</span>
+                <div class="audio-actions">
+                    <button class="btn-sound" onclick="speak('Nose')">عادي 📢</button>
+                    <button class="btn-repeat" onclick="speakPhonetic('n', 'n', 'Nose')">إيقاعي 🔄</button>
+                </div>
+            </div>
+            <div class="word-card">
+                <span class="word-emoji">🥜</span>
+                <span class="word-text">Nut</span>
+                <span class="word-translation">بندق الطاقة</span>
+                <div class="audio-actions">
+                    <button class="btn-sound" onclick="speak('Nut')">عادي 📢</button>
+                    <button class="btn-repeat" onclick="speakPhonetic('n', 'n', 'Nut')">إيقاعي 🔄</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- زر العودة لصفحة لوحة التحكم -->
+    <button class="btn-back" onclick="window.location.href='dashboard.html'">رجوع للرئيسية 🏠</button>
+
+</div>
+
+<script>
+    // النطق الطبيعي السريع للمتفوقين أو الاستماع العام
+    function speak(text) {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel(); 
+            const msg = new SpeechSynthesisUtterance();
+            msg.text = text;
+            msg.lang = 'en-US'; 
+            msg.rate = 0.8; 
+            window.speechSynthesis.speak(msg);
+        }
+    }
+
+    // 🚀 الميزة السحرية للفروق الفردية: التكرار والتمهيد الصوتي للطفل السمعي
+    function speakPhonetic(letterSound, textRepeat, fullWord) {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            
+            // قمنا بتهجئة النص برمجياً ليقوم المحرك بنطق الصوت مجزءاً (إيقاعياً) ببطء شديد
+            // سيقول: "h... h... h... Hand" بوقفات تضمن استيعاب الصوت النقي
+            const phoneticText = `${letterSound}... ${letterSound}... ${letterSound}... ${fullWord}`;
+            
+            const msg = new SpeechSynthesisUtterance();
+            msg.text = phoneticText;
+            msg.lang = 'en-US';
+            msg.rate = 0.55; // سرعة بطيئة جداً ليردد الطفل معها
+            msg.pitch = 1.2; // طبقة صوتية واضحة ومحببة للأطفال
+            
+            window.speechSynthesis.speak(msg);
+        }
+    }
+</script>
+
+</body>
+</html>
