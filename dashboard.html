@@ -3,137 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة التحكم - English Learning Hub 🚀</title>
+    <title>البوابة السحرية للأبطال - English Learning Hub 🎈</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Cairo', sans-serif;
-            background: linear-gradient(135deg, #1a1a2e, #16213e); /* تصميم مظلم سينمائي أنيق يناسب الهوية المرئية للمنصة */
-            color: #ffffff;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
+        body { 
+            font-family: 'Cairo', sans-serif; 
+            background-color: #f0f9ff; /* خلفية سماوية مبهجة ومريحة */
+            color: #333;
+            margin: 0; 
+            padding: 20px; 
             display: flex;
             flex-direction: column;
             align-items: center;
+            min-height: 100vh;
         }
-
+        
         .dashboard-container {
             width: 100%;
             max-width: 500px;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 2px solid #00f2fe;
-            border-radius: 25px;
-            padding: 30px 20px;
-            box-shadow: 0 10px 30px rgba(0, 242, 254, 0.2);
             text-align: center;
-            margin-top: 40px;
         }
-
-        h1 {
-            color: #00f2fe;
-            font-size: 1.8rem;
-            margin-bottom: 10px;
-        }
-
-        .welcome-msg {
-            font-size: 1.3rem;
-            margin-bottom: 30px;
+        
+        /* ترحيب كرتوني ملون */
+        .welcome-header { 
+            background: linear-gradient(135deg, #4caf50, #8bc34a); /* ألوان الطبيعة المبهجة والنجاح */
+            border-radius: 25px; 
+            padding: 25px 20px;
+            margin-bottom: 25px; 
+            box-shadow: 0 8px 16px rgba(76, 175, 80, 0.2);
             color: #fff;
         }
+        .welcome-header h1 { margin: 0; font-size: 1.8rem; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
+        .welcome-header p { margin: 8px 0 0 0; font-size: 1.1rem; font-weight: bold; color: #fffde7; }
 
-        .welcome-msg span {
-            color: #4facfe;
-            font-weight: bold;
+        /* أزرار الرحلة التعليمية كأنها ألعاب */
+        .menu-btn { 
+            background: #ffffff; 
+            border: 3px solid #29b6f6; /* إطار أزرق زاهي */
+            border-radius: 20px; 
+            padding: 20px; 
+            margin-bottom: 20px;
+            cursor: pointer; 
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
         }
+        
+        /* زر الاختبار بلون مختلف ومميز */
+        .menu-btn.quiz-btn {
+            border-color: #ff9800; /* إطار برتقالي مشع للمغامرة */
+        }
+        
+        .menu-btn:hover, .menu-btn:active { 
+            transform: scale(1.03) translateY(-2px);
+            background: #fffde7;
+        }
+        
+        .btn-icon { font-size: 2.8rem; }
+        .btn-info { text-align: right; flex-grow: 1; margin-right: 15px; }
+        .btn-title { font-size: 1.3rem; font-weight: bold; color: #0288d1; margin: 0; }
+        .menu-btn.quiz-btn .btn-title { color: #f57c00; }
+        .btn-desc { font-size: 0.95rem; color: #666; margin: 3px 0 0 0; }
 
-        .menu-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
-            width: 100%;
-        }
-
-        .menu-btn {
-            background: linear-gradient(45deg, #4facfe, #00f2fe);
-            color: #1a1a2e;
-            border: none;
-            padding: 15px;
-            border-radius: 15px;
-            font-family: 'Cairo', sans-serif;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 4px 15px rgba(0, 242, 254, 0.3);
-        }
-
-        .menu-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(0, 242, 254, 0.5);
-        }
-
-        .logout-btn {
-            background: #ff4757;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 12px;
-            font-family: 'Cairo', sans-serif;
-            margin-top: 30px;
-            cursor: pointer;
-            font-weight: bold;
-        }
+        /* سهم الانتقال اللطيف */
+        .btn-arrow { font-size: 1.5rem; color: #ccc; padding-left: 5px; }
     </style>
 </head>
 <body>
 
 <div class="dashboard-container">
-    <h1>مرحباً بك في English Learning Hub 🌟</h1>
-    <div class="welcome-msg">أهلاً بالبطل: <span id="student-name-display">جاري التحميل...</span> 👋</div>
-    
-    <!-- أزرار التحكم والدروس المستقبلية للمنصة -->
-    <div class="menu-grid">
-        <button class="menu-btn" onclick="goToLessons()">📖 ابدأ رحلة التعلم والدروس</button>
-        <button class="menu-btn" onclick="goToQuiz()">📝 اختبار تحديد المستوى التشخيصي</button>
-        <button class="menu-btn" onclick="viewReport()">📊 تقرير الأداء وأسلوب الاستيعاب</button>
+
+    <div class="welcome-header">
+        <h1>مرحباً بك يا بطل في عالم الإنجليزية! 🌟</h1>
+        <p>مستعد للمغامرة اليوم مع Maya و Hana؟ 🎉</p>
     </div>
 
-    <button class="logout-btn" onclick="logout()">تسجيل الخروج 🚪</button>
+    <!-- زر الانتقال لصفحة الدروس الصغير السليم -->
+    <div class="menu-btn" onclick="goToLessons()">
+        <span class="btn-icon">📖</span>
+        <div class="btn-info">
+            <h3 class="btn-title">رحلة الدروس والصوتيات</h3>
+            <p class="btn-desc">استمع وانطق الحروف والكلمات بشكل صحيح 🇬🇧</p>
+        </div>
+        <span class="btn-arrow">◀</span>
+    </div>
+
+    <!-- زر الانتقال للاختبار -->
+    <div class="menu-btn quiz-btn" onclick="goToQuiz()">
+        <span class="btn-icon">🎯</span>
+        <div class="btn-info">
+            <h3 class="btn-title">مغامرة التحدي والاختبار</h3>
+            <p class="btn-desc">اختبر ذكاءك واجمع النقاط والنجوم الكثيرة!</p>
+        </div>
+        <span class="btn-arrow">◀</span>
+    </div>
+
 </div>
 
 <script>
-    // عند تحميل الصفحة، نقرأ اسم الطالب المنسوخ في ذاكرة المتصفح فورا لتظهر لوحة التحكم مخصصة له
-    document.addEventListener("DOMContentLoaded", function() {
-        const storedName = localStorage.getItem('studentName');
-        
-        if (storedName) {
-            document.getElementById('student-name-display').innerText = storedName;
-        } else {
-            // حماية أمنية: إذا حاول أحد الدخول للوحة التحكم مباشرة دون تسجيل، يعيده لصفحة البداية
-            alert("تنبيه: الرجاء تسجيل الدخول أولاً.");
-            window.location.href = "index.html";
-        }
-    });
-
     function goToLessons() {
-    window.location.href = "lessons.html";
-    
+        window.location.href = "lessons.html"; // ربط آمن وسليم بالملف الصغير
     }
 
     function goToQuiz() {
-    window.location.href = "Quiz.html";
-}
-
-    function viewReport() {
-        alert("ميزة استخراج تقرير الذكاءات وأسلوب الاستيعاب قيد التجهيز! 📊");
-    }
-
-    function logout() {
-        // مسح اسم الطالب من الذاكرة والعودة لصفحة التسجيل
-        localStorage.removeItem('studentName');
-        window.location.href = "index.html";
+        window.location.href = "quiz.html"; // ربط اختبار تحديد المستوى
     }
 </script>
 
