@@ -1,0 +1,143 @@
+// 1. تعريف إعدادات Supabase
+const urlSupabase = 'https://cjpdnptndkceescvubmg.supabase.co';
+const keySupabase = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNqcGRucHRuZGtjZWVzY3Z1Ym1nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwMTExNTYsImV4cCI6MjA5ODU4NzE1Nn0.psxah2ekfvgZ5ReTutudYg59fiSrX13dI8IkJCobGMM';
+let clientDb;
+
+// متغيرات الأبطال والبدلات الافتراضية
+let activeHeroType = 1;
+let selectedSuitFile = '25116.jpg';
+
+// الانتظار حتى تحميل الصفحة بالكامل لمنع أي خطأ (DOM Error)
+document.addEventListener("DOMContentLoaded", function() {
+    if (typeof supabase !== 'undefined') {
+        clientDb = supabase.createClient(urlSupabase, keySupabase);
+    } else {
+        console.error("🚨 مكتبة Supabase لم يتم استدعاؤها بشكل صحيح في ملف الـ HTML!");
+    }
+    
+    // ضبط الأفاتار الابتدائي للبطل الأول
+    localStorage.setItem('studentAvatarImg', selectedSuitFile);
+});
+
+// 2. ميكانيكية اختيار الأبطال والبدلات
+function openSuitInventory() { 
+    selectHero(1, selectedSuitFile); 
+    const box = document.getElementById('suit-inventory-box');
+    if(box) box.style.display = 'block';
+}
+
+function setSuit(fileName, el) {
+    document.querySelectorAll('.suit-thumb').forEach(i => i.classList.remove('active'));
+    el.classList.add('active');
+    selectedSuitFile = fileName;
+    
+    const preview = document.getElementById('main-suit-preview');
+    if(preview) preview.style.backgroundImage = `url('${fileName}')`;
+    
+    localStorage.setItem('studentAvatarImg', fileName);
+}
+
+function triggerUpload(e, id) { 
+    e.stopPropagation(); 
+    document.getElementById(id).click(); 
+}
+
+function handleImageUpload(input, type) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const base64Img = e.target.result;
+            if(type === 2) { localStorage.setItem('uploadedHero2', base64Img); selectHero(2, base64Img); }
+            if(type === 3) { localStorage.setItem('uploadedHero3', base64Img); selectHero(3, base64Img); }
+            alert("✨ تم استلام الصورة بنجاح ودمجها مع نظام البطل الذكي!");
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+function selectHero(type, val) {
+    activeHeroType = type;
+    document.querySelectorAll('.avatar-option').forEach(el => el.classList.remove('selected'));
+    document.getElementById(`opt-hero${type}`).classList.add('selected');
+    
+    const box = document.getElementById('suit-inventory-box');
+    if (type !== 1) {
+        if(box) box.style.display = 'none';
+        localStorage.setItem('studentAvatarImg', val);
+    } else {
+        if(box) box.style.display = 'block';
+        localStorage.setItem('studentAvatarImg', selectedSuitFile);
+    }
+}
+
+// 3. منطق وظيفة التسجيل وحفظ البيانات وعرض رسالة النجاح
+async function registerStudent() {
+    const name = document.getElementById('reg-name').value.trim();
+    const user = document.getElementById('reg-username').value.trim();
+    const phone = document.getElementById('reg-whatsapp').value.trim();
+    const msgDiv = document.getElementById('reg-success-msg');
+
+    if (!name || !user || !phone) { 
+        alert("🚨 يرجى ملء كافة حقول التسجيل (الاسم، اسم المستخدم، ورقم الواتساب)!"); 
+        return; 
+    }
+
+    msgDiv.style.color = "#f59e0b";
+    msgDiv.innerText = "⏳ جاري فحص وتأمين حسابك في الفضاء...";
+
+    try {
+        const { data, error } = await clientDb.from('students').insert([
+            { 'Full Name': name, 'Username': user, 'WhatsApp Number': phone, 'Avatar': `Hero Style ${activeHeroType}` }
+        ]);
+
+        if (error) {
+            msgDiv.style.color = "#ef4444";
+            msgDiv.innerText = "🚨 اسم المستخدم هذا محجوز مسبقاً! اختر اسماً آخر.";
+        } else {
+            msgDiv.style.color = "#10b981";
+            msgDiv.innerText = `✅ تم التسجيل بنجاح! (اسم المستخدم الخاص بك هو: ${user})`;
+            
+            localStorage.setItem('studentName', name);
+            localStorage.setItem('username', user);
+            localStorage.setItem('whatsappNum', phone);
+            localStorage.setItem('heroType', activeHeroType);
+            
+            setTimeout(() => { window.location.href = 'dashboard.html'; }, 1500);
+        }
+    } catch(e) {
+        console.error(e);
+        msgDiv.style.color = "#ef4444";
+        msgDiv.innerText = "🚨 فشل الاتصال بالمفاعل الرئيسي، حاول مجدداً.";
+    }
+}
+
+// 4. منطق وظيفة الدخول السريع والفحص في Supabase
+async function loginStudent() {
+    const user = document.getElementById('login-username').value.trim();
+    
+    if (!user) { 
+        alert("🚨 يرجى إدخال اسم المستخدم الخاص بك لتشغيل محركات العبور!"); 
+        return; 
+    }
+
+    try {
+        const { data, error } = await clientDb
+            .from('students')
+            .select('*')
+            .eq('Username', user);
+
+        if (data && data.length > 0) {
+            localStorage.setItem('username', user);
+            localStorage.setItem('studentName', data[0]['Full Name']);
+            localStorage.setItem('whatsappNum', data[0]['WhatsApp Number']);
+            localStorage.setItem('studentAvatarImg', data[0]['Avatar'] || '25116.jpg');
+            
+            window.location.href = 'dashboard.html';
+        } else {
+            alert("❌ عذراً! اسم المستخدم هذا غير مسجل. يرجى التسجيل في المربع العلوي أولاً.");
+        }
+    } catch(e) {
+        console.error(e);
+        alert("🚨 عذراً، هناك مشكلة في شبكة الإنترنت، حاول مجدداً.");
+    }
+}
