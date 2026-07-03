@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>بوابة الكنز التعليمية - لوحة التحكم 🚀</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght=400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --space-bg: linear-gradient(135deg, #0f172a, #1e1b4b, #311042);
@@ -23,41 +23,29 @@
 
         .dashboard-container { width: 100%; max-width: 600px; }
 
-        /* ترويسة الترحيب الذكية */
         .welcome-card {
             background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 25px; padding: 20px; text-align: center;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3); margin-bottom: 25px;
-            position: relative; overflow: hidden;
         }
         .welcome-card h1 { margin: 0; font-size: 1.6rem; font-weight: 900; color: var(--gold-accent); }
         .welcome-card p { margin: 8px 0 0 0; color: #94a3b8; font-size: 0.95rem; }
 
-        /* مفتاح التحويل السحري - وضع ماما */
         .mode-selector-zone {
             background: rgba(255, 255, 255, 0.05);
             border-radius: 50px; padding: 6px; display: flex;
             margin-bottom: 30px; border: 2px dashed rgba(255, 255, 255, 0.15);
-            position: relative;
         }
         .mode-btn {
             flex: 1; border: none; background: transparent; color: #94a3b8;
-            padding: 12px; font-family: 'Cairo'; font-weight: bold; font-size: 1rem;
-            cursor: pointer; border-radius: 50px; transition: all 0.3s ease;
-            display: flex; align-items: center; justify-content: center; gap: 8px;
+            padding: 12px; font-family: 'Cairo'; font-weight: bold; cursor: pointer;
+            border-radius: 50px; transition: all 0.3s ease;
         }
-        .mode-btn.active-solo {
-            background: linear-gradient(90deg, #d97706, #f59e0b); color: #0f172a;
-            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
-        }
-        .mode-btn.active-mom {
-            background: linear-gradient(90deg, #db2777, #ec4899); color: white;
-            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4);
-        }
+        .mode-btn.active-solo { background: linear-gradient(90deg, #d97706, #f59e0b); color: #0f172a; }
+        .mode-btn.active-mom { background: linear-gradient(90deg, #db2777, #ec4899); color: white; }
 
-        /* شبكة الوحدات الست - خريطة الممالك */
         .grid-kingdoms { display: grid; grid-template-columns: 1fr; gap: 16px; }
         
         .kingdom-card {
@@ -65,226 +53,108 @@
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 22px; padding: 16px;
             display: flex; align-items: center; justify-content: space-between;
-            transition: transform 0.2s, border-color 0.3s; cursor: pointer;
-            position: relative;
+            transition: transform 0.2s; cursor: pointer;
         }
-        .kingdom-card:hover {
-            transform: scale(1.02);
-            border-color: var(--gold-accent);
-            background: rgba(255, 255, 255, 0.04);
-        }
-        .kingdom-info { display: flex; align-items: center; gap: 14px; }
-        .kingdom-icon {
-            font-size: 2.2rem; background: rgba(255, 255, 255, 0.05);
-            width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;
-            border-radius: 18px; transition: background 0.3s;
-        }
-        .kingdom-text { text-align: right; }
-        .kingdom-title { font-weight: 900; font-size: 1.1rem; color: #f1f5f9; }
-        .kingdom-subtitle { font-size: 0.8rem; color: #64748b; margin-top: 2px; }
+        .kingdom-card:hover { transform: scale(1.02); border-color: var(--gold-accent); }
         
-        /* مؤشرات الدرجات والتقدم */
+        .kingdom-info { display: flex; align-items: center; gap: 14px; }
+        .kingdom-icon { font-size: 2rem; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; background: rgba(255, 255, 255, 0.05); border-radius: 18px; }
+        .kingdom-title { font-weight: 900; color: #f1f5f9; }
+        .kingdom-subtitle { font-size: 0.8rem; color: #64748b; }
+        
         .badge-score {
-            background: #1e293b; border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 6px 14px; border-radius: 50px; font-size: 0.85rem; font-weight: bold;
-            color: var(--gold-accent);
+            background: #1e293b; padding: 6px 14px; border-radius: 50px; 
+            font-size: 0.85rem; font-weight: bold; color: var(--gold-accent);
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
-        /* شكل التصميم عند تفعيل وضع ماما */
-        body.mom-mode-active .kingdom-card:hover { border-color: var(--mom-accent); }
-        body.mom-mode-active .welcome-card h1 { color: var(--mom-accent); }
-        body.mom-mode-active .badge-score { color: var(--mom-accent); border-color: rgba(236, 72, 153, 0.3); }
-
-        /* قسم التباهي واستعراض القوة أمام الأم */
         .mom-pride-zone {
-            margin-top: 30px; background: linear-gradient(135deg, #4d072b, #1e1b4b);
-            border: 2px solid var(--mom-accent); border-radius: 25px; padding: 20px;
-            text-align: center; display: none; animation: popIn 0.4s ease forwards;
-        }
-        @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-
-        .footer-brand {
-            text-align: center; margin-top: 40px; font-size: 0.85rem; color: #475569;
-            border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 15px; width: 100%;
+            margin-bottom: 20px; background: linear-gradient(135deg, #4d072b, #1e1b4b);
+            border: 2px solid var(--mom-accent); border-radius: 25px; padding: 15px;
+            text-align: center; display: none;
         }
     </style>
 </head>
 <body>
 
 <div class="dashboard-container">
-
-    <!-- كارت الترحيب الذكي -->
     <div class="welcome-card">
-        <h1 id="welcome-user">مرحباً بك يا بطل السايبر 🚀</h1>
-        <p id="welcome-sub">استعد لخوض مغامرات الفصل الدراسي الأول وفك شفرات اللغة الإنجليزية!</p>
+        <h1 id="welcome-user">مرحباً بك يا بطل 🚀</h1>
+        <p id="welcome-sub">استعد لفك شفرات اللغة الإنجليزية!</p>
     </div>
 
-    <!-- مفتاح السحر التفاعلي: تحويل بيئة اللعب -->
     <div class="mode-selector-zone">
-        <button class="mode-btn active-solo" id="btn-solo" onclick="switchPlayMode('solo')">
-            🚀 طيار فردي (أنا لوحدي)
-        </button>
-        <button class="mode-btn" id="btn-mom" onclick="switchPlayMode('mom')">
-            👩‍👦 تحدي كوني مع ماما!
-        </button>
+        <button class="mode-btn active-solo" id="btn-solo" onclick="switchPlayMode('solo')">🚀 طيار فردي</button>
+        <button class="mode-btn" id="btn-mom" onclick="switchPlayMode('mom')">👩‍👦 تحدي كوني مع ماما</button>
     </div>
 
-    <!-- قسم فخر البطل أمام والدته (يظهر فقط في وضع ماما) -->
     <div class="mom-pride-zone" id="pride-panel">
-        <h3 style="margin:0 0 8px 0; color: var(--mom-accent); font-size: 1.2rem;">🏆 لوحة شرف "بصي يا ماما!"</h3>
-        <p style="margin:0; font-size:0.9rem; color:#cbd5e1;">تعالي يا ماما شوفي أوسمة وجوائز البطل الكونية اللي جمعها بنفسه في السايبر!</p>
+        <h3 style="margin:0; color: var(--mom-accent);">🏆 لوحة شرف "بصي يا ماما!"</h3>
     </div>
 
-    <!-- شبكة الممالك الست للمنهج -->
-    <h2 style="font-size: 1.1rem; color: #94a3b8; text-align: right; margin: 25px 0 10px 0;">🗺️ خريطة جزر المعرفة (6 وحدات كاملة)</h2>
-    
     <div class="grid-kingdoms">
-        <!-- الوحدة 1 -->
+        <!-- تكرار للوحدات 1-6 -->
         <div class="kingdom-card" onclick="launchUnit(1)">
             <div class="kingdom-info">
                 <div class="kingdom-icon">👋</div>
                 <div class="kingdom-text">
-                    <div class="kingdom-title">المملكة 1: مرحباً بكم</div>
-                    <div class="kingdom-subtitle">Unit 1: Hello!</div>
+                    <div class="kingdom-title">المملكة 1: Hello!</div>
+                    <div class="kingdom-subtitle">مرحباً بكم</div>
                 </div>
             </div>
             <div class="badge-score" id="u1-score">جاري التحميل..</div>
         </div>
-
-        <!-- الوحدة 2 -->
-        <div class="kingdom-card" onclick="launchUnit(2)">
-            <div class="kingdom-info">
-                <div class="kingdom-icon">🧑‍بوابة</div>
-                <div class="kingdom-text">
-                    <div class="kingdom-title">المملكة 2: هذا أنا</div>
-                    <div class="kingdom-subtitle">Unit 2: This is me</div>
-                </div>
-            </div>
-            <div class="badge-score" id="u2-score">لم تبدأ</div>
-        </div>
-
-        <!-- الوحدة 3 -->
-        <div class="kingdom-card" onclick="launchUnit(3)">
-            <div class="kingdom-info">
-                <div class="kingdom-icon">🎒</div>
-                <div class="kingdom-text">
-                    <div class="kingdom-title">المملكة 3: حقيبتي المدرسية</div>
-                    <div class="kingdom-subtitle">Unit 3: My school bag</div>
-                </div>
-            </div>
-            <div class="badge-score" id="u3-score">لم تبدأ</div>
-        </div>
-
-        <!-- الوحدة 4 -->
-        <div class="kingdom-card" onclick="launchUnit(4)">
-            <div class="kingdom-info">
-                <div class="kingdom-icon">🎂</div>
-                <div class="kingdom-text">
-                    <div class="kingdom-title">المملكة 4: يوم ميلادي</div>
-                    <div class="kingdom-subtitle">Unit 4: It's my birthday</div>
-                </div>
-            </div>
-            <div class="badge-score" id="u4-score">لم تبدأ</div>
-        </div>
-
-        <!-- الوحدة 5 -->
-        <div class="kingdom-card" onclick="launchUnit(5)">
-            <div class="kingdom-info">
-                <div class="kingdom-icon">🏡</div>
-                <div class="kingdom-text">
-                    <div class="kingdom-title">المملكة 5: مع عائلتي</div>
-                    <div class="kingdom-subtitle">Unit 5: With my family</div>
-                </div>
-            </div>
-            <div class="badge-score" id="u5-score">لم تبدأ</div>
-        </div>
-
-        <!-- الوحدة 6 -->
-        <div class="kingdom-card" onclick="launchUnit(6)">
-            <div class="kingdom-info">
-                <div class="kingdom-icon">🎵</div>
-                <div class="kingdom-text">
-                    <div class="kingdom-title">المملكة 6: مهرجان الأنغام</div>
-                    <div class="kingdom-subtitle">Unit 6: Let's play music</div>
-                </div>
-            </div>
-            <div class="badge-score" id="u6-score">لم تبدأ</div>
-        </div>
+        <!-- الوحدات الأخرى (2-6) بنفس الهيكل مع تغيير المعرفات u2-score إلى u6-score -->
+        <div class="kingdom-card" onclick="launchUnit(2)"><div class="kingdom-info"><div class="kingdom-icon">🧑‍💻</div><div class="kingdom-text"><div class="kingdom-title">المملكة 2: This is me</div></div></div><div class="badge-score" id="u2-score">...</div></div>
+        <div class="kingdom-card" onclick="launchUnit(3)"><div class="kingdom-info"><div class="kingdom-icon">🎒</div><div class="kingdom-text"><div class="kingdom-title">المملكة 3: My school bag</div></div></div><div class="badge-score" id="u3-score">...</div></div>
+        <div class="kingdom-card" onclick="launchUnit(4)"><div class="kingdom-info"><div class="kingdom-icon">🎂</div><div class="kingdom-text"><div class="kingdom-title">المملكة 4: My birthday</div></div></div><div class="badge-score" id="u4-score">...</div></div>
+        <div class="kingdom-card" onclick="launchUnit(5)"><div class="kingdom-info"><div class="kingdom-icon">🏡</div><div class="kingdom-text"><div class="kingdom-title">المملكة 5: My family</div></div></div><div class="badge-score" id="u5-score">...</div></div>
+        <div class="kingdom-card" onclick="launchUnit(6)"><div class="kingdom-info"><div class="kingdom-icon">🎵</div><div class="kingdom-text"><div class="kingdom-title">المملكة 6: Music</div></div></div><div class="badge-score" id="u6-score">...</div></div>
     </div>
-
-    <div class="footer-brand">
-        The English Learning Hub © 2026
-    </div>
-
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-    // تهيئة العميل للاتصال بقاعدة البيانات مباشرة وبسرعة لود فائقة
-    const supabaseUrl = 'https://cjpdnptndkceescvubmg.supabase.co';
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNqcGRucHRuZGtjZWVzY3Z1Ym1nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwMTExNTYsImV4cCI6MjA5ODU4NzE1Nn0.psxah2ekfvgZ5ReTutudYg59fiSrX13dI8IkJCobGMM';
-    const dbClient = supabase.createClient(supabaseUrl, supabaseKey);
-
-    // سحب اسم الطالب النشط من المتصفح للحفاظ على الاستمرارية
+    const dbClient = supabase.createClient('https://cjpdnptndkceescvubmg.supabase.co', 'Sb_publishable_Jbwm_t_ycZprbYmfV5HrPw_CAtZ-m6B');
     let currentStudent = localStorage.getItem('studentName') || 'بطل السايبر';
 
-    document.addEventListener("DOMContentLoaded", () => {
+    window.onload = () => {
         document.getElementById('welcome-user').innerText = `مرحباً بك يا ${currentStudent} 🚀`;
-        
-        // استعادة وضع اللعب الأخير المخزن لتجنب إعادة الضبط المفاجئة
-        const savedMode = localStorage.getItem('gameMode') || 'solo';
-        switchPlayMode(savedMode);
-
         fetchLiveMetrics();
-    });
+    };
 
-    // سحب نتائج التقييم الحية لكل وحدة وعرضها مباشرة على الجزر الكونية
     async function fetchLiveMetrics() {
-        if (!localStorage.getItem('studentName')) {
-            document.getElementById('u1-score').innerText = '0/5';
-            return;
-        }
-        
-        const { data, error } = await dbClient
-            .from('students')
-            .select('*')
-            .eq('Full Name', currentStudent)
-            .single();
-
-        if (data) {
-            document.getElementById('u1-score').innerText = data['Unit 1 Score'] || 'لم تبدأ';
-            document.getElementById('u6-score').innerText = data['Unit 6 Score'] || 'لم تبدأ';
-            // هنا يتم ربط باقي الوحدات بسلاسة فور تغذيتها بالبيانات
+        const { data: student } = await dbClient.from('students').select('*').eq('Full Name', currentStudent).single();
+        if (student) {
+            for (let i = 1; i <= 6; i++) {
+                const score = student[`Unit ${i} Score`];
+                const el = document.getElementById(`u${i}-score`);
+                if (score !== null && score !== undefined) {
+                    el.innerHTML = `${score}/5 ${score >= 5 ? '🏆' : ''}`;
+                    el.style.color = score >= 5 ? "#f59e0b" : "#4caf50";
+                } else {
+                    el.innerText = "لم تبدأ";
+                }
+            }
         }
     }
 
-    // ميكانيكية التحويل اللحظي وتغيير الثيم والهوية البصرية بالكامل
     function switchPlayMode(mode) {
-        localStorage.setItem('gameMode', mode);
-        const btnSolo = document.getElementById('btn-solo');
-        const btnMom = document.getElementById('btn-mom');
         const pridePanel = document.getElementById('pride-panel');
-        const subText = document.getElementById('welcome-sub');
-
         if (mode === 'mom') {
             document.body.classList.add('mom-mode-active');
-            btnSolo.className = 'mode-btn';
-            btnMom.className = 'mode-btn active-mom';
             pridePanel.style.display = 'block';
-            subText.innerText = 'أنت وماما في مهمة فضائية مشتركة لحصد النقاط الكونية معاً! 👩‍👦';
+            document.getElementById('btn-solo').className = 'mode-btn';
+            document.getElementById('btn-mom').className = 'mode-btn active-mom';
         } else {
             document.body.classList.remove('mom-mode-active');
-            btnSolo.className = 'mode-btn active-solo';
-            btnMom.className = 'mode-btn';
             pridePanel.style.display = 'none';
-            subText.innerText = 'استعد لخوض مغامرات الفصل الدراسي الأول وفك شفرات اللغة الإنجليزية!';
+            document.getElementById('btn-solo').className = 'mode-btn active-solo';
+            document.getElementById('btn-mom').className = 'mode-btn';
         }
     }
 
-    // الانتقال الموجه للوحدة المختارة مع الاحتفاظ بالحالة العامة للعب
-    function launchUnit(unitNumber) {
-        window.location.href = `unit${unitNumber}.html`;
-    }
+    function launchUnit(unit) { window.location.href = `unit${unit}.html`; }
 </script>
 </body>
 </html>
