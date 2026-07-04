@@ -27,9 +27,18 @@
             background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 25px; padding: 20px; text-align: center;
+            border-radius: 25px; padding: 25px 20px; text-align: center;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3); margin-bottom: 25px;
         }
+        
+        .local-avatar-profile {
+            width: 75px; height: 75px; border-radius: 50%; 
+            margin: 0 auto 15px auto; background-size: cover; background-position: center; 
+            border: 3px solid var(--gold-accent); display: none;
+            background-color: rgba(255,255,255,0.05);
+            align-items: center; justify-content: center;
+        }
+        
         .welcome-card h1 { margin: 0; font-size: 1.6rem; font-weight: 900; color: var(--gold-accent); }
         .welcome-card p { margin: 8px 0 0 0; color: #94a3b8; font-size: 0.95rem; }
 
@@ -79,6 +88,7 @@
 
 <div class="dashboard-container">
     <div class="welcome-card">
+        <div id="local-avatar-profile-zone" class="local-avatar-profile"></div>
         <h1 id="welcome-user">مرحباً بك يا بطل 🚀</h1>
         <p id="welcome-sub">استعد لفك شفرات اللغة الإنجليزية!</p>
     </div>
@@ -159,25 +169,37 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-    const dbClient = supabase.createClient('https://cjpdnptndkceescvubmg.supabase.co', 'Sb_publishable_Jbwm_t_ycZprbYmfV5HrPw_CAtZ-m6B');
+    // ✅ تم تصحيح المفتاح هنا ليتطابق 100% مع الملف الرئيسي
+    const dbClient = supabase.createClient('https://cjpdnptndkceescvubmg.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNqcGRucHRuZGtjZWVzY3Z1Ym1nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwMTExNTYsImV4cCI6MjA5ODU4NzE1Nn0.psxah2ekfvgZ5ReTutudYg59fiSrX13dI8IkJCobGMM');
     
-    // جلب اسم المستخدم الفردي والاسم الثلاثي للترحيب
     let currentStudentName = localStorage.getItem('Full Name') || 'بطل السايبر';
     let currentUsername = localStorage.getItem('Username');
 
     window.onload = () => {
         document.getElementById('welcome-user').innerText = `مرحباً بك يا ${currentStudentName} 🚀`;
+        
+        const localImg = localStorage.getItem('studentAvatarImg');
+        const avatarDiv = document.getElementById('local-avatar-profile-zone');
+        if (localImg && avatarDiv) {
+            if (localImg.startsWith('data:image') || localImg.includes('.jpg')) {
+                avatarDiv.style.backgroundImage = `url('${localImg}')`;
+                avatarDiv.style.display = 'block';
+            } else if (localImg.trim() !== "") {
+                avatarDiv.style.display = 'flex';
+                avatarDiv.style.fontSize = '2rem';
+                avatarDiv.innerText = localImg;
+            }
+        }
+        
         fetchLiveMetrics();
     };
 
     async function fetchLiveMetrics() {
-        // إذا لم يكن هناك اسم مستخدم مخزن، نعود لصفحة تسجيل الدخول فوراً
         if (!currentUsername) {
             window.location.href = 'index.html';
             return;
         }
 
-        // البحث الدقيق في جدول الطلاب بناءً على حقل الـ Username الفريد
         const { data, error } = await dbClient
             .from('students')
             .select('*')
@@ -185,13 +207,12 @@
             .single();
         
         if (!data || error) {
-            console.error("تعذر العثور على بيانات الطالب:", error);
+            console.error("تعذر جلب بيانات الممالك:", error);
             localStorage.clear();
             window.location.href = 'index.html'; 
             return;
         }
 
-        // تحديث درجات الممالك الست ديناميكياً
         for (let i = 1; i <= 6; i++) {
             const score = data[`Unit ${i} Score`];
             const el = document.getElementById(`u${i}-score`);

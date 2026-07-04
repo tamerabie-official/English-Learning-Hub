@@ -62,7 +62,6 @@
         .btn-launch:active { transform: scale(0.98); }
         
         .status-msg { margin-top: 15px; font-size: 0.9rem; font-weight: bold; min-height: 22px; }
-        .error-color { color: #ef4444; }
 
         .suit-thumb { height: 60px; border-radius: 10px; border: 2px solid rgba(255,255,255,0.1); background-size: cover; background-position: center; cursor: pointer; transition: border-color 0.2s; }
         .suit-thumb.active { border-color: #f59e0b; }
@@ -86,7 +85,7 @@
             <input type="text" id="reg-username" class="input-cyber" placeholder="🔑 اختر اسم مستخدم (Username)" style="direction: ltr;">
         </div>
         <div class="input-group" style="margin-top: 12px;">
-            <input type="tel" id="reg-whatsapp" class="input-cyber" placeholder="📱 رقم الواتساب الخاص بماما">
+            <input type="tel" id="reg-whatsapp" class="input-cyber" placeholder="📱 رقم الواتساب">
         </div>
         
         <div class="avatar-label" style="margin-top: 15px;">🛸 حدد بطلك المفضل:</div>
@@ -154,8 +153,10 @@
     document.addEventListener("DOMContentLoaded", function() {
         if (typeof supabase !== 'undefined') {
             clientDb = supabase.createClient(urlSupabase, keySupabase);
-        } else {
-            console.error("Supabase library not loaded properly!");
+            // تعيين قيمة افتراضية للأفاتار في ذاكرة المتصفح لو فارغة
+            if(!localStorage.getItem('studentAvatarImg')) {
+                localStorage.setItem('studentAvatarImg', '25116.jpg');
+            }
         }
     });
 
@@ -188,7 +189,7 @@
                 const base64Img = e.target.result;
                 if(type === 2) { localStorage.setItem('uploadedHero2', base64Img); selectHero(2, base64Img); }
                 if(type === 3) { localStorage.setItem('uploadedHero3', base64Img); selectHero(3, base64Img); }
-                alert("✨ تم استلام الصورة بنجاح ودمجها مع نظام البطل الذكي!");
+                alert("✨ تم دمج صورتك بنجاح محلياً في الهاتف!");
             }
             reader.readAsDataURL(input.files[0]);
         }
@@ -207,6 +208,7 @@
             if(box) box.style.display = 'block';
             localStorage.setItem('studentAvatarImg', selectedSuitFile);
         }
+        localStorage.setItem('heroType', type);
     }
 
     async function registerStudent() {
@@ -216,48 +218,46 @@
         const msgDiv = document.getElementById('reg-success-msg');
 
         if (!name || !user || !phone) { 
-            alert("🚨 يرجى ملء كافة حقول التسجيل (الاسم، اسم المستخدم، ورقم الواتساب)!"); 
+            alert("🚨 يرجى ملء كافة حقول التسجيل!"); 
             return; 
         }
 
         msgDiv.style.color = "#f59e0b";
-        msgDiv.innerText = "⏳ جاري فحص وتأمين حسابك في الفضاء...";
+        msgDiv.innerText = "⏳ جاري فحص الحساب...";
 
         try {
-            // فحص مباشر لقاعدة البيانات لمنع تكرار اسم المستخدم وحل مشكلة المزامنة العالقة
-            const { data: existingUser, error: checkError } = await clientDb
+            const { data: existingUser } = await clientDb
                 .from('students')
                 .select('Username')
                 .eq('Username', user);
 
             if (existingUser && existingUser.length > 0) {
                 msgDiv.style.color = "#ef4444";
-                msgDiv.innerText = "🚨 اسم المستخدم هذا محجوز مسبقاً! اختر اسماً آخر.";
+                msgDiv.innerText = "🚨 اسم المستخدم محجوز مسبقاً!";
                 return;
             }
 
+            // الإرسال النظيف الخالي تماماً من الأفاتار لقاعدة البيانات
             const { data, error } = await clientDb.from('students').insert([
-                { 'Full Name': name, 'Username': user, 'WhatsApp': phone, 'Avatar': `Hero Style ${activeHeroType}` }
+                { 'Full Name': name, 'Username': user, 'WhatsApp': phone }
             ]);
 
             if (error) {
                 msgDiv.style.color = "#ef4444";
-                msgDiv.innerText = "🚨 حدث خطأ أثناء التسجيل في النظام، حاول مجدداً.";
+                msgDiv.innerText = `🚨 خطأ سوبابيز: ${error.message}`;
             } else {
                 msgDiv.style.color = "#10b981";
-                msgDiv.innerText = `✅ تم التسجيل بنجاح! (اسم المستخدم الخاص بك هو: ${user})`;
+                msgDiv.innerText = "✅ تم تسجيلك بنجاح كبطل في المنصة!";
                 
                 localStorage.setItem('Full Name', name);
                 localStorage.setItem('Username', user);
                 localStorage.setItem('WhatsApp', phone);
-                localStorage.setItem('heroType', activeHeroType);
                 
-                setTimeout(() => { window.location.href = 'dashboard.html'; }, 1500);
+                setTimeout(() => { window.location.href = 'dashboard.html'; }, 1300);
             }
         } catch(e) {
-            console.error(e);
             msgDiv.style.color = "#ef4444";
-            msgDiv.innerText = "🚨 فشل الاتصال بالمفاعل الرئيسي، حاول مجدداً.";
+            msgDiv.innerText = "🚨 فشل الاتصال بالموقع، حاول مجدداً.";
         }
     }
 
@@ -265,7 +265,7 @@
         const user = document.getElementById('login-username').value.trim();
         
         if (!user) { 
-            alert("🚨 يرجى إدخال اسم المستخدم الخاص بك لتشغيل محركات العبور!"); 
+            alert("🚨 يرجى إدخال اسم المستخدم!"); 
             return; 
         }
 
@@ -279,15 +279,13 @@
                 localStorage.setItem('Username', user);
                 localStorage.setItem('Full Name', data[0]['Full Name']);
                 localStorage.setItem('WhatsApp', data[0]['WhatsApp']);
-                localStorage.setItem('studentAvatarImg', data[0]['Avatar'] || '25116.jpg');
                 
                 window.location.href = 'dashboard.html';
             } else {
-                alert("❌ عذراً! اسم المستخدم هذا غير مسجل. يرجى التسجيل في المربع العلوي أولاً.");
+                alert("❌ اسم المستخدم هذا غير مسجل لدينا.");
             }
         } catch(e) {
-            console.error(e);
-            alert("🚨 عذراً، هناك مشكلة في شبكة الإنترنت، حاول مجدداً.");
+            alert("🚨 عذراً، هناك مشكلة في شبكة الإنترنت.");
         }
     }
 </script>
