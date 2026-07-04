@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تمرين المملكة 1 - الأبطال المرحون 💫</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-play: linear-gradient(135deg, #e0f2fe, #f0fdf4); /* ألوان مهدئة للأعصاب */
+            --btn-orange: #f97316;
+            --text-dark: #1e293b;
+        }
+        body {
+            font-family: 'Cairo', sans-serif; background: var(--bg-play);
+            color: var(--text-dark); margin: 0; padding: 15px; min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .exercise-header { text-align: center; margin-bottom: 20px; }
+        .exercise-header h1 { font-size: 1.5rem; color: #0369a1; font-weight: 900; margin: 0; }
+        .exercise-header p { font-size: 0.9rem; color: #475569; margin: 5px 0 0 0; }
+        
+        .game-zone { width: 100%; max-width: 450px; background: white; border-radius: 25px; padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); border: 3px solid #bae6fd; box-sizing: border-box; }
+        
+        .stickers-container { display: flex; justify-content: center; gap: 15px; margin-bottom: 25px; flex-wrap: wrap; }
+        .draggable-sticker {
+            background: #fef08a; border: 2px dashed #eab308; padding: 10px 18px;
+            border-radius: 50px; font-weight: 900; font-size: 1.1rem; color: #854d0e;
+            cursor: grab; user-select: none; touch-action: none; display: inline-block;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        
+        .targets-container { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .character-card {
+            background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 20px;
+            padding: 15px; text-align: center; display: flex; flex-direction: column; align-items: center;
+        }
+        .character-avatar { font-size: 3rem; margin-bottom: 10px; background: white; width: 70px; height: 70px; display: flex; align-items: center; justify-content: center; border-radius: 50%; box-shadow: inset 0 2px 5px rgba(0,0,0,0.05); }
+        
+        .drop-zone {
+            width: 100%; min-height: 45px; background: #f1f5f9; border: 2px dashed #cbd5e1;
+            border-radius: 15px; display: flex; align-items: center; justify-content: center;
+            font-size: 0.85rem; color: #94a3b8; font-weight: bold; margin-top: 10px; transition: all 0.2s;
+        }
+        .drop-zone.hovered { background: #bbf7d0; border-color: #22c55e; }
+        .drop-zone.correct { background: #dcfce7; border-color: #22c55e; color: #15803d; font-size: 1.1rem; font-weight: 900; border-style: solid; }
+
+        .btn-back { margin-top: 20px; background: var(--btn-orange); color: white; border: none; padding: 12px 30px; font-family: 'Cairo'; font-weight: bold; border-radius: 50px; cursor: pointer; box-shadow: 0 5px 15px rgba(249,115,22,0.3); }
+        
+        /* تأثير احتفالي مبهج */
+        #celebration-overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(255,255,255,0.9); z-index: 100; flex-direction: column; align-items: center; justify-content: center; }
+    </style>
+</head>
+<body>
+
+<div class="exercise-header">
+    <h1>شد الستيكر لصاحبه! ⭐</h1>
+    <p>اسحب اسم البطل وضعه في المربع السحري تحت صورته</p>
+</div>
+
+<div class="game-zone">
+    <!-- مخزن الستيكرات (الأسماء) -->
+    <div class="stickers-container" id="stickers-box">
+        <div class="draggable-sticker" draggable="true" id="name-missmona">Miss Mona</div>
+        <div class="draggable-sticker" draggable="true" id="name-hany">Hany</div>
+        <div class="draggable-sticker" draggable="true" id="name-hana">Hana</div>
+    </div>
+
+    <!-- كروت الشخصيات -->
+    <div class="targets-container">
+        <div class="character-card">
+            <div class="character-avatar">👩‍🏫</div>
+            <div class="drop-zone" data-match="name-missmona">اسحب الاسم هنا</div>
+        </div>
+        <div class="character-card">
+            <div class="character-avatar">👦</div>
+            <div class="drop-zone" data-match="name-hany">اسحب الاسم هنا</div>
+        </div>
+        <div class="character-card" style="grid-column: span 2; max-width: 200px; margin: 0 auto; width: 100%;">
+            <div class="character-avatar">👧</div>
+            <div class="drop-zone" data-match="name-hana">اسحب الاسم هنا</div>
+        </div>
+    </div>
+</div>
+
+<button class="btn-back" onclick="window.location.href='dashboard.html'">العودة للوحة التحكم 🚀</button>
+
+<div id="celebration-overlay">
+    <h1 style="font-size: 3rem; margin: 0;">🥳🎉🥳</h1>
+    <h2 style="color: #16a34a; font-weight: 900;">أنت بطل خارق وممتاز!</h2>
+    <p style="font-weight: bold; color: #475569;">لقد حصلت على ملصق العبقرية 🌟🚀</p>
+    <button class="btn-back" onclick="window.location.href='dashboard.html'">اجمع جائزتك وانطلق 🏆</button>
+</div>
+
+<script>
+    const stickers = document.querySelectorAll('.draggable-sticker');
+    const dropZones = document.querySelectorAll('.drop-zone');
+    let solvedCount = 0;
+
+    // دعم اللمس على الموبايل (Touch Events) لسهولة التفاعل بالصابع
+    stickers.forEach(sticker => {
+        sticker.addEventListener('dragstart', (e) => { e.dataTransfer.setData('text', e.target.id); });
+        
+        // دعم الموبايل عبر طرقة الضغط والسحب المبسطة
+        sticker.addEventListener('click', function() {
+            stickers.forEach(s => s.style.borderStyle = 'dashed');
+            this.style.borderStyle = 'solid';
+            window.activeStickerId = this.id;
+        });
+    });
+
+    dropZones.forEach(zone => {
+        zone.addEventListener('dragover', (e) => { e.preventDefault(); zone.classList.add('hovered'); });
+        zone.addEventListener('dragleave', () => { zone.classList.remove('hovered'); });
+        
+        zone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            zone.classList.remove('hovered');
+            const draggedId = e.dataTransfer.getData('text');
+            checkMatch(draggedId, zone);
+        });
+
+        // دعم الموبايل عند الضغط على المنطقة بعد اختيار الاسم
+        zone.addEventListener('click', function() {
+            if(window.activeStickerId) {
+                checkMatch(window.activeStickerId, this);
+            }
+        });
+    });
+
+    function checkMatch(draggedId, zone) {
+        if (zone.getAttribute('data-match') === draggedId) {
+            const stickerEl = document.getElementById(draggedId);
+            zone.innerText = stickerEl.innerText;
+            zone.className = "drop-zone correct";
+            stickerEl.style.display = "none";
+            window.activeStickerId = null;
+            solvedCount++;
+            
+            if(solvedCount === 3) {
+                setTimeout(() => {
+                    document.getElementById('celebration-overlay').style.display = 'flex';
+                }, 400);
+            }
+        } else {
+            zone.style.borderColor = '#ef4444';
+            setTimeout(() => { zone.style.borderColor = '#cbd5e1'; }, 500);
+        }
+    }
+</script>
+</body>
+</html>

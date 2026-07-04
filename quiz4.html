@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تحدي بطل الفضاء - اختبار 4 👽🌌</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --space-dark: linear-gradient(180deg, #2e1065 0%, #0f052d 100%);
+            --alien-green: #22c55e;
+            --cosmic-cyan: #06b6d4;
+        }
+        body {
+            font-family: 'Cairo', sans-serif; background: var(--space-dark);
+            color: white; margin: 0; padding: 15px; min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-card {
+            width: 100%; max-width: 440px; background: rgba(255,255,255,0.04);
+            backdrop-filter: blur(20px); border: 3px solid var(--alien-green);
+            border-radius: 30px; padding: 20px; box-sizing: border-box;
+            box-shadow: 0 20px 40px rgba(34,197,94,0.15);
+        }
+        .ufo-banner { font-size: 3.5rem; text-align: center; margin-bottom: 10px; animation: ufoFloat 4s ease-in-out infinite; }
+        @keyframes ufoFloat { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-6px) rotate(3deg); } }
+
+        .line-loader { width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 50px; margin-bottom: 20px; overflow: hidden; }
+        .line-fill { width: 33.3%; height: 100%; background: var(--cosmic-cyan); transition: width 0.3s; }
+
+        .question-box { font-size: 1.2rem; font-weight: 900; text-align: center; margin-bottom: 20px; text-shadow: 0 2px 8px rgba(6,182,212,0.4); }
+        
+        .grid-options { display: grid; grid-template-columns: 1fr; gap: 12px; }
+        .btn-cosmic {
+            background: rgba(255, 255, 255, 0.05); border: 2px solid rgba(255,255,255,0.12);
+            border-radius: 20px; padding: 14px; text-align: center; font-family: 'Cairo';
+            font-weight: bold; font-size: 1.05rem; color: white; cursor: pointer; transition: all 0.2s;
+        }
+        .btn-cosmic.hit-correct { background: #16a34a !important; border-color: #4ade80 !important; font-weight: 900; }
+        .btn-cosmic.hit-wrong { background: #dc2626 !important; border-color: #f87171 !important; }
+
+        .panel-end { display: none; text-align: center; padding: 20px; }
+    </style>
+</head>
+<body>
+
+<div style="text-align: center; margin-bottom: 15px;">
+    <h1 style="font-size: 1.3rem; margin: 0; color: var(--cosmic-cyan);">👽 اختبار كوكب أعياد الميلاد الفضائي 🪐</h1>
+    <p style="font-size: 0.85rem; color: #e9d5ff; margin: 4px 0 0 0;">أجب بذكاء لشحن مركبة بطل الفضاء بالطاقة الكونية!</p>
+</div>
+
+<div class="cosmic-card">
+    <div id="screen-play">
+        <div class="ufo-banner" id="ufo-icon">🛸👽⚡</div>
+        <div class="line-loader"><div class="line-fill" id="status-fill"></div></div>
+        
+        <div class="question-box" id="text-target">جاري الاتصال بالقمر الصناعي التعليمي...</div>
+        <div class="grid-options" id="options-area"></div>
+    </div>
+
+    <div id="screen-score" class="panel-end">
+        <h1 style="font-size: 450%; margin: 0;">🛸🏆</h1>
+        <h2 style="color: var(--alien-green); font-weight: 900;" id="score-banner">شحن كامل 100%!</h2>
+        <p>تم حفظ نتيجتك بجدول بيانات المستر تامر بأمان كوني 🌟</p>
+        <button onclick="window.location.href='dashboard.html'" style="background: var(--cosmic-cyan); color: #0f052d; border: none; padding: 12px 35px; font-family: 'Cairo'; font-weight: 900; border-radius: 50px; cursor: pointer; margin-top: 15px;">العودة للمجرة الرئيسية 🚀</button>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    const dbClient = supabase.createClient('https://cjpdnptndkceescvubmg.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNqcGRucHRuZGtjZWVzY3Z1Ym1nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwMTExNTYsImV4cCI6MjA5ODU4NzE1Nn0.psxah2ekfvgZ5ReTutudYg59fiSrX13dI8IkJCobGMM');
+
+    const u4Questions = [
+        { q: "عندما يسألك صديقك الفضائي: (How old are you?) تجيب وتقول؟", answers: ["I'm 6", "I'm fine, thank you", "Hello"], correct: 0 },
+        { q: "ما هو لون التفاحة (Apple) باللغة الإنجليزية المقررة بالمنهج؟", answers: ["Black", "Blue", "Red"], correct: 2 },
+        { q: "ما الكلمة التي تبدأ بصوت حرف الـ (C) وتوضع فيها شمعة الميلاد؟", answers: ["Orange", "Cake", "Oil"], correct: 1 }
+    ];
+
+    let currentIdx = 0; let totalScore = 0;
+    const accountUser = localStorage.getItem('Username');
+
+    function drawQuestion() {
+        if(currentIdx >= u4Questions.length) { sendToCloud(); return; }
+        
+        document.getElementById('status-fill').style.width = `${((currentIdx + 1) / u4Questions.length) * 100}%`;
+        const item = u4Questions[currentIdx];
+        document.getElementById('text-target').innerText = item.q;
+        
+        const area = document.getElementById('options-area');
+        area.innerHTML = '';
+        
+        item.answers.forEach((ans, idx) => {
+            const btn = document.createElement('button');
+            btn.className = 'btn-cosmic';
+            btn.innerText = ans;
+            btn.onclick = () => evaluateChoice(idx, btn);
+            area.appendChild(btn);
+        });
+    }
+
+    function evaluateChoice(chosen, element) {
+        const item = u4Questions[currentIdx];
+        const buttons = document.querySelectorAll('.btn-cosmic');
+        buttons.forEach(b => b.disabled = true);
+        
+        if(chosen === item.correct) {
+            element.classList.add('hit-correct');
+            totalScore++;
+        } else {
+            element.classList.add('hit-wrong');
+            buttons[item.correct].classList.add('hit-correct');
+        }
+        currentIdx++;
+        setTimeout(drawQuestion, 1300);
+    }
+
+    async function sendToCloud() {
+        document.getElementById('screen-play').style.display = 'none';
+        document.getElementById('screen-score').style.display = 'block';
+        
+        const finalMark = Math.round((totalScore / u4Questions.length) * 5);
+        document.getElementById('score-banner').innerText = `بطل مجرة ممتاز! النتيجة: ${finalMark}/5 🏆`;
+        
+        if (accountUser) {
+            await dbClient
+                .from('students')
+                .update({ 'Unit 4 Score': finalMark })
+                .eq('Username', accountUser);
+        }
+    }
+
+    window.onload = drawQuestion;
+</script>
+</body>
+</html>

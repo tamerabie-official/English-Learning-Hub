@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تمرين المملكة 2 - مستكشف الجسد الكوني 🤖</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-bright: linear-gradient(135deg, #fae8ff, #e0f2fe);
+            --purple-accent: #a855f7;
+            --text-dark: #1e293b;
+        }
+        body {
+            font-family: 'Cairo', sans-serif; background: var(--bg-bright);
+            color: var(--text-dark); margin: 0; padding: 15px; min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .header { text-align: center; margin-bottom: 15px; }
+        .header h1 { font-size: 1.4rem; color: #6b21a8; font-weight: 900; margin: 0; }
+        
+        .robot-card {
+            width: 100%; max-width: 420px; background: white; border-radius: 25px;
+            padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border: 3px solid #f3e8ff; text-align: center; box-sizing: border-box;
+        }
+        
+        /* تصميم البطل الكرتوني التفاعلي */
+        .robot-visual { font-size: 5rem; margin: 15px 0; position: relative; }
+        
+        .word-flash {
+            background: #fdf4ff; border: 2px solid #e9d5ff; padding: 10px;
+            border-radius: 15px; font-size: 1.6rem; font-weight: 900;
+            color: var(--purple-accent); margin-bottom: 20px; letter-spacing: 1px;
+        }
+
+        .buttons-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .touch-btn {
+            background: #f8fafc; border: 2px solid #cbd5e1; border-radius: 18px;
+            padding: 12px; font-family: 'Cairo'; font-weight: bold; font-size: 1rem;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .touch-btn:active { transform: scale(0.95); }
+        .touch-btn.success { background: #bbf7d0; border-color: #22c55e; color: #16803d; font-weight: 900; }
+        .touch-btn.error { background: #fecaca; border-color: #ef4444; color: #b91c1c; }
+
+        .celebrate { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(255,255,255,0.95); z-index:100; flex-direction:column; align-items:center; justify-content:center; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>أنصت والمس العضو الصحيح! 👁️👂</h1>
+    <p>انظر للكلمة البصرية والمس زر العضو المناسب لمساعدة صديقنا الروبوت</p>
+</div>
+
+<div class="robot-card">
+    <div class="word-flash" id="target-word">👁️ Eye</div>
+    <div class="robot-visual">🤖</div>
+    
+    <div class="buttons-grid">
+        <button class="touch-btn" onclick="verifyTouch('Eye', this)">العين (Eye)</button>
+        <button class="touch-btn" onclick="verifyTouch('Ear', this)">الأذن (Ear)</button>
+        <button class="touch-btn" onclick="verifyTouch('Nose', this)">الأنف (Nose)</button>
+        <button class="touch-btn" onclick="verifyTouch('Mouth', this)">الفم (Mouth)</button>
+    </div>
+</div>
+
+<button onclick="window.location.href='dashboard.html'" style="margin-top:20px; background:#64748b; color:white; border:none; padding:10px 25px; font-family:'Cairo'; font-weight:bold; border-radius:50px; cursor:pointer;">العودة 🚀</button>
+
+<div id="win-screen" class="celebrate">
+    <h1 style="font-size: 4rem; margin:0;">🌟👾🌟</h1>
+    <h2 style="color: #9333ea; font-weight: 900;">ذكاء كوني خارق!</h2>
+    <p style="font-weight: bold; color: #64748b;">لقد أتقنت المفردات البصرية لأعضاء الجسد بنجاح!</p>
+    <button onclick="window.location.href='dashboard.html'" style="background:var(--purple-accent); color:white; border:none; padding:12px 30px; font-family:'Cairo'; font-weight:bold; border-radius:50px; cursor:pointer;">عد للوحة التحكم وافتح التحدي القادم 🏆</button>
+</div>
+
+<script>
+    const taskList = [
+        { word: "👁️ Eye", key: "Eye" },
+        { word: "👂 Ear", key: "Ear" },
+        { word: "👃 Nose", key: "Nose" },
+        { word: "👄 Mouth", key: "Mouth" }
+    ];
+    let currentTaskIndex = 0;
+
+    function verifyTouch(selectedKey, element) {
+        const currentTask = taskList[currentTaskIndex];
+        if(selectedKey === currentTask.key) {
+            element.classList.add('success');
+            setTimeout(() => {
+                element.classList.remove('success');
+                currentTaskIndex++;
+                if(currentTaskIndex < taskList.length) {
+                    document.getElementById('target-word').innerText = taskList[currentTaskIndex].word;
+                } else {
+                    document.getElementById('win-screen').style.display = 'flex';
+                }
+            }, 600);
+        } else {
+            element.classList.add('error');
+            setTimeout(() => element.classList.remove('error'), 500);
+        }
+    }
+</script>
+</body>
+</html>

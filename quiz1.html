@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تحدي الأبطال الخارقين - اختبار 1 🌌</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --space-bright: linear-gradient(180deg, #1e1b4b 0%, #311042 100%);
+            --neon-cyan: #22d3ee;
+            --neon-yellow: #facc15;
+        }
+        body {
+            font-family: 'Cairo', sans-serif; background: var(--space-bright);
+            color: white; margin: 0; padding: 15px; min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        
+        /* كارت الكويز بتصميم كرتوني بطل خارق */
+        .quiz-card {
+            width: 100%; max-width: 450px; background: rgba(255,255,255,0.06);
+            backdrop-filter: blur(15px); border: 3px solid var(--neon-cyan);
+            border-radius: 30px; padding: 20px; box-sizing: border-box;
+            position: relative; overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+        }
+        
+        /* بطل كرتوني يظهر في الخلفية ترفيهياً */
+        .hero-sticker { font-size: 3.5rem; text-align: center; margin-bottom: 10px; animation: float 3s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+        .progress-bar { width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 50px; margin-bottom: 20px; overflow: hidden; }
+        .progress-fill { width: 33.3%; height: 100%; background: var(--neon-yellow); transition: width 0.3s; }
+
+        .question-text { font-size: 1.25rem; font-weight: 900; text-align: center; margin-bottom: 20px; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+        
+        .options-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+        .option-btn {
+            background: rgba(255, 255, 255, 0.08); border: 2px solid rgba(255,255,255,0.15);
+            border-radius: 20px; padding: 15px; text-align: center; font-family: 'Cairo';
+            font-weight: bold; font-size: 1.1rem; color: white; cursor: pointer; transition: all 0.2s;
+        }
+        .option-btn:active { transform: scale(0.97); }
+        .option-btn.selected-correct { background: #16a34a !important; border-color: #4ade80 !important; font-weight: 900; }
+        .option-btn.selected-wrong { background: #dc2626 !important; border-color: #f87171 !important; }
+
+        .score-overlay { display: none; text-align: center; padding: 20px; }
+    </style>
+</head>
+<body>
+
+<div style="text-align: center; margin-bottom: 15px;">
+    <h1 style="font-size: 1.4rem; margin: 0; color: var(--neon-yellow);">🚀 تحدي سوبرمان وبطل الفضاء</h1>
+    <p style="font-size: 0.85rem; color: #cbd5e1; margin: 4px 0 0 0;">ساعد البطل في فك الشفرة للعودة للأرض!</p>
+</div>
+
+<div class="quiz-card">
+    <div id="quiz-playground">
+        <div class="hero-sticker" id="hero-emoji">🦸‍♂️🚀</div>
+        <div class="progress-bar"><div class="progress-fill" id="p-fill"></div></div>
+        
+        <div class="question-text" id="q-text">جاري تجهيز السؤال الأول...</div>
+        
+        <div class="options-grid" id="options-box">
+            <!-- الأزرار تولد ديناميكياً لتجنب اللخبطة -->
+        </div>
+    </div>
+
+    <!-- شاشة النهاية وحفظ النتيجة في سوبابيز -->
+    <div id="score-zone" class="score-overlay">
+        <h1 style="font-size: 4rem; margin: 0;">🏆</h1>
+        <h2 style="color: var(--neon-yellow); font-weight: 900;" id="final-score-text">مذهل يا بطل!</h2>
+        <p>تم إرسال درجتك بنجاح إلى لوحة تحكم الأستاذ تامر ربيع 🌟</p>
+        <button onclick="goBack()" style="background: var(--neon-cyan); color: #0f172a; border: none; padding: 12px 35px; font-family: 'Cairo'; font-weight: 900; font-size: 1.1rem; border-radius: 50px; cursor: pointer; margin-top: 15px;">انطلق للوحة التحكم 🛸</button>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    const dbClient = supabase.createClient('https://cjpdnptndkceescvubmg.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNqcGRucHRuZGtjZWVzY3Z1Ym1nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwMTExNTYsImV4cCI6MjA5ODU4NzE1Nn0.psxah2ekfvgZ5ReTutudYg59fiSrX13dI8IkJCobGMM');
+
+    // 🎯 الأسئلة مطابقة تماماً لأهداف منهج الوزارة رسميًا (Connect 1 - Unit 1)
+    const questions = [
+        { q: "عندما نقابل شخصاً جديداً نقول له؟", answers: ["Goodbye", "Hello", "Thank you"], correct: 1 },
+        { q: "ما هو الحرف الأول في كلمة (Bag)؟", answers: ["b", "h", "n"], correct: 0 },
+        { q: "صديقتنا النحلة النشيطة اسمها؟", answers: ["Busy Bee", "Miss Mona", "Hana"], correct: 0 }
+    ];
+
+    let currentQ = 0;
+    let score = 0;
+    const username = localStorage.getItem('Username');
+
+    function loadQuestion() {
+        if(currentQ >= questions.length) {
+            finishQuiz();
+            return;
+        }
+        
+        // تحديث شريط التقدم والإيموجي الترفيهي (تبديل الشخصيات لجذب الطفل)
+        const emojis = ["🦸‍♂️🚀", "🐱🐭", "🤖🌌"];
+        document.getElementById('hero-emoji').innerText = emojis[currentQ % emojis.length];
+        document.getElementById('p-fill').style.width = `${((currentQ + 1) / questions.length) * 100}%`;
+        
+        const qData = questions[currentQ];
+        document.getElementById('q-text').innerText = qData.q;
+        
+        const box = document.getElementById('options-box');
+        box.innerHTML = '';
+        
+        qData.answers.forEach((ans, index) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerText = ans;
+            btn.onclick = () => selectAnswer(index, btn);
+            box.appendChild(btn);
+        });
+    }
+
+    function selectAnswer(selectedIndex, btnEl) {
+        const qData = questions[currentQ];
+        const allBtns = document.querySelectorAll('.option-btn');
+        allBtns.forEach(b => b.disabled = true); // منع الضغط المتكرر
+        
+        if(selectedIndex === qData.correct) {
+            btnEl.classList.add('selected-correct');
+            score++;
+        } else {
+            btnEl.classList.add('selected-wrong');
+            allBtns[qData.correct].classList.add('selected-correct'); // إظهار الصح للطفل ليتعلم
+        }
+
+        currentQ++;
+        setTimeout(loadQuestion, 1200); // الانتقال التلقائي بعد ثانية ورشة
+    }
+
+    async function finishQuiz() {
+        document.getElementById('quiz-playground').style.display = 'none';
+        document.getElementById('score-zone').style.display = 'block';
+        
+        // حساب الدرجة النهائية من 5 درجات كالمتفق عليه في جدول سوبابيز الأساسي
+        const finalScore = Math.round((score / questions.length) * 5);
+        document.getElementById('final-score-text').innerText = `رائع! حصلت على ${finalScore}/5 🏆`;
+        
+        if (username) {
+            // تحديث عمود "Unit 1 Score" مباشرة للطالب الحالي بدون أي وسيط عبثي
+            await dbClient
+                .from('students')
+                .update({ 'Unit 1 Score': finalScore })
+                .eq('Username', username);
+        }
+    }
+
+    function goBack() { window.location.href = 'dashboard.html'; }
+    
+    window.onload = loadQuestion;
+</script>
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تحدي توم وجيري الكرتوني - اختبار 3 🐱🐭</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cartoon-orange: #f97316;
+            --cartoon-blue: #0284c7;
+            --bg-gradient: linear-gradient(180deg, #fff7ed 0%, #ffedd5 100%);
+        }
+        body {
+            font-family: 'Cairo', sans-serif; background: var(--bg-gradient);
+            color: #431407; margin: 0; padding: 15px; min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .quiz-box {
+            width: 100%; max-width: 440px; background: white;
+            border: 4px solid var(--cartoon-orange); border-radius: 30px;
+            padding: 20px; box-sizing: border-box; box-shadow: 0 15px 30px rgba(249,115,22,0.15);
+        }
+        .cartoon-banner { font-size: 3.5rem; text-align: center; margin-bottom: 5px; }
+        
+        .progress-container { width: 100%; height: 10px; background: #ffedd5; border-radius: 50px; margin-bottom: 20px; overflow: hidden; }
+        .progress-bar-fill { width: 33.3%; height: 100%; background: var(--cartoon-blue); transition: width 0.3s; }
+
+        .q-title { font-size: 1.25rem; font-weight: 900; text-align: center; margin-bottom: 20px; color: #7c2d12; }
+        
+        .choices-stack { display: grid; grid-template-columns: 1fr; gap: 12px; }
+        .choice-item {
+            background: #fff7ed; border: 2px solid #fed7aa; border-radius: 20px;
+            padding: 14px; text-align: center; font-family: 'Cairo'; font-weight: bold;
+            font-size: 1.1rem; color: #7c2d12; cursor: pointer; transition: all 0.2s;
+        }
+        .choice-item.correct-ans { background: #22c55e !important; border-color: #4ade80 !important; color: white; font-weight: 900; }
+        .choice-item.wrong-ans { background: #ef4444 !important; border-color: #f87171 !important; color: white; }
+
+        .overlay-result { display: none; text-align: center; padding: 25px 10px; }
+    </style>
+</head>
+<body>
+
+<div style="text-align: center; margin-bottom: 15px;">
+    <h1 style="font-size: 1.3rem; margin: 0; color: var(--cartoon-orange);">🐱 معركة الأدوات مع توم وجيري 🐭</h1>
+    <p style="font-size: 0.85rem; color: #7c2d12; font-weight: bold;">أجب صح لتساعد جيري في الهروب بالجبنة النطاطة!</p>
+</div>
+
+<div class="quiz-box">
+    <div id="playground">
+        <div class="cartoon-banner" id="cartoon-img">🐱🧀🐭</div>
+        <div class="progress-container"><div class="progress-bar-fill" id="indicator"></div></div>
+        
+        <div class="q-title" id="question-display">جاري تجهيز السؤال الفأري...</div>
+        <div class="choices-stack" id="choices-box"></div>
+    </div>
+
+    <div id="result-zone" class="overlay-result">
+        <h1 style="font-size: 4rem; margin: 0;">🧀🏆</h1>
+        <h2 style="color: var(--cartoon-orange); font-weight: 900;" id="feedback-text">يا لك من عبقري فذ!</h2>
+        <p style="font-weight: bold; color: #7c2d12;">تم إرسال درجتك الوزارية بنجاح تام إلى السيرفر الرئيسي 🚀</p>
+        <button onclick="window.location.href='dashboard.html'" style="background: var(--cartoon-blue); color: white; border: none; padding: 12px 35px; font-family: 'Cairo'; font-weight: 900; border-radius: 50px; cursor: pointer; margin-top: 15px;">طيران للوحة التحكم 🛸</button>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    const dbClient = supabase.createClient('https://cjpdnptndkceescvubmg.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNqcGRucHRuZGtjZWVzY3Z1Ym1nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwMTExNTYsImV4cCI6MjA5ODU4NzE1Nn0.psxah2ekfvgZ5ReTutudYg59fiSrX13dI8IkJCobGMM');
+
+    const questionsData = [
+        { q: "ماذا تقول عندما تسألك المعلمة عن شيء مفرد: (What's this?)", answers: ["It's a pen", "Hello Hany", "Goodbye"], correct: 0 },
+        { q: "أي كلمة تبدأ بصوت حرف الـ (R) المقررة في المنهج؟", answers: ["Peter", "Ruler", "Pencil"], correct: 1 },
+        { q: "نضع الأقلام والممحاة داخل الـ...؟", answers: ["Bag", "Sharpener", "Pencil case"], correct: 2 }
+    ];
+
+    let indexQ = 0; let finalPoints = 0;
+    const currentStudent = localStorage.getItem('Username');
+
+    function renderQuestion() {
+        if(indexQ >= questionsData.length) { finishAndSave(); return; }
+        
+        document.getElementById('indicator').style.width = `${((indexQ + 1) / questionsData.length) * 100}%`;
+        const activeQ = questionsData[indexQ];
+        document.getElementById('question-display').innerText = activeQ.q;
+        
+        const box = document.getElementById('choices-box');
+        box.innerHTML = '';
+        
+        activeQ.answers.forEach((ans, idx) => {
+            const btn = document.createElement('button');
+            btn.className = 'choice-item';
+            btn.innerText = ans;
+            btn.onclick = () => verifyChoice(idx, btn);
+            box.appendChild(btn);
+        });
+    }
+
+    function verifyChoice(chosenIdx, element) {
+        const activeQ = questionsData[indexQ];
+        const buttons = document.querySelectorAll('.choice-item');
+        buttons.forEach(b => b.disabled = true);
+        
+        if(chosenIdx === activeQ.correct) {
+            element.classList.add('correct-ans');
+            finalPoints++;
+        } else {
+            element.classList.add('wrong-ans');
+            buttons[activeQ.correct].classList.add('correct-ans');
+        }
+        indexQ++;
+        setTimeout(renderQuestion, 1200);
+    }
+
+    async function finishAndSave() {
+        document.getElementById('playground').style.display = 'none';
+        document.getElementById('result-zone').style.display = 'block';
+        
+        const finalCalculated = Math.round((finalPoints / questionsData.length) * 5);
+        document.getElementById('feedback-text').innerText = `ممتاز! حصلت على ${finalCalculated}/5 🏆`;
+        
+        if (currentStudent) {
+            await dbClient
+                .from('students')
+                .update({ 'Unit 3 Score': finalCalculated })
+                .eq('Username', currentStudent);
+        }
+    }
+
+    window.onload = renderQuestion;
+</script>
+</body>
+</html>

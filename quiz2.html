@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تحدي سوبرمان الكرتوني - اختبار 2 🌌</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --space-bright: linear-gradient(180deg, #0f172a 0%, #1e1b4b 100%);
+            --neon-pink: #f43f5e;
+            --neon-yellow: #eab308;
+        }
+        body {
+            font-family: 'Cairo', sans-serif; background: var(--space-bright);
+            color: white; margin: 0; padding: 15px; min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .quiz-card {
+            width: 100%; max-width: 450px; background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(15px); border: 3px solid var(--neon-pink);
+            border-radius: 30px; padding: 20px; box-sizing: border-box;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+        }
+        .hero-banner { font-size: 3.5rem; text-align: center; margin-bottom: 10px; }
+        .progress-bar { width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 50px; margin-bottom: 20px; overflow: hidden; }
+        .progress-fill { width: 33.3%; height: 100%; background: var(--neon-yellow); transition: width 0.3s; }
+        
+        .question-text { font-size: 1.2rem; font-weight: 900; text-align: center; margin-bottom: 20px; }
+        
+        .options-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+        .option-btn {
+            background: rgba(255, 255, 255, 0.08); border: 2px solid rgba(255,255,255,0.15);
+            border-radius: 20px; padding: 14px; text-align: center; font-family: 'Cairo';
+            font-weight: bold; font-size: 1.05rem; color: white; cursor: pointer; transition: all 0.2s;
+        }
+        .option-btn.selected-correct { background: #16a34a !important; border-color: #4ade80 !important; font-weight: 900; }
+        .option-btn.selected-wrong { background: #dc2626 !important; border-color: #f87171 !important; }
+        
+        .score-overlay { display: none; text-align: center; padding: 20px; }
+    </style>
+</head>
+<body>
+
+<div style="text-align: center; margin-bottom: 15px;">
+    <h1 style="font-size: 1.3rem; margin: 0; color: var(--neon-yellow);">🦸‍♂️ اختبار الوزارة الرسمي: This is me</h1>
+    <p style="font-size: 0.85rem; color: #cbd5e1; margin: 4px 0 0 0;">ساعد سوبرمان الكرتوني في الوصول للهدف بالإجابة الصحيحة!</p>
+</div>
+
+<div class="quiz-card">
+    <div id="quiz-playground">
+        <div class="hero-banner" id="hero-animation">🦸‍♂️💫</div>
+        <div class="progress-bar"><div class="progress-fill" id="p-fill"></div></div>
+        
+        <div class="question-text" id="q-text">جاري استدعاء السؤال الوزاري الأول...</div>
+        <div class="options-grid" id="options-box"></div>
+    </div>
+
+    <div id="score-zone" class="score-overlay">
+        <h1 style="font-size: 4rem; margin: 0;">🏆</h1>
+        <h2 style="color: var(--neon-yellow); font-weight: 900;" id="final-score-text">أنت رائع ومستعد للمدرسة!</h2>
+        <p>تم تحديث نتيجتك بجدول الطلاب الفردي بنجاح 🌟</p>
+        <button onclick="window.location.href='dashboard.html'" style="background: var(--neon-pink); color: white; border: none; padding: 12px 35px; font-family: 'Cairo'; font-weight: 900; border-radius: 50px; cursor: pointer; margin-top: 15px;">عد للوحة التحكم 🛸</button>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    const dbClient = supabase.createClient('https://cjpdnptndkceescvubmg.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNqcGRucHRuZGtjZWVzY3Z1Ym1nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwMTExNTYsImV4cCI6MjA5ODU4NzE1Nn0.psxah2ekfvgZ5ReTutudYg59fiSrX13dI8IkJCobGMM');
+
+    // 🎯 أسئلة Connect 1 - Unit 2 الوزارية الرسمية تماماً
+    const questions = [
+        { q: "عندما تطلب المعلمة من البطل لمس أنفه تقول له؟", answers: ["Touch your nose", "Touch your eye", "Touch your hand"], correct: 0 },
+        { q: "أي كلمة من هذه الكلمات تبدأ بصوت حرف الـ (H) المقررة بالمنهج؟", answers: ["Nose", "Hand", "Neck"], correct: 1 },
+        { q: "ما الكلمة التي تبدأ بصوت حرف الـ (N) مثل كلمة Nut؟", answers: ["Hany", "Face", "Nose"], correct: 2 }
+    ];
+
+    let currentQ = 0;
+    let score = 0;
+    const username = localStorage.getItem('Username');
+
+    function loadQuestion() {
+        if(currentQ >= questions.length) { findFinalResult(); return; }
+        
+        document.getElementById('p-fill').style.width = `${((currentQ + 1) / questions.length) * 100}%`;
+        const qData = questions[currentQ];
+        document.getElementById('q-text').innerText = qData.q;
+        
+        const box = document.getElementById('options-box');
+        box.innerHTML = '';
+        
+        qData.answers.forEach((ans, index) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerText = ans;
+            btn.onclick = () => checkSelection(index, btn);
+            box.appendChild(btn);
+        });
+    }
+
+    function checkSelection(selectedIndex, btnEl) {
+        const qData = questions[currentQ];
+        const allBtns = document.querySelectorAll('.option-btn');
+        allBtns.forEach(b => b.disabled = true);
+        
+        if(selectedIndex === qData.correct) {
+            btnEl.classList.add('selected-correct');
+            score++;
+        } else {
+            btnEl.classList.add('selected-wrong');
+            allBtns[qData.correct].classList.add('selected-correct');
+        }
+        currentQ++;
+        setTimeout(loadQuestion, 1300);
+    }
+
+    async function findFinalResult() {
+        document.getElementById('quiz-playground').style.display = 'none';
+        document.getElementById('score-zone').style.display = 'block';
+        
+        const convertedScore = Math.round((score / questions.length) * 5);
+        document.getElementById('final-score-text').innerText = `ممتاز! حصلت على ${convertedScore}/5 في التقييم الوزاري 🏆`;
+        
+        if (username) {
+            // تحديث عمود الوحدة الثانية الفردي النظيف تماماً بسوبابيز
+            await dbClient
+                .from('students')
+                .update({ 'Unit 2 Score': convertedScore })
+                .eq('Username', username);
+        }
+    }
+
+    window.onload = loadQuestion;
+</script>
+</body>
+</html>

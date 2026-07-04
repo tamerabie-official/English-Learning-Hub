@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تمرين المملكة 6 - أركيد الموسيقى الكوني 🎹</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --arcade-black: #0f172a;
+            --neon-pink: #f43f5e;
+            --neon-green: #10b981;
+        }
+        body {
+            font-family: 'Cairo', sans-serif; background: var(--arcade-black);
+            color: white; margin: 0; padding: 15px; min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .arcade-title { text-align: center; margin-bottom: 20px; }
+        .arcade-title h1 { font-size: 1.4rem; color: var(--neon-pink); font-weight: 900; margin: 0; text-shadow: 0 0 10px var(--neon-pink); }
+        
+        .screen-frame {
+            width: 100%; max-width: 400px; background: #020617;
+            border: 4px solid var(--neon-green); border-radius: 20px;
+            padding: 25px 15px; text-align: center; box-sizing: border-box;
+            box-shadow: 0 0 25px rgba(16,185,129,0.2); margin-bottom: 25px;
+        }
+        .music-emoji { font-size: 4rem; display: block; margin-bottom: 10px; }
+        
+        .pads-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .arcade-pad {
+            background: #1e293b; border: 2px solid #475569; border-radius: 15px;
+            padding: 15px; font-family: 'Cairo'; font-weight: 900; color: white;
+            font-size: 1.1rem; cursor: pointer; transition: all 0.15s;
+        }
+        .arcade-pad:active { transform: scale(0.93); background: #334155; }
+        .arcade-pad.neon-hit { background: var(--neon-green) !important; border-color: #34d399 !important; box-shadow: 0 0 15px var(--neon-green); }
+        .arcade-pad.neon-miss { background: var(--neon-pink) !important; border-color: #fb7185 !important; box-shadow: 0 0 15px var(--neon-pink); }
+
+        .arcade-win-overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(2,6,23,0.98); z-index:100; flex-direction:column; align-items:center; justify-content:center; }
+    </style>
+</head>
+<body>
+
+<div class="arcade-title">
+    <h1>👾 أركيد النوتات الموسيقية السحرية ⚡</h1>
+    <p style="color: #94a3b8; font-size:0.9rem;">اقرأ اسم الآلة واضغط على وسادة الموسيقى المطابقة لها بالكامل!</p>
+</div>
+
+<div class="screen-frame">
+    <span class="music-emoji">🎵 Guitar</span>
+    <div style="font-weight: bold; color: var(--neon-green); margin-top: 10px;" id="track-status">المقطوعة رقم 1 جاهزة للضغط!</div>
+</div>
+
+<div class="pads-layout">
+    <button class="arcade-pad" onclick="hitPad('Guitar', this)">Guitar 🎸</button>
+    <button class="arcade-pad" onclick="hitPad('Piano', this)">Piano 🎹</button>
+    <button class="arcade-pad" onclick="hitPad('Drum', this)">Drum 🥁</button>
+    <button class="arcade-pad" onclick="hitPad('Flute', this)">Flute 🪈</button>
+</div>
+
+<button onclick="window.location.href='dashboard.html'" style="margin-top:30px; background:#334155; color:#cbd5e1; border:none; padding:10px 25px; font-family:'Cairo'; font-weight:bold; border-radius:8px; cursor:pointer; border: 1px solid #475569;">إيقاف اللعب 🕹️</button>
+
+<div id="win-arcade" class="arcade-win-overlay">
+    <h1 style="font-size: 5rem; margin:0; text-shadow: 0 0 20px var(--neon-green);">🕹️👾🏆</h1>
+    <h2 style="color: var(--neon-green); font-weight: 900; text-shadow: 0 0 10px var(--neon-green);">أنت مايسترو الأركيد الخارق!</h2>
+    <p style="color: #94a3b8; font-weight: bold;">أتممت المقطوعة السمعية وحققت أعلى الدرجات التفاعلية دولياً.</p>
+    <button onclick="window.location.href='dashboard.html'" style="background:var(--neon-pink); color:white; border:none; padding:12px 35px; font-family:'Cairo'; font-weight:bold; border-radius:8px; cursor:pointer; box-shadow: 0 0 15px var(--neon-pink);">العودة لغرفة التحكم الرئيسي 🚀</button>
+</div>
+
+<script>
+    const musicTracks = [
+        { word: "🎵 Guitar", matchKey: "Guitar" },
+        { word: "🎵 Drum", matchKey: "Drum" },
+        { word: "🎵 Piano", matchKey: "Piano" },
+        { word: "🎵 Flute", matchKey: "Flute" }
+    ];
+    let currentTrackIdx = 0;
+
+    function hitPad(keySelected, element) {
+        const activeTrack = musicTracks[currentTrackIdx];
+        if(keySelected === activeTrack.matchKey) {
+            element.classList.add('neon-hit');
+            setTimeout(() => {
+                element.classList.remove('neon-hit');
+                currentTrackIdx++;
+                if(currentTrackIdx < musicTracks.length) {
+                    document.querySelector('.music-emoji').innerText = musicTracks[currentTrackIdx].word;
+                    document.getElementById('track-status').innerText = `المقطوعة رقم ${currentTrackIdx + 1} جاهزة للضغط!`;
+                } else {
+                    document.getElementById('win-arcade').style.display = 'flex';
+                }
+            }, 500);
+        } else {
+            element.classList.add('neon-miss');
+            setTimeout(() => element.classList.remove('neon-miss'), 500);
+        }
+    }
+</script>
+</body>
+</html>

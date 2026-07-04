@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تمرين المملكة 3 - الحقيبة السحرية 🎒</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-jungle: linear-gradient(135deg, #ecfdf5, #d1fae5);
+            --mint-dark: #065f46;
+            --gold-star: #fbbf24;
+        }
+        body {
+            font-family: 'Cairo', sans-serif; background: var(--bg-jungle);
+            color: #1f2937; margin: 0; padding: 15px; min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .game-title { text-align: center; margin-bottom: 15px; }
+        .game-title h1 { font-size: 1.4rem; color: var(--mint-dark); font-weight: 900; margin: 0; }
+        
+        /* صندوق فرز مبتكر ومختلف */
+        .bag-zone {
+            width: 100%; max-width: 400px; background: white; border: 4px dashed #10b981;
+            border-radius: 30px; padding: 20px; text-align: center; box-sizing: border-box;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05); margin-bottom: 20px;
+        }
+        .bag-visual { font-size: 4.5rem; display: block; margin-bottom: 10px; }
+        
+        .items-cloud { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; max-width: 400px; }
+        .item-card {
+            background: #ffffff; border: 2px solid #e5e7eb; border-radius: 20px;
+            padding: 15px; text-align: center; cursor: pointer; font-size: 1.1rem;
+            font-weight: bold; transition: all 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+        }
+        .item-card:active { transform: scale(0.95); }
+        .item-card.packed { background: #a7f3d0; border-color: #10b981; color: #065f46; transform: scale(0.9); opacity: 0.6; pointer-events: none; }
+        .item-card.wrong-item { background: #fecaca; border-color: #ef4444; color: #991b1b; }
+
+        .win-popup { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(255,255,255,0.96); z-index:100; flex-direction:column; align-items:center; justify-content:center; }
+    </style>
+</head>
+<body>
+
+<div class="game-title">
+    <h1>جهز حقيبتك المدرسية! 🎒✨</h1>
+    <p>اضغط فقط على الأشياء التي نأخذها معنا إلى المدرسة</p>
+</div>
+
+<div class="bag-zone">
+    <span class="bag-visual">🎒</span>
+    <div style="font-weight: 900; color: var(--mint-dark);" id="counter-text">باقي 4 أدوات سحرية!</div>
+</div>
+
+<div class="items-cloud">
+    <div class="item-card" data-is-school="true" onclick="packItem(this)">✏️ Pencil</div>
+    <div class="item-card" data-is-school="false" onclick="packItem(this)">🧸 Teddy Bear</div>
+    <div class="item-card" data-is-school="true" onclick="packItem(this)">📏 Ruler</div>
+    <div class="item-card" data-is-school="false" onclick="packItem(this)">🦁 Lion Toy</div>
+    <div class="item-card" data-is-school="true" onclick="packItem(this)">📕 Book</div>
+    <div class="item-card" data-is-school="true" onclick="packItem(this)">✂️ Scissors</div>
+</div>
+
+<button onclick="window.location.href='dashboard.html'" style="margin-top:25px; background:#6b7280; color:white; border:none; padding:10px 25px; font-family:'Cairo'; font-weight:bold; border-radius:50px; cursor:pointer;">انسحاب مؤقت 🚀</button>
+
+<div id="win-popup" class="win-popup">
+    <h1 style="font-size: 5rem; margin:0;">🌟🥳🎒</h1>
+    <h2 style="color: #047857; font-weight: 900;">ترتيب عبقري ومنظم!</h2>
+    <p style="font-weight: bold; color: #4b5563;">حقيبتك جاهزة الأن للانطلاق نحو الفضاء التعليمي.</p>
+    <button onclick="window.location.href='dashboard.html'" style="background:#10b981; color:white; border:none; padding:12px 35px; font-family:'Cairo'; font-weight:bold; border-radius:50px; cursor:pointer;">عد للوحة التحكم 🏆</button>
+</div>
+
+<script>
+    let remainingSchoolItems = 4;
+
+    function packItem(element) {
+        const isSchool = element.getAttribute('data-is-school') === 'true';
+        if (isSchool) {
+            element.classList.add('packed');
+            remainingSchoolItems--;
+            document.getElementById('counter-text').innerText = `باقي ${remainingSchoolItems} أدوات سحرية!`;
+            
+            if (remainingSchoolItems === 0) {
+                setTimeout(() => {
+                    document.getElementById('win-popup').style.display = 'flex';
+                }, 500);
+            }
+        } else {
+            element.classList.add('wrong-item');
+            setTimeout(() => element.classList.remove('wrong-item'), 600);
+        }
+    }
+</script>
+</body>
+</html>

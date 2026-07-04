@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تحدي قلعة الملوك - اختبار 5 🏰⚔️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght=400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-castle: linear-gradient(180deg, #451a03 0%, #1c1917 100%);
+            --royal-gold: #f59e0b;
+        }
+        body {
+            font-family: 'Cairo', sans-serif; background: var(--bg-castle);
+            color: white; margin: 0; padding: 15px; min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .castle-card {
+            width: 100%; max-width: 440px; background: rgba(255,255,255,0.03);
+            border: 3px solid var(--royal-gold); border-radius: 25px;
+            padding: 20px; box-sizing: border-box; box-shadow: 0 15px 35px rgba(245,158,11,0.1);
+        }
+        .shield-banner { font-size: 3.5rem; text-align: center; margin-bottom: 5px; }
+        
+        .bar-container { width: 100%; height: 8px; background: rgba(255,255,255,0.05); border-radius: 50px; margin-bottom: 20px; overflow: hidden; }
+        .bar-fill { width: 33.3%; height: 100%; background: var(--royal-gold); transition: width 0.3s; }
+
+        .question-holder { font-size: 1.2rem; font-weight: 900; text-align: center; margin-bottom: 20px; color: #fef08a; }
+        
+        .options-stack { display: grid; grid-template-columns: 1fr; gap: 12px; }
+        .option-royal {
+            background: rgba(255, 255, 255, 0.05); border: 2px solid #78350f;
+            border-radius: 18px; padding: 14px; text-align: center; font-family: 'Cairo';
+            font-weight: bold; font-size: 1.05rem; color: #fef3c7; cursor: pointer; transition: all 0.2s;
+        }
+        .option-royal.gold-correct { background: #15803d !important; border-color: #22c55e !important; font-weight: 900; color: white; }
+        .option-royal.gold-wrong { background: #991b1b !important; border-color: #ef4444 !important; color: white; }
+
+        .castle-end { display: none; text-align: center; padding: 25px 10px; }
+    </style>
+</head>
+<body>
+
+<div style="text-align: center; margin-bottom: 15px;">
+    <h1 style="font-size: 1.3rem; margin: 0; color: var(--royal-gold);">⚔️ فرسان العائلة:  👑</h1>
+    <p style="font-size: 0.85rem; color: #d6d3d1; margin-top: 4px;">اجتاز بوابة التنين بالإجابة الصحيحة لرفع نتيجتك وزارياً!</p>
+</div>
+
+<div class="castle-card">
+    <div id="castle-play">
+        <div class="shield-banner">🛡️👑⚔️</div>
+        <div class="bar-container"><div class="bar-fill" id="castle-bar"></div></div>
+        
+        <div class="question-holder" id="castle-q-text">جاري فك تشفير المخطوطة الملكية...</div>
+        <div class="options-stack" id="castle-options"></div>
+    </div>
+
+    <div id="castle-score" class="castle-end">
+        <h1 style="font-size: 4rem; margin: 0;">🏰🏆</h1>
+        <h2 style="color: var(--royal-gold); font-weight: 900;" id="royal-feedback">فارس  مغوار!</h2>
+        <p style="color: #cbd5e1;">تم تسجيل درجاتك في خزانة السيرفر المركزي بأمان ممتد 🌟</p>
+        <button onclick="window.location.href='dashboard.html'" style="background: var(--royal-gold); color: #451a03; border: none; padding: 12px 35px; font-family: 'Cairo'; font-weight: 900; border-radius: 50px; cursor: pointer; margin-top: 15px;">العودة لعرش التحكم 🚀</button>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    const dbClient = supabase.createClient('https://cjpdnptndkceescvubmg.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNqcGRucHRuZGtjZWVzY3Z1Ym1nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwMTExNTYsImV4cCI6MjA5ODU4NzE1Nn0.psxah2ekfvgZ5ReTutudYg59fiSrX13dI8IkJCobGMM');
+
+    const u5Questions = [
+        { q: "عندما تُعرّف صديقك على أخيك تقول له بالإنجليزية؟", answers: ["This is my brother", "Goodbye brother", "Thank you"], correct: 0 },
+        { q: "من هو الـ (Grandfather) في شجرة العائلة الكرتونية؟", answers: ["الجد", "الجدة", "العم"], correct: 0 },
+        { q: "أي من الكلمات التالية تبدأ بصوت حرف الـ (T) كما ؟", answers: ["Father", "Tea", "Family"], correct: 1 }
+    ];
+
+    let castleIdx = 0; let castlePoints = 0;
+    const playerUser = localStorage.getItem('Username');
+
+    function loadCastleQuestion() {
+        if(castleIdx >= u5Questions.length) { saveCastleScore(); return; }
+        
+        document.getElementById('castle-bar').style.width = `${((castleIdx + 1) / u5Questions.length) * 100}%`;
+        const activeQ = u5Questions[castleIdx];
+        document.getElementById('castle-q-text').innerText = activeQ.q;
+        
+        const area = document.getElementById('castle-options');
+        area.innerHTML = '';
+        
+        activeQ.answers.forEach((ans, idx) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-royal';
+            btn.innerText = ans;
+            btn.onclick = () => checkCastleAns(idx, btn);
+            area.appendChild(btn);
+        });
+    }
+
+    function checkCastleAns(selected, element) {
+        const activeQ = u5Questions[castleIdx];
+        const items = document.querySelectorAll('.option-royal');
+        items.forEach(b => b.disabled = true);
+        
+        if(selected === activeQ.correct) {
+            element.classList.add('gold-correct');
+            castlePoints++;
+        } else {
+            element.classList.add('gold-wrong');
+            items[activeQ.correct].classList.add('gold-correct');
+        }
+        castleIdx++;
+        setTimeout(loadCastleQuestion, 1200);
+    }
+
+    async function saveCastleScore() {
+        document.getElementById('castle-play').style.display = 'none';
+        document.getElementById('castle-score').style.display = 'block';
+        
+        const scaledScore = Math.round((castlePoints / u5Questions.length) * 5);
+        document.getElementById('royal-feedback').innerText = `تم الفتح بنجاح! النتيجة: ${scaledScore}/5 🏆`;
+        
+        if (playerUser) {
+            await dbClient
+                .from('students')
+                .update({ 'Unit 5 Score': scaledScore })
+                .eq('Username', playerUser);
+        }
+    }
+
+    window.onload = loadCastleQuestion;
+</script>
+</body>
+</html>
