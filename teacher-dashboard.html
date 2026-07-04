@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>غرفة تحكم المعلم - English Learning Hub</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         body { 
             font-family: 'Cairo', sans-serif; 
@@ -19,7 +19,7 @@
             margin: auto;
         }
 
-        h1 { color: #ff9800; text-align: center; margin-bottom: 30px; }
+        h1 { color: #ff9800; text-align: center; margin-bottom: 30px; font-weight: 900; }
 
         .stat-card {
             background: #1e1e1e;
@@ -47,8 +47,8 @@
         tr:hover { background: #2a2a2a; }
 
         .whatsapp-btn {
-            background: #25d366;
-            color: white;
+            background: #ff9800;
+            color: #121212;
             border: none;
             padding: 8px 15px;
             border-radius: 10px;
@@ -58,7 +58,7 @@
             font-size: 0.85rem;
             transition: 0.3s;
         }
-        .whatsapp-btn:hover { background: #128c7e; transform: scale(1.05); }
+        .whatsapp-btn:hover { background: #e08600; transform: scale(1.05); }
 
         .modal-overlay {
             display: none;
@@ -106,7 +106,7 @@
 <body>
 
 <div class="admin-container">
-    <h1>لوحة تحكم وتطوير المنصة التعليمية 🛠️</h1>
+    <h1>غرفة تحكم وتطوير المنصة التعليمية 🛠️</h1>
 
     <div class="stats-grid">
         <div class="stat-card">
@@ -122,37 +122,39 @@
                     <th>اسم الطالب الثلاثي</th>
                     <th>اسم المستخدم (Login)</th>
                     <th>رقم الواتساب</th>
-                    <th>الأداء (التقدم)</th>
-                    <th>إرسال التقرير التشخيصي</th>
+                    <th>الأداء التقليدي (التقدم)</th>
+                    <th>مؤشر الأداء والتحليل الآلي</th>
+                    <th>إنشاء التقرير</th>
                 </tr>
             </thead>
             <tbody id="studentsTableBody">
                 <tr>
-                    <td colspan="5" style="text-align:center; color:#888;">جاري جلب البيانات...</td>
+                    <td colspan="6" style="text-align:center; color:#888;">جاري جلب وتحليل البيانات الذكية...</td>
                 </tr>
             </tbody>
         </table>
     </div>
 </div>
 
+<!-- مودال التقرير الشامل التلقائي -->
 <div id="reportModal" class="modal-overlay">
     <div class="modal-box">
         <h2 id="modalTitle">التقرير الأكاديمي الشامل</h2>
         
         <div class="modal-field">
             <label>حدد الأسبوع الدراسي الحالي:</label>
-            <input type="text" id="repWeek" placeholder="مثال: الأسبوع الأول (Phonics Intro)">
+            <input type="text" id="repWeek" placeholder="مثال: الأسبوع الحالي">
         </div>
 
         <div class="modal-section-title">⏳ ١. التواجد الزمني على المنصة:</div>
         <div class="modal-field">
-            <label>المدة التي قضاها الطالب بداخل الموقع هذا الأسبوع:</label>
-            <input type="text" id="repTimeSpent" placeholder="مثال: ساعتان ونصف متفرقة طوال الأسبوع">
+            <label>المدة التي قضاها الطالب بداخل الموقع هذا الأسبوع (محتسبة آلياً):</label>
+            <input type="text" id="repTimeSpent">
         </div>
 
         <div class="modal-section-title">📈 ٢. تحليل الأداء والمقارنة الزمنية:</div>
         <div class="modal-field">
-            <label>مستوى الأداء مقارنة بالأسابيع السابقة:</label>
+            <label>مستوى الأداء المقاس تربوياً:</label>
             <select id="repComparison">
                 <option value="منحنى صاعد: هناك تطور ملحوظ وسريع مقارنة بالأسابيع الماضية 🚀">منحنى صاعد: هناك تطور ملحوظ وسريع مقارنة بالأسابيع الماضية 🚀</option>
                 <option value="مستوى مستقر: يحافظ على أدائه الرائع وثباته الأكاديمي المستمر 🎯">مستوى مستقر: يحافظ على أدائه الرائع وثباته الأكاديمي المستمر 🎯</option>
@@ -162,19 +164,19 @@
 
         <div class="modal-section-title">🧠 ٣. تحليل الـ Quizzes وطريقة الاستيعاب:</div>
         <div class="modal-field">
-            <label>تحليل درجات الكويزات وتحديد الأسلوب الأنسب لاستيعاب الطالب:</label>
-            <textarea id="repQuizAnalysis" rows="2" placeholder="مثال: تميز في حل الأسئلة المعتمدة على الصوت والصور؛ يتضح أن الطالب (بصري-سمعي) ويستوعب أسرع عبر التكرار النطقي المباشر."></textarea>
+            <label>تحليل الكويزات وتحديد الأسلوب الأنسب لاستيعاب الطالب (مستخلص آلياً):</label>
+            <textarea id="repQuizAnalysis" rows="3"></textarea>
         </div>
 
         <div class="modal-section-title">💡 ٤. التوصيات الاستراتيجية المخصصة:</div>
         <div class="modal-field">
-            <label>توصيات خاصة لولي الأمر (للتطبيق في المنزل):</label>
-            <textarea id="repParentNote" rows="2" placeholder="مثال: يرجى مراجعة الكلمات بصوت مرتفع مع الطالب لمدة 10 دقائق يومياً لتثبيت الحروف الصوتية."></textarea>
+            <label>توصيات خاصة لولي الأمر (للتطبيق في المنزل - ذكاء اصطناعي):</label>
+            <textarea id="repParentNote" rows="3"></textarea>
         </div>
         
         <div class="modal-field">
-            <label>توصيات خاصة لمدرس الفصل (للمتابعة المدرسية):</label>
-            <textarea id="repTeacherNote" rows="2" placeholder="مثال: يفضل تشجيعه على القراءة الفردية أمام زملائه في الحصة لزيادة ثقته بنفسه."></textarea>
+            <label>توصيات خاصة لمدرس الفصل (للمتابعة المدرسية - ذكاء اصطناعي):</label>
+            <textarea id="repTeacherNote" rows="3"></textarea>
         </div>
 
         <div class="modal-buttons">
@@ -187,21 +189,34 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
     const supabaseClient = supabase.createClient('https://cjpdnptndkceescvubmg.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNqcGRucHRuZGtjZWVzY3Z1Ym1nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwMTExNTYsImV4cCI6MjA5ODU4NzE1Nn0.psxah2ekfvgZ5ReTutudYg59fiSrX13dI8IkJCobGMM');
-    let activePhone = "", activeName = "";
+    
+    // ذاكرة تخزين مؤقتة للبيانات التحليلية لسهولة وسرعة استدعائها داخل الهاتف
+    let analyticsCache = {};
+    let activeStudentId = "";
 
     window.onload = fetchTeacherData;
 
     async function fetchTeacherData() {
         try {
-            const { data: students, error } = await supabaseClient.from('students').select('*');
-            if (error) { alert("خطأ: " + error.message); return; }
+            // 1. جلب الطلاب الأساسيين
+            const { data: students, error: studentErr } = await supabaseClient.from('students').select('*');
+            if (studentErr) { alert("خطأ في جلب الطلاب: " + studentErr.message); return; }
+
+            // 2. جلب التحليلات الذكية المجمعة من الـ View الفوري
+            const { data: analytics, error: analyticsErr } = await supabaseClient.from('student_analytics_view').select('*');
+            if (!analyticsErr && analytics) {
+                analyticsCache = analytics.reduce((map, item) => {
+                    map[item.student_id] = item;
+                    return;
+                }, {});
+            }
 
             const tbody = document.getElementById('studentsTableBody');
             tbody.innerHTML = ''; 
             document.getElementById('totalStudents').innerText = students.length;
 
             if (students.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#888;">لا يوجد طلاب مسجلون.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#888;">لا يوجد طلاب مسجلون.</td></tr>`;
                 return;
             }
 
@@ -209,51 +224,74 @@
                 let avg = "0.0";
                 let units = 0;
 
+                // استدعاء دالة الأداء التقليدية الخاصة بك للحفاظ على استقرار الكود القديم
                 try {
                     const { data: perfData } = await supabaseClient
                         .rpc('calculate_student_performance', { student_id: student.id });
-                    
                     if (perfData && perfData[0]) {
                         avg = perfData[0].avg_score ? perfData[0].avg_score.toFixed(1) : "0.0";
                         units = perfData[0].total_units_completed || 0;
                     }
                 } catch (rpcErr) {
-                    console.warn("RPC calculated performance failed, using defaults:", rpcErr);
+                    console.warn("فشل حساب الأداء التقليدي:", rpcErr);
                 }
+
+                // جلب التحليلات الذكية من الكاش المخزن
+                const studentAnalyze = analyticsCache[student.id] || {
+                    kpi_indicator: 0,
+                    student_level: 'تحت الحساب 🤔',
+                    learning_style: 'غير محدد'
+                };
 
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td style="font-weight: bold; color: #fff;">${student['Full Name']}</td>
                     <td style="color: #ff9800;">${student['Username']}</td>
                     <td dir="ltr" style="color: #b0bec5;">${student['WhatsApp']}</td>
-                    <td style="color: #4caf50; font-weight: bold;">${units}/6 (${avg})</td>
+                    <td style="color: #4caf50; font-weight: bold;">${units}/6 الممالك (${avg})</td>
+                    <td style="color: #00bcd4; font-weight: bold;">🌟 ${studentAnalyze.kpi_indicator}% | ${studentAnalyze.student_level}</td>
                     <td>
-                        <button class="whatsapp-btn" onclick="openReportModal('${student['WhatsApp']}', '${student['Full Name']}')">
+                        <button class="whatsapp-btn" onclick="openReportModal('${student.id}', '${student['WhatsApp']}', '${student['Full Name']}')">
                             تقرير 📊
                         </button>
                     </td>
                 `;
                 tbody.appendChild(tr);
             }
-        } catch (err) { alert("حدث خطأ أثناء جلب البيانات: " + err.message); }
+        } catch (err) { alert("حدث خطأ غير متوقع: " + err.message); }
     }
 
-    function openReportModal(phone, studentName) {
-        activePhone = phone;
-        activeName = studentName;
+    function openReportModal(studentId, phone, studentName) {
+        activeStudentId = studentId;
+        const info = analyticsCache[studentId] || {};
+        
         document.getElementById('modalTitle').innerText = `📊 التقرير الأكاديمي الشامل للبطل: ${studentName}`;
         document.getElementById('reportModal').style.display = 'flex';
         
-        document.getElementById('repWeek').value = "هذا الأسبوع";
-        document.getElementById('repTimeSpent').value = "";
-        document.getElementById('repQuizAnalysis').value = "";
-        document.getElementById('repParentNote').value = "";
-        document.getElementById('repTeacherNote').value = "";
+        // التعبئة الآلية الفورية للبيانات المستخلصة من الـ SQL داخل المودال لسرعة الإرسال من الجوال
+        document.getElementById('repWeek').value = "هذا الأسبوع الدراسي";
+        
+        // أ. التواجد الزمني يومي/أسبوعي
+        const daily = info.daily_usage || 0;
+        const weekly = info.weekly_usage || 0;
+        document.getElementById('repTimeSpent').value = `إجمالي ${weekly} دقيقة هذا الأسبوع (منها ${daily} دقيقة اليوم)`;
+        
+        // ب وجـ. مؤشر الإداء والأسلوب الاستيعابي المناسب المكتشف
+        const kpi = info.kpi_indicator || 0;
+        const style = info.learning_style || "لم يتحدد بعد";
+        document.getElementById('repQuizAnalysis').value = `حقق البطل نسبة نجاح تفاعلية تقدر بـ ${kpi}% في مهارات الفونكس والامتحانات التفاعلية. نمط الاستيعاب والتعلم المكتشف للطفل هو: [ ${style} ] وهو الأسلوب الأسرع لاستيعابه واستجابته اللغوية.`;
+        
+        // د. التوصيات الاستراتيجية الجاهزة لولي الأمر والمدرس
+        document.getElementById('repParentNote').value = info.parent_recommendation || "يرجى الاستمرار في تشجيع الطالب ومتابعة نطق الحروف الصوتية بانتظام.";
+        document.getElementById('repTeacherNote').value = info.teacher_recommendation || "يرجى زيادة دعمه داخل الفصل وإعطائه الأولوية في النطق الفردي.";
     }
 
     function closeModal() { document.getElementById('reportModal').style.display = 'none'; }
 
     function submitWeeklyReport() {
+        const info = analyticsCache[activeStudentId] || {};
+        const studentName = info.student_name || "البطل الباحث";
+        
         const week = document.getElementById('repWeek').value.trim();
         const timeSpent = document.getElementById('repTimeSpent').value.trim();
         const comparison = document.getElementById('repComparison').value;
@@ -266,21 +304,27 @@
             return;
         }
 
-        let cleanPhone = activePhone.trim().replace(/\s+/g, '');
+        let cleanPhone = (info.parent_whatsapp || "").trim().replace(/\s+/g, '');
+        if (!cleanPhone) {
+            alert("عذراً، لا يوجد رقم واتساب مسجل لهذا الطالب في قاعدة البيانات!");
+            return;
+        }
+        
         if (cleanPhone.startsWith('0')) { cleanPhone = '20' + cleanPhone.substring(1); }
         else if (!cleanPhone.startsWith('20')) { cleanPhone = '20' + cleanPhone; }
 
+        // صياغة التقرير الكوني الاحترافي لولي الأمر باسم "The English Learning Hub" ومستر تامر ربيع
         const messageText = 
 `السلام عليكم ورحمة الله وبركاته 🌟
 
-معكم مستر تامر من منصة *The English Learning Hub* 🎓
-إليكم *التقرير الأكاديمي التشخيصي الشامل* لمتابعة أداء البطل: (*${activeName}*)
+معكم مستر تامر ربيع من منصة *The English Learning Hub* 🎓
+إليكم *التقرير الأكاديمي التشخيصي الشامل* لمتابعة أداء البطل: (*${studentName}*)
 
 📅 *الفترة الدراسية:* ${week}
 ---------------------------------------
 
 ⏳ *١. التواجد الزمني والنشاط بداخل الموقع:*
-- قضى الطالب مدة تقدر بـ: (${timeSpent}) في تصفح الموارد والتعلم الفعال.
+- ${timeSpent}.
 
 📈 *٢. تحليل ومقارنة الأداء (الزمني):*
 - ${comparison}
@@ -288,7 +332,7 @@
 🧠 *٣. تحليل الاختبارات (Quizzes) وأسلوب الاستيعاب:*
 - ${quizAnalysis}
 
-💡 *٤. التوصيات الاستراتيجية الموجهة:*
+💡 *٤. التوصيات الاستراتيجية الموجهة من المستر:*
 
 👨‍👩‍👦 *توصيات مخصصة لولي الأمر (للمنزل):*
 - "${parentNote}"
@@ -308,4 +352,3 @@
 </script>
 </body>
 </html>
-
