@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الاختبارات والتمارين الذكية 📝✨</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght=400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-purple: #6366f1;
+            --neon-green: #10b981;
+            --neon-red: #ef4444;
+            --bg-dark: #0f172a;
+            --card-bg: #1e293b;
+            --accent-gold: #f59e0b;
+        }
+        body {
+            font-family: 'Cairo', sans-serif; background: var(--bg-dark);
+            color: white; margin: 0; padding: 15px; min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .header-zone { text-align: center; margin-bottom: 15px; width: 100%; max-width: 450px; }
+        .header-zone h1 { font-size: 1.5rem; color: #a5b4fc; font-weight: 900; margin: 0; }
+        
+        /* شريط التقدم والنجوم */
+        .status-bar {
+            width: 100%; max-width: 450px; background: var(--card-bg);
+            padding: 12px 15px; border-radius: 15px; margin-bottom: 15px;
+            display: flex; justify-content: space-between; align-items: center;
+            box-sizing: border-box; border: 1px solid #334155;
+        }
+        .stars-counter { color: var(--accent-gold); font-weight: 900; font-size: 1.1rem; }
+        
+        /* واجهة اختيار الوحدات */
+        .unit-selector {
+            width: 100%; max-width: 450px; background: var(--card-bg);
+            color: white; border: 2px solid var(--primary-purple);
+            padding: 12px; border-radius: 15px; font-family: 'Cairo';
+            font-weight: bold; font-size: 1rem; outline: none; margin-bottom: 20px;
+        }
+
+        /* كارت السؤال */
+        .quiz-card {
+            width: 100%; max-width: 450px; background: var(--card-bg);
+            border: 3px solid var(--primary-purple); border-radius: 25px;
+            padding: 25px 20px; box-sizing: border-box; text-align: center;
+            box-shadow: 0 15px 30px rgba(99,102,241,0.15);
+        }
+        .question-title { font-size: 1.2rem; font-weight: 700; color: #f8fafc; margin-bottom: 20px; }
+        
+        /* منطقة العرض المركزي (حرف، صورة، أيقونة) */
+        .display-center { font-size: 4.5rem; margin: 15px 0; font-weight: 900; min-height: 100px; display: flex; align-items: center; justify-content: center; }
+
+        /* أزرار الخيارات المتعددة */
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
+        .option-btn {
+            background: #334155; color: white; border: 2px solid #475569;
+            padding: 14px; border-radius: 16px; font-family: 'Cairo';
+            font-weight: 900; font-size: 1.2rem; cursor: pointer; transition: all 0.2s;
+        }
+        .option-btn:active { transform: scale(0.95); }
+        .option-btn.correct { background: var(--neon-green) !important; border-color: #34d399 !important; }
+        .option-btn.wrong { background: var(--neon-red) !important; border-color: #f87171 !important; }
+
+        /* زر الاستماع وزر المايك */
+        .audio-trigger-btn {
+            width: 80px; height: 80px; border-radius: 50%; border: none;
+            font-size: 2.2rem; cursor: pointer; display: inline-flex; align-items: center;
+            justify-content: center; transition: all 0.2s; color: white; margin: 10px 0;
+        }
+        .btn-listen-q { background: #3b82f6; box-shadow: 0 0 15px rgba(59,130,246,0.4); }
+        .btn-mic-q { background: var(--neon-red); box-shadow: 0 0 15px rgba(239,68,68,0.4); }
+        
+        .recording-pulse { animation: pulseMic 1.2s infinite; background: #b91c1c !important; }
+        @keyframes pulseMic { 0% { box-shadow: 0 0 0 0 rgba(239,68,68,0.7); } 70% { box-shadow: 0 0 0 15px rgba(239,68,68,0); } 100% { box-shadow: 0 0 0 0 rgba(239,68,68,0); } }
+
+        /* صندوق الاستجابة والتقييم للطفل */
+        .feedback-banner {
+            margin-top: 20px; min-height: 55px; border-radius: 15px; background: #0f172a;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem; font-weight: 900; padding: 10px; box-sizing: border-box;
+        }
+        .fb-idle { color: #64748b; font-weight: normal; font-size: 0.95rem; }
+        .fb-success { color: var(--neon-green); text-shadow: 0 0 10px rgba(16,185,129,0.3); }
+        .fb-fail { color: #f59e0b; text-shadow: 0 0 10px rgba(245,158,11,0.3); }
+
+        /* أزرار التنقل */
+        .nav-zone { display: flex; justify-content: space-between; margin-top: 20px; width: 100%; max-width: 450px; }
+        .nav-btn { background: #334155; border: 1px solid #475569; color: white; padding: 12px 24px; border-radius: 12px; font-family: 'Cairo'; font-weight: bold; cursor: pointer; }
+        .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+
+<div class="header-zone">
+    <h1>📝 الاختبارات والتمارين الصوتية الذكية ✨</h1>
+</div>
+
+<div class="status-bar">
+    <div style="font-weight: bold; color: #94a3b8;" id="quiz-progress">السؤال: 1 / 4</div>
+    <div class="stars-counter" id="stars-display">النجوم المجمعة: 0 🌟</div>
+</div>
+
+<select class="unit-selector" id="quiz-unit-picker" onchange="loadUnitQuiz()">
+    <option value="1">الوحدة الأولى - Unit 1 Quiz</option>
+    <option value="2">الوحدة الثانية - Unit 2 Quiz</option>
+    <option value="3">الوحدة الثالثة - Unit 3 Quiz</option>
+    <option value="4">الوحدة الرابعة - Unit 4 Quiz</option>
+    <option value="5">الوحدة الخامسة - Unit 5 Quiz</option>
+    <option value="6">الوحدة السادسة - Unit 6 Quiz</option>
+</select>
+
+<div class="quiz-card">
+    <div id="q-title-text" class="question-title">جاري تحميل السؤال...</div>
+    
+    <div id="quiz-interactive-area">
+        </div>
+
+    <div class="options-grid" id="quiz-options-block"></div>
+
+    <div class="feedback-banner" id="quiz-feedback-screen">
+        <span class="fb-idle">استعد للإجابة على السؤال بتركيز!</span>
+    </div>
+</div>
+
+<div class="nav-zone">
+    <button class="nav-btn" onclick="window.location.href='dashboard.html'">الرئيسية 🏠</button>
+    <button class="nav-btn" id="quiz-next-btn" onclick="nextQuestion()" disabled>السؤال التالي ➡️</button>
+</div>
+
+<script>
+    // قاعدة بيانات الأسئلة الشاملة للوحدات (تحتوي على الأنواع الأربعة المطلوبة بكل وحدة)
+    const megaQuizDatabase = {
+        "1": [
+            { type: "listen_letter", title: "اختر الحرف الذي تسمعه 🔊", target: "B", options: ["A", "B", "C", "D"] },
+            { type: "listen_word", title: "اختر الكلمة التي تسمعها 🔊", target: "Hello", options: ["Hello", "Goodbye", "Book", "Blue"] },
+            { type: "see_speak_letter", title: "انطق الحرف الذي تراه أمامك بدقة 🗣️", target: "A", display: "A" },
+            { type: "describe_image", title: "وصف ما تراه في الصورة؟ انطق الاسم بالإنجليزية 🗣️", target: "book", display: "📚" }
+        ],
+        "2": [
+            { type: "listen_letter", title: "اختر الحرف الذي تسمعه 🔊", target: "H", options: ["E", "F", "G", "H"] },
+            { type: "listen_word", title: "اختر الكلمة التي تسمعها 🔊", target: "Nose", options: ["Eye", "Ear", "Nose", "Hand"] },
+            { type: "see_speak_letter", title: "انطق الحرف الذي تراه أمامك بدقة 🗣️", target: "C", display: "C" },
+            { type: "describe_image", title: "وصف ما تراه في الصورة؟ انطق الاسم بالإنجليزية 🗣️", target: "cake", display: "🎂" }
+        ],
+        "3": [
+            { type: "listen_letter", title: "اختر الحرف الذي تسمعه 🔊", target: "M", options: ["I", "J", "K", "M"] },
+            { type: "listen_word", title: "اختر الكلمة التي تسمعها 🔊", target: "Bag", options: ["Pen", "Pencil", "Bag", "Sharpener"] },
+            { type: "see_speak_letter", title: "انطق الحرف الذي تراه أمامك بدقة 🗣️", target: "D", display: "D" },
+            { type: "describe_image", title: "وصف ما تراه في الصورة؟ انطق الاسم بالإنجليزية 🗣️", target: "ruler", display: "📏" }
+        ],
+        "4": [
+            { type: "listen_letter", title: "اختر الحرف الذي تسمعه 🔊", target: "O", options: ["N", "O", "P", "Q"] },
+            { type: "listen_word", title: "اختر الكلمة التي تسمعها 🔊", target: "One", options: ["One", "Two", "Three", "Four"] },
+            { type: "see_speak_letter", title: "انطق الحرف الذي تراه أمامك بدقة 🗣️", target: "F", display: "F" },
+            { type: "describe_image", title: "وصف ما تراه في الصورة؟ انطق الاسم بالإنجليزية 🗣️", target: "ball", display: "⚽" }
+        ],
+        "5": [
+            { type: "listen_letter", title: "اختر الحرف الذي تسمعه 🔊", target: "T", options: ["R", "S", "T", "U"] },
+            { type: "listen_word", title: "اختر الكلمة التي تسمعها 🔊", target: "Mother", options: ["Father", "Mother", "Brother", "Sister"] },
+            { type: "see_speak_letter", title: "انطق الحرف الذي تراه أمامك بدقة 🗣️", target: "T", display: "T" },
+            { type: "describe_image", title: "وصف ما تراه في الصورة؟ انطق الاسم بالإنجليزية 🗣️", target: "tea", display: "☕" }
+        ],
+        "6": [
+            { type: "listen_letter", title: "اختر الحرف الذي تسمعه 🔊", target: "D", options: ["C", "D", "G", "V"] },
+            { type: "listen_word", title: "اختر الكلمة التي تسمعها 🔊", target: "Guitar", options: ["Drum", "Guitar", "Violin", "Piano"] },
+            { type: "see_speak_letter", title: "انطق الحرف الذي تراه أمامك بدقة 🗣️", target: "G", display: "G" },
+            { type: "describe_image", title: "وصف ما تراه في الصورة؟ انطق الاسم بالإنجليزية 🗣️", target: "drum", display: "🥁" }
+        ]
+    };
+
+    let currentUnitQuestions = [];
+    let questionIdx = 0;
+    let earnedStars = 0;
+    let hasAnsweredCurrent = false;
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    let quizRec;
+
+    if (SpeechRecognition) {
+        quizRec = new SpeechRecognition();
+        quizRec.continuous = false;
+        quizRec.lang = 'en-GB'; // اللكنة المتفق عليها بريطانياً داخلياً لتقييم النطق بدقة
+        quizRec.interimResults = false;
+
+        quizRec.onresult = (event) => {
+            document.getElementById('quiz-mic-btn').classList.remove('recording-pulse');
+            const userSpeech = event.results[0][0].transcript.toLowerCase().trim();
+            const currentQ = currentUnitQuestions[questionIdx];
+            const cleanTarget = currentQ.target.toLowerCase().trim();
+            
+            if (userSpeech === cleanTarget || userSpeech.includes(cleanTarget)) {
+                handleCorrectAnswer();
+            } else {
+                handleWrongAnswer(`سمعتك تقول: ${userSpeech}`);
+            }
+        };
+
+        quizRec.onerror = () => {
+            document.getElementById('quiz-mic-btn').classList.remove('recording-pulse');
+            document.getElementById('quiz-feedback-screen').innerHTML = `<span class="fb-fail">❌ لم أسمع صوتك بوضوح، اضغط على المايك وحاول مجدداً</span>`;
+        };
+    }
+
+    function loadUnitQuiz() {
+        const selectedUnit = document.getElementById('quiz-unit-picker').value;
+        currentUnitQuestions = megaQuizDatabase[selectedUnit];
+        questionIdx = 0;
+        renderQuestion();
+    }
+
+    function renderQuestion() {
+        hasAnsweredCurrent = false;
+        document.getElementById('quiz-next-btn').disabled = true;
+        document.getElementById('quiz-feedback-screen').innerHTML = `<span class="fb-idle">استعد للإجابة على السؤال بتركيز!</span>`;
+        
+        const q = currentUnitQuestions[questionIdx];
+        document.getElementById('q-title-text').innerText = q.title;
+        document.getElementById('quiz-progress').innerText = `السؤال: ${questionIdx + 1} / ${currentUnitQuestions.length}`;
+
+        const interactiveArea = document.getElementById('quiz-interactive-area');
+        const optionsBlock = document.getElementById('quiz-options-block');
+        
+        interactiveArea.innerHTML = "";
+        optionsBlock.innerHTML = "";
+
+        // بناء واجهة السؤال بناءً على نوع النمط الصوتي المطلوب
+        if (q.type === "listen_letter" || q.type === "listen_word") {
+            // نمط أسئلة الاستماع (إظهار زر تشغيل الصوت فقط)
+            interactiveArea.innerHTML = `<button class="audio-trigger-btn btn-listen-q" onclick="speakQuizTarget('${q.target}')">🔊</button><div style="font-size:0.9rem; color:#94a3b8; margin-top:5px;">اضغط للاستماع للصوت</div>`;
+            
+            // توليد أزرار الخيارات المتعددة للطفل
+            q.options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = opt;
+                btn.onclick = () => checkMultipleChoice(btn, opt, q.target);
+                optionsBlock.appendChild(btn);
+            });
+        } 
+        else if (q.type === "see_speak_letter") {
+            // نمط انطق الحرف الذي تراه (عرض الحرف + زر المايك)
+            interactiveArea.innerHTML = `
+                <div class="display-center" style="color:#6366f1;">${q.display}</div>
+                <button class="audio-trigger-btn btn-mic-q" id="quiz-mic-btn" onclick="startQuizVoiceRec()">🎤</button>
+                <div style="font-size:0.9rem; color:#94a3b8; margin-top:5px;">اضغط على المايك ثم انطق الحرف بوضوح</div>
+            `;
+        } 
+        else if (q.type === "describe_image") {
+            // نمط وصف الصورة (عرض أيقونة/صورة + زر المايك للتسجيل الفوري)
+            interactiveArea.innerHTML = `
+                <div class="display-center">${q.display}</div>
+                <button class="audio-trigger-btn btn-mic-q" id="quiz-mic-btn" onclick="startQuizVoiceRec()">🎤</button>
+                <div style="font-size:0.9rem; color:#94a3b8; margin-top:5px;">اضغط على المايك وعَبِّر عن الصورة بكلمة واحدة</div>
+            `;
+        }
+    }
+
+    // دالة نطق الكلمة/الحرف المستهدف باللكنة البريطانية للطفل ليسمعها في أسئلة الاستماع
+    function speakQuizTarget(text) {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            const voices = window.speechSynthesis.getVoices();
+            const gbVoice = voices.find(v => v.lang === 'en-GB' || v.lang.includes('GB'));
+            if (gbVoice) utterance.voice = gbVoice;
+            utterance.lang = 'en-GB';
+            utterance.rate = 0.8;
+            window.speechSynthesis.speak(utterance);
+        }
+    }
+
+    // دالة فتح المايك للاستماع لنطق الطفل في أسئلة التحدث والإنتاج الصوتي
+    function startQuizVoiceRec() {
+        if (hasAnsweredCurrent) return;
+        if (!SpeechRecognition) {
+            alert("ميزة التعرف على الصوت غير مدعومة على هذا المتصفح، يرجى تشغيل التطبيق على متصفح Chrome.");
+            return;
+        }
+        window.speechSynthesis.cancel();
+        document.getElementById('quiz-mic-btn').classList.add('recording-pulse');
+        document.getElementById('quiz-feedback-screen').innerHTML = `<span class="fb-idle" style="color:#ef4444;">🎤 جاري سماع نطقك الآن... تحدث!</span>`;
+        try { quizRec.start(); } catch(e) { quizRec.stop(); }
+    }
+
+    // فحص الإجابة في أسئلة الاختيار من متعدد
+    function checkMultipleChoice(buttonElement, selectedOption, correctOption) {
+        if (hasAnsweredCurrent) return;
+        
+        if (selectedOption === correctOption) {
+            buttonElement.classList.add('correct');
+            handleCorrectAnswer();
+        } else {
+            buttonElement.classList.add('wrong');
+            // تلوين الخيار الصحيح تلقائياً لمساعدة الطفل على التعلم من خطئه
+            const buttons = document.getElementById('quiz-options-block').getElementsByClassName('option-btn');
+            for(let b of buttons) {
+                if(b.innerText === correctOption) b.classList.add('correct');
+            }
+            handleWrongAnswer();
+        }
+    }
+
+    // التعامل مع الإجابة الصحيحة (🌟)
+    function handleCorrectAnswer() {
+        hasAnsweredCurrent = true;
+        earnedStars++;
+        document.getElementById('stars-display').innerText = `النجوم المجمعة: ${earnedStars} 🌟`;
+        document.getElementById('quiz-feedback-screen').innerHTML = `<span class="fb-success">🎉 Excellent! ممتاز 🌟</span>`;
+        playAudioFeedback(true);
+        document.getElementById('quiz-next-btn').disabled = false;
+    }
+
+    // التعامل مع الإجابة الخاطئة (تدرب أكثر)
+    function handleWrongAnswer(extraMsg = "") {
+        hasAnsweredCurrent = true;
+        document.getElementById('quiz-feedback-screen').innerHTML = `<span class="fb-fail">🔄 تدرب أكثر! (حاول مجدداً في السؤال القادم) ${extraMsg}</span>`;
+        playAudioFeedback(false);
+        document.getElementById('quiz-next-btn').disabled = false;
+    }
+
+    // الانتقال للسؤال التالي بداخل الوحدة
+    function nextQuestion() {
+        if (questionIdx < currentUnitQuestions.length - 1) {
+            questionIdx++;
+            renderQuestion();
+        } else {
+            // انتهاء اختبار الوحدة الحالية بنجاح واحتساب إجمالي نقاط الطفل
+            document.getElementById('quiz-interactive-area').innerHTML = `<div style="font-size: 5rem;">🏆</div>`;
+            document.getElementById('quiz-options-block').innerHTML = "";
+            document.getElementById('q-title-text').innerText = "تم إنهاء الاختبار بنجاح! 🎉";
+            document.getElementById('quiz-feedback-screen').innerHTML = `<span class="fb-success">رائع جداً! لقد حصلت على ${earnedStars} نجوم 🌟</span>`;
+            document.getElementById('quiz-next-btn').disabled = true;
+            
+            // هنا يمكنك مستقبلاً حفظ درجات درجات الطالب مباشرة في جدول الـ `students` في Supabase لتوثيق تقدمه
+        }
+    }
+
+    // رنين صوتي مبهج وتفاعلي لتعزيز تجربة اللعب (Gamification)
+    function playAudioFeedback(isSuccess) {
+        if (!window.AudioContext && !window.webkitAudioContext) return;
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain); gain.connect(ctx.destination);
+        
+        if (isSuccess) {
+            osc.frequency.setValueAtTime(523.25, ctx.currentTime); // نغمة مرتفعة مبهجة للنجاح
+            osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.1);
+            gain.gain.setValueAtTime(0.1, ctx.currentTime);
+            osc.start(); osc.stop(ctx.currentTime + 0.25);
+        } else {
+            osc.frequency.setValueAtTime(293.66, ctx.currentTime); // نغمة منخفضة هادئة للتنبيه
+            gain.gain.setValueAtTime(0.1, ctx.currentTime);
+            osc.start(); osc.stop(ctx.currentTime + 0.2);
+        }
+    }
+
+    // تشغيل تحميل أصوات المتصفح مسبقاً لضمان جهوزية محرك النطق الفوري البريطاني
+    if ('speechSynthesis' in window) {
+        window.speechSynthesis.getVoices();
+        window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+    }
+
+    window.onload = loadUnitQuiz;
+</script>
+</body>
+</html>
