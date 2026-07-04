@@ -8,7 +8,7 @@
     <style>
         body { 
             font-family: 'Cairo', sans-serif; 
-            background: #121212; /* الثيم السينمائي الداكن */
+            background: #121212; 
             color: #e0e0e0;
             margin: 0;
             padding: 20px;
@@ -21,7 +21,6 @@
 
         h1 { color: #ff9800; text-align: center; margin-bottom: 30px; }
 
-        /* كروت الإحصائيات */
         .stat-card {
             background: #1e1e1e;
             padding: 20px;
@@ -34,7 +33,6 @@
         .stat-card h3 { margin: 0; color: #b0bec5; font-size: 1.1rem; }
         .stat-card .number { font-size: 2.5rem; font-weight: bold; color: #ff9800; margin-top: 10px; }
 
-        /* جدول بيانات الطلاب */
         .table-container {
             background: #1e1e1e;
             border-radius: 15px;
@@ -62,7 +60,6 @@
         }
         .whatsapp-btn:hover { background: #128c7e; transform: scale(1.05); }
 
-        /* 🌟 التعديل الشامل للنافذة المنبثقة لتستوعب التحليلات الأربعة */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -121,24 +118,23 @@
     <div class="table-container">
         <table>
             <thead>
-    <tr>
-        <th>اسم الطالب الثلاثي</th>
-        <th>اسم المستخدم (Login)</th>
-        <th>رقم الواتساب</th>
-        <th>الأداء (التقدم)</th> <!-- هذا هو العنوان الناقص -->
-        <th>إرسال التقرير التشخيصي</th>
-    </tr>
-</thead>
+                <tr>
+                    <th>اسم الطالب الثلاثي</th>
+                    <th>اسم المستخدم (Login)</th>
+                    <th>رقم الواتساب</th>
+                    <th>الأداء (التقدم)</th>
+                    <th>إرسال التقرير التشخيصي</th>
+                </tr>
+            </thead>
             <tbody id="studentsTableBody">
                 <tr>
-                    <td colspan="4" style="text-align:center; color:#888;">جاري جلب البيانات...</td>
+                    <td colspan="5" style="text-align:center; color:#888;">جاري جلب البيانات...</td>
                 </tr>
             </tbody>
         </table>
     </div>
 </div>
 
-<!-- 🌟 النافذة المنبثقة الذكية للتقرير التشخيصي المطور -->
 <div id="reportModal" class="modal-overlay">
     <div class="modal-box">
         <h2 id="modalTitle">التقرير الأكاديمي الشامل</h2>
@@ -148,14 +144,12 @@
             <input type="text" id="repWeek" placeholder="مثال: الأسبوع الأول (Phonics Intro)">
         </div>
 
-        <!-- ١. المدة الزمنية -->
         <div class="modal-section-title">⏳ ١. التواجد الزمني على المنصة:</div>
         <div class="modal-field">
             <label>المدة التي قضاها الطالب بداخل الموقع هذا الأسبوع:</label>
             <input type="text" id="repTimeSpent" placeholder="مثال: ساعتان ونصف متفرقة طوال الأسبوع">
         </div>
 
-        <!-- ٢. المقارنة الزمنية -->
         <div class="modal-section-title">📈 ٢. تحليل الأداء والمقارنة الزمنية:</div>
         <div class="modal-field">
             <label>مستوى الأداء مقارنة بالأسابيع السابقة:</label>
@@ -166,14 +160,12 @@
             </select>
         </div>
 
-        <!-- ٣. تحليل الـ Quizs وأسلوب الاستيعاب -->
         <div class="modal-section-title">🧠 ٣. تحليل الـ Quizzes وطريقة الاستيعاب:</div>
         <div class="modal-field">
             <label>تحليل درجات الكويزات وتحديد الأسلوب الأنسب لاستيعاب الطالب:</label>
             <textarea id="repQuizAnalysis" rows="2" placeholder="مثال: تميز في حل الأسئلة المعتمدة على الصوت والصور؛ يتضح أن الطالب (بصري-سمعي) ويستوعب أسرع عبر التكرار النطقي المباشر."></textarea>
         </div>
 
-        <!-- ٤. التوصيات المزدوجة -->
         <div class="modal-section-title">💡 ٤. التوصيات الاستراتيجية المخصصة:</div>
         <div class="modal-field">
             <label>توصيات خاصة لولي الأمر (للتطبيق في المنزل):</label>
@@ -199,7 +191,7 @@
 
     window.onload = fetchTeacherData;
 
-        async function fetchTeacherData() {
+    async function fetchTeacherData() {
         try {
             const { data: students, error } = await supabaseClient.from('students').select('*');
             if (error) { alert("خطأ: " + error.message); return; }
@@ -214,17 +206,25 @@
             }
 
             for (const student of students) {
-                // استدعاء الدالة البرمجية (المحرك) من Supabase
-                const { data: perfData } = await supabaseClient
-                    .rpc('calculate_student_performance', { student_id: student.id });
-                
-                const avg = perfData ? perfData[0].avg_score.toFixed(1) : "0.0";
-                const units = perfData ? perfData[0].total_units_completed : 0;
+                let avg = "0.0";
+                let units = 0;
+
+                try {
+                    const { data: perfData } = await supabaseClient
+                        .rpc('calculate_student_performance', { student_id: student.id });
+                    
+                    if (perfData && perfData[0]) {
+                        avg = perfData[0].avg_score ? perfData[0].avg_score.toFixed(1) : "0.0";
+                        units = perfData[0].total_units_completed || 0;
+                    }
+                } catch (rpcErr) {
+                    console.warn("RPC calculated performance failed, using defaults:", rpcErr);
+                }
 
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td style="font-weight: bold; color: #fff;">${student['Full Name']}</td>
-                    <td style="color: #ff9800;">${student['User name']}</td>
+                    <td style="color: #ff9800;">${student['Username']}</td>
                     <td dir="ltr" style="color: #b0bec5;">${student['WhatsApp']}</td>
                     <td style="color: #4caf50; font-weight: bold;">${units}/6 (${avg})</td>
                     <td>
@@ -235,35 +235,7 @@
                 `;
                 tbody.appendChild(tr);
             }
-        } catch (err) { alert("حدث خطأ: " + err.message); }
-    }
-            const { data: students, error } = await supabaseClient.from('students').select('*');
-            if (error) { alert("خطأ: " + error.message); return; }
-
-            const tbody = document.getElementById('studentsTableBody');
-            tbody.innerHTML = ''; 
-            document.getElementById('totalStudents').innerText = students.length;
-
-            if (students.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#888;">لا يوجد طلاب مسجلون.</td></tr>`;
-                return;
-            }
-
-            students.forEach(student => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td style="font-weight: bold; color: #fff;">${student['Full Name']}</td>
-                    <td style="color: #ff9800;">${student['User name']}</td>
-                    <td dir="ltr" style="color: #b0bec5;">${student['WhatsApp']}</td>
-                    <td>
-                        <button class="whatsapp-btn" onclick="openReportModal('${student['WhatsApp']}', '${student['Full Name']}')">
-                            صياغة تقرير أكاديمي 📊
-                        </button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-        } catch (err) { alert("حدث خطأ: " + err.message); }
+        } catch (err) { alert("حدث خطأ أثناء جلب البيانات: " + err.message); }
     }
 
     function openReportModal(phone, studentName) {
@@ -298,7 +270,6 @@
         if (cleanPhone.startsWith('0')) { cleanPhone = '20' + cleanPhone.substring(1); }
         else if (!cleanPhone.startsWith('20')) { cleanPhone = '20' + cleanPhone; }
 
-        // الهيكل البرمجي المطور للرسالة لتظهر كشهادة أداء فخمة جداً على الواتساب
         const messageText = 
 `السلام عليكم ورحمة الله وبركاته 🌟
 
@@ -337,3 +308,4 @@
 </script>
 </body>
 </html>
+

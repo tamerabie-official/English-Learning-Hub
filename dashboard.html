@@ -93,7 +93,7 @@
     </div>
 
     <div class="grid-kingdoms">
-        <!-- تكرار للوحدات 1-6 -->
+        <!-- المملكة 1 -->
         <div class="kingdom-card" onclick="launchUnit(1)">
             <div class="kingdom-info">
                 <div class="kingdom-icon">👋</div>
@@ -104,38 +104,94 @@
             </div>
             <div class="badge-score" id="u1-score">جاري التحميل..</div>
         </div>
-        <!-- الوحدات الأخرى (2-6) بنفس الهيكل مع تغيير المعرفات u2-score إلى u6-score -->
-        <div class="kingdom-card" onclick="launchUnit(2)"><div class="kingdom-info"><div class="kingdom-icon">🧑‍💻</div><div class="kingdom-text"><div class="kingdom-title">المملكة 2: This is me</div></div></div><div class="badge-score" id="u2-score">...</div></div>
-        <div class="kingdom-card" onclick="launchUnit(3)"><div class="kingdom-info"><div class="kingdom-icon">🎒</div><div class="kingdom-text"><div class="kingdom-title">المملكة 3: My school bag</div></div></div><div class="badge-score" id="u3-score">...</div></div>
-        <div class="kingdom-card" onclick="launchUnit(4)"><div class="kingdom-info"><div class="kingdom-icon">🎂</div><div class="kingdom-text"><div class="kingdom-title">المملكة 4: My birthday</div></div></div><div class="badge-score" id="u4-score">...</div></div>
-        <div class="kingdom-card" onclick="launchUnit(5)"><div class="kingdom-info"><div class="kingdom-icon">🏡</div><div class="kingdom-text"><div class="kingdom-title">المملكة 5: My family</div></div></div><div class="badge-score" id="u5-score">...</div></div>
-        <div class="kingdom-card" onclick="launchUnit(6)"><div class="kingdom-info"><div class="kingdom-icon">🎵</div><div class="kingdom-text"><div class="kingdom-title">المملكة 6: Music</div></div></div><div class="badge-score" id="u6-score">...</div></div>
+        <!-- المملكة 2 -->
+        <div class="kingdom-card" onclick="launchUnit(2)">
+            <div class="kingdom-info">
+                <div class="kingdom-icon">🧑‍💻</div>
+                <div class="kingdom-text">
+                    <div class="kingdom-title">المملكة 2: This is me</div>
+                </div>
+            </div>
+            <div class="badge-score" id="u2-score">...</div>
+        </div>
+        <!-- المملكة 3 -->
+        <div class="kingdom-card" onclick="launchUnit(3)">
+            <div class="kingdom-info">
+                <div class="kingdom-icon">🎒</div>
+                <div class="kingdom-text">
+                    <div class="kingdom-title">المملكة 3: My school bag</div>
+                </div>
+            </div>
+            <div class="badge-score" id="u3-score">...</div>
+        </div>
+        <!-- المملكة 4 -->
+        <div class="kingdom-card" onclick="launchUnit(4)">
+            <div class="kingdom-info">
+                <div class="kingdom-icon">🎂</div>
+                <div class="kingdom-text">
+                    <div class="kingdom-title">المملكة 4: My birthday</div>
+                </div>
+            </div>
+            <div class="badge-score" id="u4-score">...</div>
+        </div>
+        <!-- المملكة 5 -->
+        <div class="kingdom-card" onclick="launchUnit(5)">
+            <div class="kingdom-info">
+                <div class="kingdom-icon">🏡</div>
+                <div class="kingdom-text">
+                    <div class="kingdom-title">المملكة 5: My family</div>
+                </div>
+            </div>
+            <div class="badge-score" id="u5-score">...</div>
+        </div>
+        <!-- المملكة 6 -->
+        <div class="kingdom-card" onclick="launchUnit(6)">
+            <div class="kingdom-info">
+                <div class="kingdom-icon">🎵</div>
+                <div class="kingdom-text">
+                    <div class="kingdom-title">المملكة 6: Music</div>
+                </div>
+            </div>
+            <div class="badge-score" id="u6-score">...</div>
+        </div>
     </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
     const dbClient = supabase.createClient('https://cjpdnptndkceescvubmg.supabase.co', 'Sb_publishable_Jbwm_t_ycZprbYmfV5HrPw_CAtZ-m6B');
-    let currentStudent = localStorage.getItem('studentName') || 'بطل السايبر';
+    
+    // جلب اسم المستخدم الفردي والاسم الثلاثي للترحيب
+    let currentStudentName = localStorage.getItem('Full Name') || 'بطل السايبر';
+    let currentUsername = localStorage.getItem('Username');
 
     window.onload = () => {
-        document.getElementById('welcome-user').innerText = `مرحباً بك يا ${currentStudent} 🚀`;
+        document.getElementById('welcome-user').innerText = `مرحباً بك يا ${currentStudentName} 🚀`;
         fetchLiveMetrics();
     };
 
-    /* --- الجزء المراد وضعه بدلاً منه في ملف dashboard.html --- */
-    /* قم بوضع هذا الكود الجديد في ملفك */
-    /* --- الجزء المراد وضعه --- */
     async function fetchLiveMetrics() {
-        const { data, error } = await dbClient.from('students').select('*').eq('Full Name', currentStudent).single();
-        
-        // إذا لم نجد الطالب، أعده إلى صفحة مركبة المعرفة (التسجيل)
-        if (!data || error) {
-            localStorage.removeItem('studentName');
-            window.location.href = 'index.html'; // تأكد أن هذا هو اسم ملف صفحة التسجيل
+        // إذا لم يكن هناك اسم مستخدم مخزن، نعود لصفحة تسجيل الدخول فوراً
+        if (!currentUsername) {
+            window.location.href = 'index.html';
             return;
         }
 
+        // البحث الدقيق في جدول الطلاب بناءً على حقل الـ Username الفريد
+        const { data, error } = await dbClient
+            .from('students')
+            .select('*')
+            .eq('Username', currentUsername)
+            .single();
+        
+        if (!data || error) {
+            console.error("تعذر العثور على بيانات الطالب:", error);
+            localStorage.clear();
+            window.location.href = 'index.html'; 
+            return;
+        }
+
+        // تحديث درجات الممالك الست ديناميكياً
         for (let i = 1; i <= 6; i++) {
             const score = data[`Unit ${i} Score`];
             const el = document.getElementById(`u${i}-score`);
@@ -160,7 +216,9 @@
         }
     }
 
-    function launchUnit(unit) { window.location.href = `unit${unit}.html`; }
+    function launchUnit(unit) { 
+        window.location.href = `unit${unit}.html`; 
+    }
 </script>
 </body>
 </html>

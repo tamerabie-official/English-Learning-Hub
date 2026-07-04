@@ -41,7 +41,6 @@
         }
         .input-cyber:focus { border-color: var(--cyber-purple); outline: none; background: rgba(255, 255, 255, 0.08); }
 
-        /* شبكة الأبطال والبدلات المفرغة */
         .avatar-label { text-align: right; font-weight: bold; color: var(--neon-gold); font-size: 0.9rem; margin-bottom: 12px; }
         .avatar-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 25px; }
         .avatar-option {
@@ -90,16 +89,13 @@
             <input type="tel" id="reg-whatsapp" class="input-cyber" placeholder="📱 رقم الواتساب الخاص بماما">
         </div>
         
-        <!-- اختيار المظهر والبدلة المفضلة -->
         <div class="avatar-label" style="margin-top: 15px;">🛸 حدد بطلك المفضل:</div>
         <div class="avatar-grid">
-            <!-- البطل 1: رائد فضاء بالصور المفرغة (الأولى ديفولت) -->
             <div class="avatar-option selected" id="opt-hero1" onclick="openSuitInventory()">
                 <div class="avatar-preview" id="main-suit-preview" style="background-image: url('25116.jpg');"></div>
                 <p>البدلة الفضائية</p>
             </div>
 
-            <!-- البطل 2: كرتون AI تفاعلي -->
             <div class="avatar-option" id="opt-hero2" onclick="selectHero(2, '')">
                 <div class="avatar-preview" id="prev-2">🤖</div>
                 <p>بطل كرتوني</p>
@@ -107,7 +103,6 @@
                 <input type="file" id="file-hero2" class="hidden-file" accept="image/*" onchange="handleImageUpload(this, 2)">
             </div>
 
-            <!-- البطل 3: بطل النادي الأهلي (الفانيلة الحمراء الديفولت) -->
             <div class="avatar-option" id="opt-hero3" onclick="selectHero(3, '🦅🔴')">
                 <div class="avatar-preview" id="prev-3" style="background: var(--ahly-red); color: white; font-size:1.4rem; font-weight:900; border-radius:12px;">𓄂🦅</div>
                 <p>النادي الأهلي</p>
@@ -116,7 +111,6 @@
             </div>
         </div>
 
-        <!-- مخزن البدلات المفرغة -->
         <div id="suit-inventory-box" style="margin-bottom: 20px; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 20px; border: 1px dashed rgba(168, 85, 247, 0.4);">
             <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;">
                 <div class="suit-thumb active" onclick="setSuit('25116.jpg', this)" style="background-image: url('25116.jpg');"></div>
@@ -130,7 +124,6 @@
         <div id="reg-success-msg" class="status-msg" style="text-align: center;"></div>
     </div>
 
-    <!-- خط فاصل بامتياز سينمائي -->
     <div style="margin: 25px 0; display: flex; align-items: center; text-align: center; color: #4b5563; font-size: 0.85rem; font-weight: bold;">
         <div style="flex: 1; border-bottom: 1px dashed #4b5563;"></div>
         <span style="padding: 0 15px;">أو</span>
@@ -149,10 +142,7 @@
     </div>
 </div>
 
-<!-- 📦 مكتبة Supabase يتم تحميلها من سطر واحد سليم ومقاوم للانحناء -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<!-- 🧠 الكود البرمجي الموحد والخالي من أخطاء المسارات -->
 <script>
     const urlSupabase = 'https://cjpdnptndkceescvubmg.supabase.co';
     const keySupabase = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNqcGRucHRuZGtjZWVzY3Z1Ym1nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwMTExNTYsImV4cCI6MjA5ODU4NzE1Nn0.psxah2ekfvgZ5ReTutudYg59fiSrX13dI8IkJCobGMM';
@@ -167,7 +157,6 @@
         } else {
             console.error("Supabase library not loaded properly!");
         }
-        localStorage.setItem('studentAvatarImg', selectedSuitFile);
     });
 
     function openSuitInventory() { 
@@ -235,20 +224,32 @@
         msgDiv.innerText = "⏳ جاري فحص وتأمين حسابك في الفضاء...";
 
         try {
+            // فحص مباشر لقاعدة البيانات لمنع تكرار اسم المستخدم وحل مشكلة المزامنة العالقة
+            const { data: existingUser, error: checkError } = await clientDb
+                .from('students')
+                .select('Username')
+                .eq('Username', user);
+
+            if (existingUser && existingUser.length > 0) {
+                msgDiv.style.color = "#ef4444";
+                msgDiv.innerText = "🚨 اسم المستخدم هذا محجوز مسبقاً! اختر اسماً آخر.";
+                return;
+            }
+
             const { data, error } = await clientDb.from('students').insert([
-                { 'Full Name': name, 'Username': user, 'WhatsApp Number': phone, 'Avatar': `Hero Style ${activeHeroType}` }
+                { 'Full Name': name, 'Username': user, 'WhatsApp': phone, 'Avatar': `Hero Style ${activeHeroType}` }
             ]);
 
             if (error) {
                 msgDiv.style.color = "#ef4444";
-                msgDiv.innerText = "🚨 اسم المستخدم هذا محجوز مسبقاً! اختر اسماً آخر.";
+                msgDiv.innerText = "🚨 حدث خطأ أثناء التسجيل في النظام، حاول مجدداً.";
             } else {
                 msgDiv.style.color = "#10b981";
                 msgDiv.innerText = `✅ تم التسجيل بنجاح! (اسم المستخدم الخاص بك هو: ${user})`;
                 
-                localStorage.setItem('studentName', name);
-                localStorage.setItem('username', user);
-                localStorage.setItem('whatsappNum', phone);
+                localStorage.setItem('Full Name', name);
+                localStorage.setItem('Username', user);
+                localStorage.setItem('WhatsApp', phone);
                 localStorage.setItem('heroType', activeHeroType);
                 
                 setTimeout(() => { window.location.href = 'dashboard.html'; }, 1500);
@@ -275,9 +276,9 @@
                 .eq('Username', user);
 
             if (data && data.length > 0) {
-                localStorage.setItem('username', user);
-                localStorage.setItem('studentName', data[0]['Full Name']);
-                localStorage.setItem('whatsappNum', data[0]['WhatsApp Number']);
+                localStorage.setItem('Username', user);
+                localStorage.setItem('Full Name', data[0]['Full Name']);
+                localStorage.setItem('WhatsApp', data[0]['WhatsApp']);
                 localStorage.setItem('studentAvatarImg', data[0]['Avatar'] || '25116.jpg');
                 
                 window.location.href = 'dashboard.html';
