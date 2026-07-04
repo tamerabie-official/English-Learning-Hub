@@ -237,10 +237,10 @@
                 }
 
                 // جلب التحليلات الذكية من الكاش المخزن
-                const studentAnalyze = analyticsCache[student.id] || {
+                const studentAnalyze = analyticsCache[student['Username']] || {
                     kpi_indicator: 0,
                     student_level: 'تحت الحساب 🤔',
-                    learning_style: 'غير محدد'
+                    learning_style: , 'غير محدد'
                 };
 
                 const tr = document.createElement('tr');
